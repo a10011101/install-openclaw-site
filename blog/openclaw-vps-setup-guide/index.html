@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to Install OpenClaw on a VPS: Complete Setup Guide (2026)</title>
+  <meta name="description" content="Step-by-step guide to installing OpenClaw on a DigitalOcean, Hetzner, or Linux VPS. Covers Node.js, gateway config, Telegram wiring, and systemd for always-on operation." />
+  <link rel="canonical" href="https://install-openclaw.net/blog/openclaw-vps-setup-guide/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://install-openclaw.net/blog/openclaw-vps-setup-guide/" />
+  <meta property="og:title" content="How to Install OpenClaw on a VPS: Complete Setup Guide (2026)" />
+  <meta property="og:description" content="Step-by-step guide to deploying OpenClaw on a Linux VPS with systemd, gateway config, and Telegram bot setup." />
+  <meta property="og:image" content="https://install-openclaw.net/og-image.png" />
+  <meta property="og:site_name" content="GetMicroservices" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://install-openclaw.net/og-image.png" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "How to Install OpenClaw on a VPS: Complete Setup Guide (2026)",
+    "description": "Step-by-step guide to deploying OpenClaw on a Linux VPS with systemd, gateway config, and Telegram bot setup.",
+    "datePublished": "2026-04-05",
+    "dateModified": "2026-04-05",
+    "author": { "@type": "Organization", "name": "GetMicroservices", "url": "https://getmicroservices.com" },
+    "publisher": { "@type": "Organization", "name": "GetMicroservices", "url": "https://getmicroservices.com" },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://install-openclaw.net/blog/openclaw-vps-setup-guide/" }
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f5f3ee; --surface: #ffffff; --border: #d9d4c7;
+      --text: #1a1a1a; --muted: #6b6560; --accent: #b5006a;
+      --code: #fdf6ec; --pixel: 2px;
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; line-height: 1.7; }
+    nav {
+      background: var(--surface); border-bottom: var(--pixel) solid var(--border);
+      padding: 0 2rem; display: flex; align-items: center; justify-content: space-between;
+      height: 64px; position: sticky; top: 0; z-index: 100;
+    }
+    .nav-logo { font-family: 'Fira Code', monospace; font-weight: 700; font-size: 1.1rem; color: var(--text); text-decoration: none; }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-links a { font-size: 0.9rem; color: var(--muted); text-decoration: none; font-weight: 500; }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-cta {
+      background: var(--accent); color: #fff !important; padding: 0.45rem 1.1rem;
+      border: var(--pixel) solid var(--text); box-shadow: 3px 3px 0 var(--text);
+      font-weight: 700 !important;
+    }
+    article { max-width: 740px; margin: 0 auto; padding: 3rem 2rem 5rem; }
+    .breadcrumb { font-family: 'Fira Code', monospace; font-size: 0.78rem; color: var(--muted); margin-bottom: 2rem; }
+    .breadcrumb a { color: var(--accent); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .post-header { margin-bottom: 2.5rem; }
+    .post-tag { font-family: 'Fira Code', monospace; font-size: 0.78rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; }
+    .post-header h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 700; line-height: 1.25; margin: 0.5rem 0 0.75rem; }
+    .post-meta { font-family: 'Fira Code', monospace; font-size: 0.8rem; color: var(--muted); display: flex; gap: 1rem; flex-wrap: wrap; }
+    .post-body { font-size: 1.02rem; }
+    .post-body p { margin-bottom: 1.25rem; }
+    .post-body h2 { font-size: 1.4rem; font-weight: 700; margin: 2.5rem 0 0.75rem; padding-top: 0.5rem; border-top: var(--pixel) solid var(--border); }
+    .post-body h3 { font-size: 1.1rem; font-weight: 700; margin: 1.75rem 0 0.5rem; }
+    .post-body ul, .post-body ol { margin: 0.75rem 0 1.25rem 1.5rem; }
+    .post-body li { margin-bottom: 0.4rem; }
+    .post-body a { color: var(--accent); text-decoration: underline; }
+    .post-body strong { font-weight: 700; }
+    pre {
+      background: #1a1a1a; color: #e8e6df; font-family: 'Fira Code', monospace;
+      font-size: 0.88rem; padding: 1.25rem 1.5rem; margin: 1rem 0 1.5rem;
+      border: var(--pixel) solid var(--border); overflow-x: auto; line-height: 1.6;
+    }
+    code { font-family: 'Fira Code', monospace; font-size: 0.88em; background: var(--code); padding: 0.15em 0.4em; border: 1px solid var(--border); }
+    pre code { background: none; padding: 0; border: none; font-size: inherit; }
+    .callout {
+      background: var(--code); border: var(--pixel) solid var(--border);
+      border-left: 4px solid var(--accent); padding: 1rem 1.25rem; margin: 1.5rem 0;
+      font-size: 0.95rem;
+    }
+    .callout strong { color: var(--accent); }
+    .toc { background: var(--surface); border: var(--pixel) solid var(--border); padding: 1.25rem 1.5rem; margin-bottom: 2.5rem; }
+    .toc p { font-family: 'Fira Code', monospace; font-size: 0.78rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.6rem; }
+    .toc ol { margin-left: 1.25rem; }
+    .toc li { font-size: 0.92rem; margin-bottom: 0.3rem; }
+    .toc a { color: var(--text); text-decoration: none; }
+    .toc a:hover { color: var(--accent); text-decoration: underline; }
+    .cta-box {
+      background: var(--text); color: #fff; padding: 2rem; margin: 3rem 0 0;
+      text-align: center;
+    }
+    .cta-box h3 { font-size: 1.25rem; margin-bottom: 0.5rem; }
+    .cta-box p { color: #aaa; font-size: 0.95rem; margin-bottom: 1.25rem; }
+    .btn-white {
+      background: #fff; color: var(--text); padding: 0.75rem 1.75rem;
+      border: var(--pixel) solid #fff; box-shadow: 4px 4px 0 var(--accent);
+      font-family: 'Space Grotesk', sans-serif; font-size: 0.95rem; font-weight: 700;
+      text-decoration: none; display: inline-block;
+    }
+    footer {
+      background: var(--surface); border-top: var(--pixel) solid var(--border);
+      padding: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-logo { font-family: 'Fira Code', monospace; font-weight: 700; font-size: 0.95rem; color: var(--text); text-decoration: none; }
+    .footer-logo span { color: var(--accent); }
+    footer p { font-size: 0.82rem; color: var(--muted); }
+    footer a { color: var(--muted); text-decoration: none; font-size: 0.82rem; }
+    footer a:hover { color: var(--accent); }
+    .footer-links { display: flex; gap: 1.25rem; flex-wrap: wrap; }
+    .hamburger { display: none; cursor: pointer; background: none; border: none; padding: 0.5rem; }
+    .hamburger span { display: block; width: 22px; height: 2px; background: var(--text); margin: 5px 0; }
+    .mobile-menu { display: none; }
+    @media (max-width: 640px) {
+      .hamburger { display: block; }
+      .nav-links { display: none; }
+      .nav-cta-desktop { display: none; }
+      .mobile-menu { display: none; flex-direction: column; background: var(--surface); border-bottom: var(--pixel) solid var(--border); padding: 1rem 2rem; gap: 0.75rem; }
+      .mobile-menu.open { display: flex; }
+      .mobile-menu a { font-size: 1rem; color: var(--text); text-decoration: none; font-weight: 600; padding: 0.4rem 0; border-bottom: 1px solid var(--border); }
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="https://install-openclaw.net" class="nav-logo" style="text-decoration:none;display:flex;flex-direction:column;">
+    <span style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:400;letter-spacing:-0.01em;line-height:1;color:#1a1a1a;">Get<span style="color:#b5006a;">Micro</span><span style="color:#e9c46a;">Services</span></span>
+    <div style="font-size:0.65rem;color:#6b6560;letter-spacing:0.06em;margin-top:3px;">// done-for-you automation agency</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="https://install-openclaw.net/#pricing">Pricing</a></li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="https://install-openclaw.net/#contact" class="nav-cta nav-cta-desktop">Get Started</a></li>
+  </ul>
+  <button class="hamburger" onclick="document.getElementById('mobileMenu').classList.toggle('open')" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="https://install-openclaw.net/#pricing">Pricing</a>
+  <a href="/blog/">Blog</a>
+  <a href="mailto:hello@getmicroservices.com">→ Get Started</a>
+</div>
+
+<article>
+  <div class="breadcrumb"><a href="https://install-openclaw.net">Home</a> / <a href="/blog/">Blog</a> / VPS Setup Guide</div>
+
+  <header class="post-header">
+    <div class="post-tag">// guide</div>
+    <h1>How to Install OpenClaw on a VPS: Complete Setup Guide (2026)</h1>
+    <div class="post-meta">
+      <span>April 5, 2026</span>
+      <span>8 min read</span>
+      <span>By GetMicroservices</span>
+    </div>
+  </header>
+
+  <nav class="toc" aria-label="Table of contents">
+    <p>// contents</p>
+    <ol>
+      <li><a href="#why-vps">Why run OpenClaw on a VPS?</a></li>
+      <li><a href="#requirements">What you need before starting</a></li>
+      <li><a href="#step1">Step 1 — Provision your server</a></li>
+      <li><a href="#step2">Step 2 — Install Node.js</a></li>
+      <li><a href="#step3">Step 3 — Install OpenClaw</a></li>
+      <li><a href="#step4">Step 4 — Run initial setup</a></li>
+      <li><a href="#step5">Step 5 — Configure the gateway</a></li>
+      <li><a href="#step6">Step 6 — Keep it always-on with systemd</a></li>
+      <li><a href="#step7">Step 7 — Connect Telegram</a></li>
+      <li><a href="#troubleshooting">Troubleshooting common issues</a></li>
+      <li><a href="#next">What to do next</a></li>
+    </ol>
+  </nav>
+
+  <div class="post-body">
+
+    <p>Running OpenClaw on a VPS means your AI assistant is always available — whether your laptop is closed, on a plane, or just turned off. Unlike a local Mac install, a VPS setup gives you 24/7 uptime, a static IP, and the ability to receive webhooks and messages at any hour.</p>
+
+    <p>This guide walks you through a full <strong>OpenClaw VPS installation</strong> from scratch, using a clean Ubuntu 22.04 server. The same steps work on Hetzner, DigitalOcean, Vultr, Linode, or any comparable provider.</p>
+
+    <div class="callout"><strong>Don't want to do this yourself?</strong> We offer a done-for-you <a href="https://install-openclaw.net/#pricing">OpenClaw VPS setup service</a> — live in 24 hours, no terminal required.</div>
+
+    <h2 id="why-vps">Why run OpenClaw on a VPS?</h2>
+    <p>A local install on your Mac is great for getting started, but a VPS unlocks the full potential of OpenClaw:</p>
+    <ul>
+      <li><strong>Always on</strong> — receives Telegram/WhatsApp messages even when your machine is off</li>
+      <li><strong>Stable endpoint</strong> — webhooks, n8n integrations, and bots all need a reliable URL</li>
+      <li><strong>No performance hit</strong> — offloads AI calls and automation workloads from your laptop</li>
+      <li><strong>Team-ready</strong> — easier to share access and add team members later</li>
+    </ul>
+    <p>A $6/month Hetzner CAX11 (2 vCPU, 4GB RAM) is more than enough to run OpenClaw, its gateway, and a few connected automations.</p>
+
+    <h2 id="requirements">What you need before starting</h2>
+    <ul>
+      <li>A VPS running <strong>Ubuntu 22.04 LTS</strong> (or 20.04) — root or sudo access</li>
+      <li>An <strong>AI API key</strong> — Claude (Anthropic), GPT-4o (OpenAI), or Gemini</li>
+      <li>A <strong>Telegram bot token</strong> (optional but recommended — create one via <a href="https://t.me/BotFather" target="_blank" rel="noopener">BotFather</a>)</li>
+      <li>~15 minutes of uninterrupted time</li>
+    </ul>
+
+    <h2 id="step1">Step 1 — Provision your server</h2>
+    <p>Create a new VPS with at least 2GB RAM and 20GB disk. Ubuntu 22.04 LTS is the recommended OS. Once it's up, SSH in:</p>
+    <pre><code>ssh root@YOUR_SERVER_IP</code></pre>
+    <p>Update the system first:</p>
+    <pre><code>apt update && apt upgrade -y</code></pre>
+
+    <h2 id="step2">Step 2 — Install Node.js</h2>
+    <p>OpenClaw requires Node.js 22 LTS or higher. Install it using the NodeSource setup script:</p>
+    <pre><code>curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+apt install -y nodejs</code></pre>
+    <p>Verify it installed correctly:</p>
+    <pre><code>node --version   # should print v22.x.x
+npm --version</code></pre>
+
+    <h2 id="step3">Step 3 — Install OpenClaw</h2>
+    <p>Install OpenClaw globally via npm:</p>
+    <pre><code>npm install -g openclaw</code></pre>
+    <p>This installs the <code>openclaw</code> CLI. Verify it works:</p>
+    <pre><code>openclaw --version</code></pre>
+
+    <h2 id="step4">Step 4 — Run initial setup</h2>
+    <p>OpenClaw has an interactive onboarding wizard. Run it once to set your AI provider, API key, and workspace:</p>
+    <pre><code>openclaw setup</code></pre>
+    <p>The wizard will ask you to:</p>
+    <ol>
+      <li>Choose your AI model provider (Claude, GPT-4o, Gemini, Ollama)</li>
+      <li>Paste your API key</li>
+      <li>Set a workspace directory (default: <code>~/.openclaw/workspace</code>)</li>
+      <li>Optionally configure a persona name and initial memory</li>
+    </ol>
+    <p>Your config is stored at <code>~/.openclaw/config.json</code>. You can edit it directly later.</p>
+
+    <h2 id="step5">Step 5 — Configure the gateway</h2>
+    <p>The OpenClaw gateway is what allows messaging channels (Telegram, WhatsApp, etc.) to reach your assistant. Start it:</p>
+    <pre><code>openclaw gateway start</code></pre>
+    <p>Check that it's running:</p>
+    <pre><code>openclaw gateway status</code></pre>
+    <p>By default, the gateway listens on port <code>3210</code>. If you have a firewall, open that port:</p>
+    <pre><code>ufw allow 3210/tcp</code></pre>
+
+    <div class="callout"><strong>Pro tip:</strong> If you have a domain name, point it at your VPS IP and configure the gateway's <code>publicUrl</code> in your config. This makes Telegram webhooks and other integrations much more reliable.</div>
+
+    <h2 id="step6">Step 6 — Keep it always-on with systemd</h2>
+    <p>To make OpenClaw survive reboots and run as a background service, create a systemd unit file:</p>
+    <pre><code>cat > /etc/systemd/system/openclaw.service << 'EOF'
+[Unit]
+Description=OpenClaw AI Assistant
+After=network.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/openclaw gateway start --foreground
+Restart=on-failure
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
+EOF</code></pre>
+    <p>Enable and start the service:</p>
+    <pre><code>systemctl daemon-reload
+systemctl enable openclaw
+systemctl start openclaw
+systemctl status openclaw</code></pre>
+    <p>Your OpenClaw gateway will now start automatically on boot and restart if it crashes.</p>
+
+    <h2 id="step7">Step 7 — Connect Telegram</h2>
+    <p>This is the most satisfying part — chatting with your assistant from your phone. You'll need a Telegram bot token from <a href="https://t.me/BotFather" target="_blank" rel="noopener">BotFather</a>.</p>
+    <p>Add the token to your OpenClaw config:</p>
+    <pre><code>openclaw config set channels.telegram.token YOUR_BOT_TOKEN</code></pre>
+    <p>Then restart the gateway:</p>
+    <pre><code>systemctl restart openclaw</code></pre>
+    <p>Open Telegram, find your bot, and send it a message. You should get a response from your AI assistant within a few seconds. For a full walkthrough, see our <a href="/blog/openclaw-telegram-bot-setup/">Telegram setup guide</a>.</p>
+
+    <h2 id="troubleshooting">Troubleshooting common issues</h2>
+
+    <h3>Gateway won't start</h3>
+    <p>Check the logs: <code>journalctl -u openclaw -n 50</code>. The most common causes are a missing API key, port conflict (something already using 3210), or a Node.js version below 22.</p>
+
+    <h3>Telegram bot not responding</h3>
+    <p>Make sure your gateway is reachable from the internet on port 3210. Test with: <code>curl http://YOUR_SERVER_IP:3210/health</code>. If it times out, check your VPS firewall rules.</p>
+
+    <h3>High memory usage</h3>
+    <p>OpenClaw itself is lightweight (~100MB), but repeated large AI conversations can grow memory over time. If you're on a 1GB RAM server, consider adding a 1GB swap file.</p>
+
+    <h3>npm install fails</h3>
+    <p>If you get permission errors, make sure you're running as root, or use <code>sudo npm install -g openclaw</code>. On non-root setups, configure npm's global prefix to a user-writable directory.</p>
+
+    <h2 id="next">What to do next</h2>
+    <p>Once your VPS setup is working, here's what most people do next:</p>
+    <ul>
+      <li><strong>Add a domain</strong> — point a subdomain at your VPS IP for a cleaner webhook URL</li>
+      <li><strong>Connect email & calendar</strong> — let your assistant read and respond to your inbox</li>
+      <li><strong>Set up n8n</strong> — pair OpenClaw with n8n for powerful workflow automations</li>
+      <li><strong>Configure memory</strong> — teach your assistant about your projects, preferences, and context</li>
+      <li><strong>Add skills</strong> — extend OpenClaw with community skills from ClawHub</li>
+    </ul>
+
+    <p>If you'd rather skip the terminal entirely and have us handle this for you, our <a href="https://install-openclaw.net/#pricing">Power User setup</a> includes VPS deployment, all channel connections, and 60 days of support — starting at $899.</p>
+
+    <div class="cta-box">
+      <h3>Want us to do this for you?</h3>
+      <p>We'll install, configure, and hand off a fully working OpenClaw on your VPS — live in 24 hours.</p>
+      <a href="https://install-openclaw.net/#contact" class="btn-white">Get Your VPS Setup →</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <a href="https://install-openclaw.net" class="footer-logo">Get<span>Micro</span>Services</a>
+  <p>© 2026 GetMicroservices. All rights reserved.</p>
+  <div class="footer-links">
+    <a href="https://install-openclaw.net">Home</a>
+    <a href="/blog/">Blog</a>
+    <a href="mailto:hello@getmicroservices.com">Contact</a>
+  </div>
+</footer>
+</body>
+</html>

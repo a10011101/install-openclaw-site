@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog – OpenClaw Setup Guides & Tips | install-openclaw.net</title>
+  <meta name="description" content="Practical guides on OpenClaw installation, configuration, self-hosted AI setup, and automation. Written by the team at GetMicroservices." />
+  <link rel="canonical" href="https://install-openclaw.net/blog/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://install-openclaw.net/blog/" />
+  <meta property="og:title" content="Blog – OpenClaw Setup Guides & Tips" />
+  <meta property="og:description" content="Practical guides on OpenClaw installation, configuration, self-hosted AI, and automation workflows." />
+  <meta property="og:image" content="https://install-openclaw.net/og-image.png" />
+  <meta property="og:site_name" content="GetMicroservices" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f5f3ee; --surface: #ffffff; --border: #d9d4c7;
+      --text: #1a1a1a; --muted: #6b6560; --accent: #b5006a;
+      --accent-hover: #8a004f; --code: #fdf6ec; --pixel: 2px;
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; line-height: 1.6; }
+    nav {
+      background: var(--surface); border-bottom: var(--pixel) solid var(--border);
+      padding: 0 2rem; display: flex; align-items: center; justify-content: space-between;
+      height: 64px; position: sticky; top: 0; z-index: 100;
+    }
+    .nav-logo { font-family: 'Fira Code', monospace; font-weight: 700; font-size: 1.1rem; color: var(--text); text-decoration: none; }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-links a { font-size: 0.9rem; color: var(--muted); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-cta {
+      background: var(--accent); color: #fff !important; padding: 0.45rem 1.1rem;
+      border: var(--pixel) solid var(--text); box-shadow: 3px 3px 0 var(--text);
+      font-weight: 700 !important; transition: box-shadow 0.15s, transform 0.15s !important;
+    }
+    .nav-cta:hover { box-shadow: 1px 1px 0 var(--text) !important; transform: translate(2px, 2px); }
+    .page-header { text-align: center; padding: 4rem 2rem 2.5rem; max-width: 700px; margin: 0 auto; }
+    .page-header .section-label { font-family: 'Fira Code', monospace; font-size: 0.78rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; }
+    .page-header h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; margin-bottom: 0.75rem; }
+    .page-header p { color: var(--muted); font-size: 1.05rem; }
+    .blog-grid { max-width: 900px; margin: 0 auto; padding: 0 2rem 5rem; display: grid; gap: 1.5rem; }
+    .post-card {
+      background: var(--surface); border: var(--pixel) solid var(--border);
+      box-shadow: 4px 4px 0 var(--border); padding: 1.75rem 2rem;
+      text-decoration: none; color: inherit; display: block;
+      transition: box-shadow 0.15s, transform 0.15s;
+    }
+    .post-card:hover { box-shadow: 2px 2px 0 var(--border); transform: translate(2px, 2px); }
+    .post-meta { font-family: 'Fira Code', monospace; font-size: 0.78rem; color: var(--muted); margin-bottom: 0.6rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+    .post-tag { color: var(--accent); }
+    .post-card h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .post-card p { color: var(--muted); font-size: 0.95rem; line-height: 1.6; }
+    .read-more { margin-top: 0.75rem; font-family: 'Fira Code', monospace; font-size: 0.82rem; color: var(--accent); }
+    footer {
+      background: var(--surface); border-top: var(--pixel) solid var(--border);
+      padding: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-logo { font-family: 'Fira Code', monospace; font-weight: 700; font-size: 0.95rem; color: var(--text); text-decoration: none; }
+    .footer-logo span { color: var(--accent); }
+    footer p { font-size: 0.82rem; color: var(--muted); }
+    footer a { color: var(--muted); text-decoration: none; font-size: 0.82rem; }
+    footer a:hover { color: var(--accent); }
+    .footer-links { display: flex; gap: 1.25rem; flex-wrap: wrap; }
+    .hamburger { display: none; cursor: pointer; background: none; border: none; padding: 0.5rem; }
+    .hamburger span { display: block; width: 22px; height: 2px; background: var(--text); margin: 5px 0; }
+    .mobile-menu { display: none; }
+    @media (max-width: 640px) {
+      .hamburger { display: block; }
+      .nav-links { display: none; }
+      .nav-cta-desktop { display: none; }
+      .mobile-menu { display: none; flex-direction: column; background: var(--surface); border-bottom: var(--pixel) solid var(--border); padding: 1rem 2rem; gap: 0.75rem; }
+      .mobile-menu.open { display: flex; }
+      .mobile-menu a { font-size: 1rem; color: var(--text); text-decoration: none; font-weight: 600; padding: 0.4rem 0; border-bottom: 1px solid var(--border); }
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="https://install-openclaw.net" class="nav-logo" style="text-decoration:none;display:flex;flex-direction:column;">
+    <span style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:400;letter-spacing:-0.01em;line-height:1;color:#1a1a1a;">Get<span style="color:#b5006a;">Micro</span><span style="color:#e9c46a;">Services</span></span>
+    <div style="font-size:0.65rem;color:#6b6560;letter-spacing:0.06em;margin-top:3px;">// done-for-you automation agency</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="https://install-openclaw.net/#what">What is OpenClaw</a></li>
+    <li><a href="https://install-openclaw.net/#pricing">Pricing</a></li>
+    <li><a href="https://install-openclaw.net/#process">How it Works</a></li>
+    <li><a href="https://install-openclaw.net/#faq">FAQ</a></li>
+    <li><a href="https://install-openclaw.net/#contact" class="nav-cta nav-cta-desktop">Get Started</a></li>
+  </ul>
+  <button class="hamburger" onclick="document.getElementById('mobileMenu').classList.toggle('open')" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="https://install-openclaw.net/#what">What is OpenClaw</a>
+  <a href="https://install-openclaw.net/#pricing">Pricing</a>
+  <a href="https://install-openclaw.net/#process">How it Works</a>
+  <a href="https://install-openclaw.net/#faq">FAQ</a>
+  <a href="mailto:hello@getmicroservices.com">→ Get Started</a>
+</div>
+
+<header class="page-header">
+  <div class="section-label">// openclaw blog</div>
+  <h1>Setup Guides & Tips</h1>
+  <p>Practical articles on OpenClaw installation, configuration, self-hosted AI, and automation — written by the team at GetMicroservices.</p>
+</header>
+
+<main class="blog-grid">
+
+  <a class="post-card" href="/blog/openclaw-vps-setup-guide/">
+    <div class="post-meta">
+      <span class="post-tag">// guide</span>
+      <span>April 5, 2026</span>
+      <span>8 min read</span>
+    </div>
+    <h2>How to Install OpenClaw on a VPS: Complete Setup Guide (2026)</h2>
+    <p>Step-by-step walkthrough for deploying OpenClaw on a DigitalOcean, Hetzner, or any Linux VPS. Covers Node.js setup, gateway configuration, Telegram bot wiring, and keeping it always-on with systemd.</p>
+    <div class="read-more">Read guide →</div>
+  </a>
+
+  <a class="post-card" href="/blog/openclaw-telegram-bot-setup/">
+    <div class="post-meta">
+      <span class="post-tag">// tutorial</span>
+      <span>April 5, 2026</span>
+      <span>6 min read</span>
+    </div>
+    <h2>OpenClaw Telegram Bot Setup: Talk to Your AI Assistant from Anywhere</h2>
+    <p>How to connect OpenClaw to Telegram using BotFather, configure your bot token, and chat with your self-hosted AI assistant from any device — in under 30 minutes.</p>
+    <div class="read-more">Read tutorial →</div>
+  </a>
+
+</main>
+
+<footer>
+  <a href="https://install-openclaw.net" class="footer-logo">Get<span>Micro</span>Services</a>
+  <p>© 2026 GetMicroservices. All rights reserved.</p>
+  <div class="footer-links">
+    <a href="https://install-openclaw.net">Home</a>
+    <a href="/blog/">Blog</a>
+    <a href="mailto:hello@getmicroservices.com">Contact</a>
+  </div>
+</footer>
+</body>
+</html>
