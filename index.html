@@ -16,10 +16,6 @@
     gtag('config', 'G-RKCCVN536P');
   </script>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-
   <!-- OG -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://install-openclaw.net/" />
@@ -98,7 +94,7 @@
         "name": "Do I need a Mac to use OpenClaw?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "No. OpenClaw runs on Mac, Linux, and Windows (via WSL). We can also deploy it on a VPS so it's always on, even when your laptop is closed. We'll recommend the best option during the intake call."
+          "text": "No. OpenClaw runs on Mac, Linux, and Windows (via WSL). We can also deploy it on a VPS so it's always on, even when your laptop is closed."
         }
       },
       {
@@ -114,7 +110,7 @@
         "name": "Is my data private with OpenClaw?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes. OpenClaw runs on your own machine or server. Your conversations, files, and integrations stay where you put them. The only external calls are to the AI model provider you choose."
+          "text": "Yes. OpenClaw runs on your own machine or server. Your conversations, files, and integrations stay where you put them."
         }
       },
       {
@@ -122,7 +118,7 @@
         "name": "What if something breaks after setup?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Every plan includes at least 30 days of support. If something breaks within that window, we'll fix it. Ongoing support retainers are available after that."
+          "text": "Every plan includes at least 30 days of support. If something breaks within that window, we'll fix it."
         }
       },
       {
@@ -130,7 +126,7 @@
         "name": "How is payment handled?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "We invoice via Stripe. Payment is due before work begins. We'll send a link when you book."
+          "text": "We invoice via Stripe. Payment is due before work begins."
         }
       },
       {
@@ -145,286 +141,325 @@
   }
   </script>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    input, textarea { -webkit-user-select: text; -moz-user-select: text; user-select: text; }
 
     :root {
-      --bg: #f5f3ee;
-      --surface: #ffffff;
-      --border: #d9d4c7;
-      --text: #1a1a1a;
-      --muted: #6b6560;
-      --accent: #b5006a;
-      --accent-hover: #8a004f;
-      --code: #fdf6ec;
-      --pixel: 2px;
+      --bg: #060b14;
+      --surface: #0d1623;
+      --surface2: #111c2e;
+      --border: #1e2d45;
+      --text: #e8edf5;
+      --muted: #7a8fa8;
+      --accent: #00d9c8;
+      --accent2: #0099ff;
+      --accent-dim: rgba(0, 217, 200, 0.12);
+      --mono: 'JetBrains Mono', monospace;
+      --sans: 'Inter', sans-serif;
     }
+
+    html { scroll-behavior: smooth; }
 
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Space Grotesk', sans-serif;
+      font-family: var(--sans);
       line-height: 1.6;
+      min-height: 100vh;
     }
 
     /* ── NAV ── */
     nav {
-      background: var(--surface);
-      border-bottom: var(--pixel) solid var(--border);
-      padding: 0 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 64px;
       position: sticky;
       top: 0;
       z-index: 100;
+      background: rgba(6, 11, 20, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
     .nav-logo {
-      font-family: 'Fira Code', monospace;
+      font-family: var(--mono);
+      font-size: 0.95rem;
       font-weight: 700;
-      font-size: 1.1rem;
       color: var(--text);
       text-decoration: none;
-    }
-    .nav-logo span { color: var(--accent); }
-    .nav-links {
       display: flex;
-      gap: 1.5rem;
-      list-style: none;
+      align-items: center;
+      gap: 0.5rem;
     }
-    .nav-links a {
-      font-size: 0.9rem;
-      color: var(--muted);
+    .nav-logo .bracket { color: var(--accent); }
+    .nav-cta-sm {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent);
       text-decoration: none;
-      font-weight: 500;
-      transition: color 0.2s;
+      border: 1px solid var(--accent);
+      padding: 0.4rem 1rem;
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s;
     }
-    .nav-links a:hover { color: var(--accent); }
-    .nav-cta {
-      background: var(--accent);
-      color: #fff !important;
-      padding: 0.45rem 1.1rem;
-      border: var(--pixel) solid var(--text);
-      box-shadow: 3px 3px 0 var(--text);
-      font-weight: 700 !important;
-      transition: box-shadow 0.15s, transform 0.15s !important;
-    }
-    .nav-cta:hover {
-      box-shadow: 1px 1px 0 var(--text) !important;
-      transform: translate(2px, 2px);
-      color: #fff !important;
-    }
+    .nav-cta-sm:hover { background: var(--accent); color: var(--bg); }
 
     /* ── HERO ── */
     .hero {
       text-align: center;
-      padding: 5rem 2rem 3.5rem;
-      max-width: 800px;
+      padding: 6rem 2rem 4rem;
+      max-width: 760px;
       margin: 0 auto;
     }
-    .hero-tag {
-      display: inline-block;
-      background: var(--code);
-      border: var(--pixel) solid var(--border);
-      font-family: 'Fira Code', monospace;
-      font-size: 0.8rem;
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--mono);
+      font-size: 0.75rem;
       color: var(--accent);
-      padding: 0.25rem 0.75rem;
-      margin-bottom: 1.25rem;
+      background: var(--accent-dim);
+      border: 1px solid rgba(0, 217, 200, 0.25);
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      margin-bottom: 2rem;
+      letter-spacing: 0.05em;
     }
+    .hero-badge::before { content: '⟩'; }
     .hero h1 {
+      font-family: var(--sans);
       font-size: clamp(2rem, 5vw, 3.2rem);
       font-weight: 700;
-      line-height: 1.2;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
       margin-bottom: 1.25rem;
     }
-    .hero h1 span { color: var(--accent); }
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
     .hero p {
       font-size: 1.15rem;
       color: var(--muted);
-      max-width: 600px;
-      margin: 0 auto 2rem;
+      max-width: 540px;
+      margin: 0 auto 2.5rem;
     }
-    .hero-cta-group {
+    .hero-actions {
       display: flex;
       gap: 1rem;
       justify-content: center;
       flex-wrap: wrap;
     }
     .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
       background: var(--accent);
-      color: #fff;
-      padding: 0.85rem 2rem;
-      border: var(--pixel) solid var(--text);
-      box-shadow: 4px 4px 0 var(--text);
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1rem;
+      color: var(--bg);
+      font-family: var(--mono);
+      font-size: 0.9rem;
       font-weight: 700;
-      cursor: pointer;
+      padding: 0.75rem 1.75rem;
+      border-radius: 6px;
       text-decoration: none;
-      display: inline-block;
-      transition: box-shadow 0.15s, transform 0.15s;
+      transition: opacity 0.2s, transform 0.15s;
     }
-    .btn-primary:hover {
-      box-shadow: 2px 2px 0 var(--text);
-      transform: translate(2px, 2px);
-    }
-    .btn-secondary {
-      background: transparent;
-      color: var(--text);
-      padding: 0.85rem 2rem;
-      border: var(--pixel) solid var(--text);
-      box-shadow: 4px 4px 0 var(--text);
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 0.75rem 1.75rem;
+      border-radius: 6px;
       text-decoration: none;
-      display: inline-block;
-      transition: box-shadow 0.15s, transform 0.15s;
+      transition: border-color 0.2s, color 0.2s;
     }
-    .btn-secondary:hover {
-      box-shadow: 2px 2px 0 var(--text);
-      transform: translate(2px, 2px);
-    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
 
     /* ── TRUST BAR ── */
     .trust-bar {
-      background: var(--surface);
-      border-top: var(--pixel) solid var(--border);
-      border-bottom: var(--pixel) solid var(--border);
-      padding: 1rem 2rem;
       display: flex;
       justify-content: center;
       gap: 2.5rem;
       flex-wrap: wrap;
+      padding: 2rem 2rem;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0;
     }
     .trust-item {
-      font-family: 'Fira Code', monospace;
-      font-size: 0.85rem;
-      color: var(--muted);
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.6rem;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--muted);
     }
-    .trust-item span { color: var(--accent); font-weight: 700; }
+    .trust-item .icon { color: var(--accent); font-size: 1rem; }
 
-    /* ── SECTION COMMON ── */
-    section { padding: 4rem 2rem; }
-    .section-inner { max-width: 1080px; margin: 0 auto; }
+    /* ── SECTIONS ── */
+    section { padding: 5rem 2rem; }
+    .section-inner { max-width: 960px; margin: 0 auto; }
     .section-label {
-      font-family: 'Fira Code', monospace;
-      font-size: 0.78rem;
+      font-family: var(--mono);
+      font-size: 0.75rem;
       color: var(--accent);
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
     }
+    .section-label::before { content: '⟩ '; }
     .section-title {
-      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-size: clamp(1.5rem, 3vw, 2rem);
       font-weight: 700;
-      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
     }
     .section-sub {
       color: var(--muted);
-      font-size: 1.05rem;
-      max-width: 560px;
-      margin-bottom: 2.5rem;
-    }
-
-    /* ── WHAT IS OPENCLAW ── */
-    .what-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-      align-items: center;
-    }
-    @media (max-width: 700px) { .what-grid { grid-template-columns: 1fr; } }
-    .what-text p {
-      color: var(--muted);
-      margin-bottom: 1rem;
       font-size: 1rem;
+      max-width: 560px;
     }
-    .what-features {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
-    }
-    @media (max-width: 500px) { .what-features { grid-template-columns: 1fr; } }
-    .feature-chip {
-      background: var(--code);
-      border: var(--pixel) solid var(--border);
-      padding: 0.55rem 0.85rem;
-      font-family: 'Fira Code', monospace;
-      font-size: 0.8rem;
-      color: var(--text);
-    }
-    .feature-chip::before { content: '→ '; color: var(--accent); }
 
-    /* ── PRICING CARDS ── */
-    .pricing-grid {
+    /* ── WHAT YOU GET ── */
+    .features-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.25rem;
+      margin-top: 2.5rem;
     }
-    .pixel-box {
+    .feature-card {
       background: var(--surface);
-      border: var(--pixel) solid var(--border);
-      box-shadow: 4px 4px 0 var(--border);
-      padding: 2rem;
-      position: relative;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      transition: border-color 0.2s;
     }
-    .pixel-box.featured {
-      border-color: var(--accent);
-      box-shadow: 4px 4px 0 var(--accent);
+    .feature-card:hover { border-color: var(--accent); }
+    .feature-icon {
+      font-size: 1.4rem;
+      margin-bottom: 0.75rem;
     }
-    .badge {
-      position: absolute;
-      top: -14px;
-      left: 1.5rem;
-      background: var(--accent);
-      color: #fff;
-      font-family: 'Fira Code', monospace;
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 0.2rem 0.65rem;
-      border: var(--pixel) solid var(--text);
-    }
-    .plan-name {
-      font-family: 'Fira Code', monospace;
-      font-size: 0.8rem;
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
+    .feature-card h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
       margin-bottom: 0.4rem;
     }
-    .plan-price {
-      font-size: 2.4rem;
+    .feature-card p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── HOW IT WORKS ── */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0;
+      margin-top: 2.5rem;
+      position: relative;
+    }
+    .step {
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+      margin-right: -1px;
+      margin-bottom: -1px;
+      background: var(--surface);
+    }
+    .step-num {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+    .step h3 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+    .step p { font-size: 0.82rem; color: var(--muted); }
+
+    /* ── PRICING ── */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.25rem;
+      margin-top: 2.5rem;
+      align-items: start;
+    }
+    .plan {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.75rem;
+      position: relative;
+    }
+    .plan.featured {
+      border-color: var(--accent);
+      background: var(--surface2);
+    }
+    .plan-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--mono);
+      font-size: 0.65rem;
       font-weight: 700;
-      line-height: 1;
+      color: var(--bg);
+      background: var(--accent);
+      padding: 0.2rem 0.75rem;
+      border-radius: 999px;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+    .plan-name {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .plan-price {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
       margin-bottom: 0.25rem;
     }
-    .plan-price sub {
-      font-size: 1rem;
+    .plan-price span {
+      font-size: 0.9rem;
       font-weight: 400;
       color: var(--muted);
     }
     .plan-desc {
-      font-size: 0.9rem;
+      font-size: 0.83rem;
       color: var(--muted);
-      margin-bottom: 1.5rem;
-      padding-bottom: 1.5rem;
-      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.25rem;
+      line-height: 1.5;
     }
     .plan-features {
       list-style: none;
       margin-bottom: 1.75rem;
     }
     .plan-features li {
-      font-size: 0.92rem;
-      padding: 0.35rem 0;
+      font-size: 0.83rem;
+      color: var(--muted);
+      padding: 0.3rem 0;
       display: flex;
       align-items: flex-start;
       gap: 0.5rem;
@@ -432,299 +467,260 @@
     .plan-features li::before {
       content: '✓';
       color: var(--accent);
+      font-family: var(--mono);
       font-weight: 700;
-      font-family: 'Fira Code', monospace;
       flex-shrink: 0;
-      margin-top: 1px;
     }
-    .plan-features li.muted::before { content: '–'; color: var(--border); }
-    .plan-features li.muted { color: var(--muted); }
-
-    /* ── PROCESS ── */
-    .process-steps {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.25rem;
+    .plan-cta {
+      display: block;
+      text-align: center;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.7rem 1rem;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: all 0.2s;
     }
-    .step {
-      background: var(--surface);
-      border: var(--pixel) solid var(--border);
-      box-shadow: 4px 4px 0 var(--border);
-      padding: 1.5rem;
+    .plan.featured .plan-cta {
+      background: var(--accent);
+      color: var(--bg);
     }
-    .step-num {
-      font-family: 'Fira Code', monospace;
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: var(--accent);
-      opacity: 0.3;
-      line-height: 1;
-      margin-bottom: 0.5rem;
-    }
-    .step h3 {
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 0.4rem;
-    }
-    .step p {
-      font-size: 0.88rem;
+    .plan.featured .plan-cta:hover { opacity: 0.88; }
+    .plan:not(.featured) .plan-cta {
+      border: 1px solid var(--border);
       color: var(--muted);
     }
+    .plan:not(.featured) .plan-cta:hover { border-color: var(--accent); color: var(--accent); }
 
     /* ── FAQ ── */
-    .faq-list { max-width: 720px; }
+    .faq-list { margin-top: 2rem; }
     details {
-      border: var(--pixel) solid var(--border);
-      background: var(--surface);
-      margin-bottom: 0.75rem;
-      box-shadow: 3px 3px 0 var(--border);
+      border-bottom: 1px solid var(--border);
     }
+    details:first-child { border-top: 1px solid var(--border); }
     summary {
-      font-weight: 600;
-      font-size: 0.98rem;
+      padding: 1.1rem 0;
+      font-size: 0.95rem;
+      font-weight: 500;
       cursor: pointer;
-      padding: 1rem 1.25rem;
       list-style: none;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      user-select: none;
     }
     summary::-webkit-details-marker { display: none; }
     summary::after {
       content: '+';
-      font-family: 'Fira Code', monospace;
-      font-size: 1.2rem;
+      font-family: var(--mono);
       color: var(--accent);
+      font-size: 1.2rem;
+      flex-shrink: 0;
     }
-    details[open] summary::after { content: '–'; }
+    details[open] summary::after { content: '−'; }
     details p {
-      padding: 0 1.25rem 1rem;
-      font-size: 0.92rem;
+      font-size: 0.88rem;
       color: var(--muted);
-      border-top: 1px solid var(--border);
-      padding-top: 0.75rem;
+      padding-bottom: 1.1rem;
+      line-height: 1.7;
     }
 
     /* ── CTA BAND ── */
     .cta-band {
-      background: var(--text);
-      color: #fff;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
       text-align: center;
       padding: 4rem 2rem;
     }
     .cta-band h2 {
-      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
       margin-bottom: 0.75rem;
     }
     .cta-band p {
-      color: #aaa;
+      color: var(--muted);
       margin-bottom: 2rem;
-      font-size: 1rem;
     }
-    .btn-white {
-      background: #fff;
-      color: var(--text);
-      padding: 0.85rem 2rem;
-      border: var(--pixel) solid #fff;
-      box-shadow: 4px 4px 0 var(--accent);
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      text-decoration: none;
+    .cta-email {
       display: inline-block;
-      transition: box-shadow 0.15s, transform 0.15s;
+      font-family: var(--mono);
+      font-size: 1rem;
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0, 217, 200, 0.3);
+      padding-bottom: 2px;
+      transition: border-color 0.2s;
     }
-    .btn-white:hover {
-      box-shadow: 2px 2px 0 var(--accent);
-      transform: translate(2px, 2px);
-    }
+    .cta-email:hover { border-color: var(--accent); }
 
     /* ── FOOTER ── */
     footer {
-      background: var(--surface);
-      border-top: var(--pixel) solid var(--border);
       padding: 2rem;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       flex-wrap: wrap;
       gap: 1rem;
+      border-top: 1px solid var(--border);
     }
     .footer-logo {
-      font-family: 'Fira Code', monospace;
-      font-weight: 700;
-      font-size: 0.95rem;
-      color: var(--text);
-      text-decoration: none;
-    }
-    .footer-logo span { color: var(--accent); }
-    footer p {
-      font-size: 0.82rem;
-      color: var(--muted);
-    }
-    footer a {
+      font-family: var(--mono);
+      font-size: 0.85rem;
       color: var(--muted);
       text-decoration: none;
-      font-size: 0.82rem;
     }
-    footer a:hover { color: var(--accent); }
-    .footer-links { display: flex; gap: 1.25rem; flex-wrap: wrap; }
+    .footer-logo:hover { color: var(--text); }
+    footer p { font-size: 0.8rem; color: var(--muted); }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-decoration: none;
+    }
+    .footer-links a:hover { color: var(--accent); }
 
-    /* ── MOBILE NAV ── */
-    .hamburger { display: none; cursor: pointer; background: none; border: none; padding: 0.5rem; }
-    .hamburger span { display: block; width: 22px; height: 2px; background: var(--text); margin: 5px 0; }
-    .mobile-menu { display: none; }
+    /* ── MOBILE ── */
     @media (max-width: 640px) {
-      .hamburger { display: block; }
-      .nav-links { display: none; }
-      .nav-cta-desktop { display: none; }
-      .mobile-menu {
-        display: none;
-        flex-direction: column;
-        background: var(--surface);
-        border-bottom: var(--pixel) solid var(--border);
-        padding: 1rem 2rem;
-        gap: 0.75rem;
-      }
-      .mobile-menu.open { display: flex; }
-      .mobile-menu a {
-        font-size: 1rem;
-        color: var(--text);
-        text-decoration: none;
-        font-weight: 600;
-        padding: 0.4rem 0;
-        border-bottom: 1px solid var(--border);
-      }
+      nav { padding: 0 1rem; }
+      .hero { padding: 4rem 1.25rem 3rem; }
+      section { padding: 3.5rem 1.25rem; }
+      .trust-bar { gap: 1.25rem; padding: 1.5rem 1.25rem; }
+      footer { flex-direction: column; align-items: flex-start; }
+      .steps { grid-template-columns: 1fr; }
     }
-
-    /* alt bg sections */
-    .alt-bg { background: var(--surface); }
-
-    /* ── CONTACT FORM ── */
-    .contact-form { display: flex; flex-direction: column; gap: 12px; }
-    .contact-form input,
-    .contact-form select,
-    .contact-form textarea {
-      background: var(--surface);
-      border: var(--pixel) solid var(--border);
-      padding: 0.75rem 1rem;
-      font-family: 'Fira Code', monospace;
-      font-size: 0.88rem;
-      color: var(--text);
-      width: 100%;
-      outline: none;
-      transition: border-color 0.15s;
-    }
-    .contact-form input:focus,
-    .contact-form select:focus,
-    .contact-form textarea:focus { border-color: var(--accent); }
-    .contact-form select option { background: var(--surface); }
-    .contact-form textarea { resize: vertical; }
   </style>
 </head>
 <body>
 
 <!-- NAV -->
 <nav>
-  <a href="https://getmicroservices.com" class="nav-logo">Get<span>Micro</span>Services</a>
-  <ul class="nav-links">
-    <li><a href="#what">What is OpenClaw</a></li>
-    <li><a href="#pricing">Pricing</a></li>
-    <li><a href="#process">How it Works</a></li>
-    <li><a href="#faq">FAQ</a></li>
-    <li><a href="#contact" class="nav-cta nav-cta-desktop">Get Started</a></li>
-  </ul>
-  <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
+  <a href="https://getmicroservices.com" class="nav-logo">
+    <span class="bracket">[</span>GetMicroservices<span class="bracket">]</span>
+  </a>
+  <a href="mailto:hello@getmicroservices.com?subject=OpenClaw%20Setup%20Enquiry" class="nav-cta-sm">→ Get Started</a>
 </nav>
-<div class="mobile-menu" id="mobileMenu">
-  <a href="#what">What is OpenClaw</a>
-  <a href="#pricing">Pricing</a>
-  <a href="#process">How it Works</a>
-  <a href="#faq">FAQ</a>
-  <a href="mailto:hello@getmicroservices.com">→ Get Started</a>
-</div>
 
 <!-- HERO -->
-<section class="hero">
-  <div class="hero-tag">// done-for-you AI setup</div>
-  <h1>Get <span>OpenClaw</span> Running —<br>Without the Headaches</h1>
-  <p>We install, configure, and hand off a fully working OpenClaw AI assistant on your Mac or business server. You're live in 24 hours. No terminal required.</p>
-  <div class="hero-cta-group">
-    <a href="mailto:hello@getmicroservices.com?subject=OpenClaw%20Setup%20Enquiry" class="btn-primary">Get Your Setup — from $499</a>
-    <a href="#pricing" class="btn-secondary">See All Plans</a>
+<div class="hero">
+  <div class="hero-badge">done-for-you OpenClaw setup service</div>
+  <h1>Your own AI assistant.<br><em>Running in 24 hours.</em></h1>
+  <p>We install, configure, and hand off a fully working OpenClaw on your Mac or server. No terminal. No headaches. You just use it.</p>
+  <div class="hero-actions">
+    <a href="mailto:hello@getmicroservices.com?subject=OpenClaw%20Setup%20Enquiry" class="btn-primary">Start Your Setup →</a>
+    <a href="#pricing" class="btn-outline">View Pricing</a>
   </div>
-</section>
+</div>
 
 <!-- TRUST BAR -->
 <div class="trust-bar">
-  <div class="trust-item">⚡ <span>24h</span> turnaround</div>
-  <div class="trust-item">🔒 <span>100%</span> private — your data, your server</div>
-  <div class="trust-item">🛠 <span>Full</span> handoff + walkthrough</div>
-  <div class="trust-item">💬 <span>30-day</span> support included</div>
+  <div class="trust-item"><span class="icon">⚡</span> 24h turnaround</div>
+  <div class="trust-item"><span class="icon">🔒</span> 100% private — your server</div>
+  <div class="trust-item"><span class="icon">🛠</span> Full handoff + walkthrough</div>
+  <div class="trust-item"><span class="icon">💬</span> 30-day support included</div>
 </div>
 
-<!-- WHAT IS OPENCLAW -->
+<!-- WHAT YOU GET -->
 <section id="what">
   <div class="section-inner">
-    <div class="what-grid">
-      <div class="what-text">
-        <div class="section-label">// what is openclaw</div>
-        <h2 class="section-title">Your own AI assistant,<br>running on <em>your</em> infrastructure</h2>
-        <p>OpenClaw is an open-source AI assistant platform — like having a personal ChatGPT that lives on your machine, connects to your tools, and never sends your data anywhere you haven't approved.</p>
-        <p>It connects to Telegram, WhatsApp, Discord, email, calendar, GitHub, Shopify, and dozens more. It can run automations, manage workflows, answer questions, and actually get things done — not just chat.</p>
-        <p>Setting it up correctly takes hours of fiddling. We skip that part for you.</p>
+    <div class="section-label">what you get</div>
+    <h2 class="section-title">OpenClaw, properly configured</h2>
+    <p class="section-sub">Setting it up correctly takes hours of fiddling. We skip that part for you.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <h3>AI on your infrastructure</h3>
+        <p>OpenClaw running on your Mac or VPS — connected to Claude, GPT-4o, or local models. Your data never leaves your server.</p>
       </div>
-      <div class="what-features">
-        <div class="feature-chip">Telegram / WhatsApp bot</div>
-        <div class="feature-chip">Email & calendar access</div>
-        <div class="feature-chip">Shopify & CRM sync</div>
-        <div class="feature-chip">Custom automations</div>
-        <div class="feature-chip">Runs locally / VPS</div>
-        <div class="feature-chip">Your own AI model</div>
-        <div class="feature-chip">No SaaS fees</div>
-        <div class="feature-chip">Private by default</div>
+      <div class="feature-card">
+        <div class="feature-icon">💬</div>
+        <h3>Messaging channels connected</h3>
+        <p>Talk to your AI from Telegram, WhatsApp, Discord, or email. Works in DMs and group chats.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🧠</div>
+        <h3>Memory & persona setup</h3>
+        <p>Your assistant learns your preferences, remembers context, and behaves exactly the way you want it to.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚙️</div>
+        <h3>Tools & integrations wired</h3>
+        <p>Email, calendar, GitHub, Shopify, n8n — whatever you need connected, we connect it.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎓</div>
+        <h3>Full handoff walkthrough</h3>
+        <p>We walk you through everything we built, what it can do, and how to use it. You're fully in control.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🛟</div>
+        <h3>Post-setup support</h3>
+        <p>Every plan includes at least 30 days of email support. Something breaks? We fix it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="process" style="background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="section-inner">
+    <div class="section-label">how it works</div>
+    <h2 class="section-title">Four steps. Live in 24 hours.</h2>
+    <p class="section-sub">You don't touch the terminal once.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">// 01</div>
+        <h3>Book your setup</h3>
+        <p>Email us. We'll reply within a few hours to confirm and schedule your session.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">// 02</div>
+        <h3>15-min intake call</h3>
+        <p>We ask about your stack, tools, and what you want your AI to actually do.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">// 03</div>
+        <h3>We do the setup</h3>
+        <p>Remote screen share or server access. We install, configure, integrate, and test everything.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">// 04</div>
+        <h3>Handoff + walkthrough</h3>
+        <p>We show you what we built and hand over full control. You're live.</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- PRICING -->
-<section id="pricing" class="alt-bg">
+<section id="pricing">
   <div class="section-inner">
-    <div class="section-label">// pricing</div>
+    <div class="section-label">pricing</div>
     <h2 class="section-title">One-time setup. Done properly.</h2>
-    <p class="section-sub">No subscriptions. No ongoing retainer unless you want one. Pay once, own it forever.</p>
-
+    <p class="section-sub">No subscriptions. No retainer unless you want one. Pay once, own it forever.</p>
     <div class="pricing-grid">
 
-      <!-- MAC PERSONAL -->
-      <div class="pixel-box">
+      <div class="plan">
         <div class="plan-name">Mac Personal</div>
-        <div class="plan-price">$499<sub> one-time</sub></div>
-        <p class="plan-desc">OpenClaw installed and configured on your personal Mac. Perfect for founders, freelancers, and power users.</p>
+        <div class="plan-price">$499 <span>one-time</span></div>
+        <div class="plan-desc">OpenClaw on your personal Mac. Perfect for founders, freelancers, and power users.</div>
         <ul class="plan-features">
           <li>Remote setup via screen share</li>
           <li>OpenClaw installed + configured</li>
-          <li>Connect 1 messaging channel (Telegram/WhatsApp/Discord)</li>
+          <li>1 messaging channel connected</li>
           <li>Basic persona + memory setup</li>
           <li>30-min handoff walkthrough</li>
           <li>30 days email support</li>
-          <li class="muted">Custom integrations</li>
-          <li class="muted">VPS / server deployment</li>
         </ul>
-        <a href="mailto:hello@getmicroservices.com?subject=Mac%20Personal%20Setup%20%E2%80%94%20%24499" class="btn-primary" style="width:100%;text-align:center;">Get Started</a>
+        <a href="mailto:hello@getmicroservices.com?subject=Mac%20Personal%20Setup%20%E2%80%94%20%24499" class="plan-cta">Get Started →</a>
       </div>
 
-      <!-- POWER USER -->
-      <div class="pixel-box featured">
-        <div class="badge">★ Most Popular</div>
+      <div class="plan featured">
+        <div class="plan-badge">★ MOST POPULAR</div>
         <div class="plan-name">Power User</div>
-        <div class="plan-price">$899<sub> one-time</sub></div>
-        <p class="plan-desc">Full setup on Mac or VPS, all channels connected, custom automations baked in. Ready to run your day from day one.</p>
+        <div class="plan-price">$899 <span>one-time</span></div>
+        <div class="plan-desc">Full setup on Mac or VPS, all channels, custom automations. Ready to run your day from day one.</div>
         <ul class="plan-features">
           <li>Mac or VPS deployment</li>
           <li>All messaging channels connected</li>
@@ -733,16 +729,14 @@
           <li>Custom persona, memory & identity</li>
           <li>1-hour handoff + training call</li>
           <li>60 days priority support</li>
-          <li class="muted">Team / multi-user setup</li>
         </ul>
-        <a href="mailto:hello@getmicroservices.com?subject=Power%20User%20Setup%20%E2%80%94%20%24899" class="btn-primary" style="width:100%;text-align:center;">Get Started</a>
+        <a href="mailto:hello@getmicroservices.com?subject=Power%20User%20Setup%20%E2%80%94%20%24899" class="plan-cta">Get Started →</a>
       </div>
 
-      <!-- BUSINESS -->
-      <div class="pixel-box">
+      <div class="plan">
         <div class="plan-name">Business</div>
-        <div class="plan-price">$1,999<sub> one-time</sub></div>
-        <p class="plan-desc">Full business deployment. Multiple users, custom integrations, Shopify/CRM/n8n wiring, and an AI assistant that actually runs your ops.</p>
+        <div class="plan-price">$1,999 <span>one-time</span></div>
+        <div class="plan-desc">Full business deployment. Multiple users, custom integrations, and an AI that runs your ops.</div>
         <ul class="plan-features">
           <li>VPS or on-premise deployment</li>
           <li>Multi-user / team setup</li>
@@ -753,179 +747,72 @@
           <li>2-hour onboarding session</li>
           <li>90 days priority support</li>
         </ul>
-        <a href="mailto:hello@getmicroservices.com?subject=Business%20Setup%20Enquiry" class="btn-primary" style="width:100%;text-align:center;">Contact Us</a>
+        <a href="mailto:hello@getmicroservices.com?subject=Business%20Setup%20Enquiry" class="plan-cta">Contact Us →</a>
       </div>
 
     </div>
-
-    <p style="margin-top:1.5rem;font-size:0.85rem;color:var(--muted);font-family:'Fira Code',monospace;">
-      // Need something custom? <a href="mailto:hello@getmicroservices.com" style="color:var(--accent);">Email us</a> — we build bespoke setups for complex teams.
+    <p style="margin-top:1.5rem; font-family: var(--mono); font-size: 0.8rem; color: var(--muted); text-align: center;">
+      Need something custom? <a href="mailto:hello@getmicroservices.com" style="color: var(--accent);">Email us</a> — we build bespoke setups for complex teams.
     </p>
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
-<section id="process">
-  <div class="section-inner">
-    <div class="section-label">// how it works</div>
-    <h2 class="section-title">Four steps. Live in 24 hours.</h2>
-    <p class="section-sub">You don't touch the terminal once. We handle everything, then hand it over.</p>
-
-    <div class="process-steps">
-      <div class="step">
-        <div class="step-num">01</div>
-        <h3>Book your setup</h3>
-        <p>Send us an email. We'll reply within a few hours to confirm and schedule your session.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">02</div>
-        <h3>15-min intake call</h3>
-        <p>We ask about your stack, tools, and what you want your AI to actually do. Takes 15 minutes.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">03</div>
-        <h3>We do the setup</h3>
-        <p>Remote screen share or server access. We install, configure, integrate, and test everything.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">04</div>
-        <h3>Handoff + walkthrough</h3>
-        <p>We walk you through what we built, what it can do, and how to use it. You're fully in control.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- FAQ -->
-<section id="faq" class="alt-bg">
+<section id="faq" style="background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
   <div class="section-inner">
-    <div class="section-label">// faq</div>
+    <div class="section-label">faq</div>
     <h2 class="section-title">Common questions</h2>
     <div class="faq-list">
-
       <details>
         <summary>What exactly is OpenClaw?</summary>
         <p>OpenClaw is an open-source AI assistant platform that you self-host. Think of it as your own private AI — like ChatGPT, but running on your machine, connected to your tools (Telegram, email, calendar, Shopify, etc.), with no data leaving your infrastructure without your say-so.</p>
       </details>
-
       <details>
         <summary>Do I need a Mac to use this?</summary>
-        <p>No. OpenClaw runs on Mac, Linux, and Windows (via WSL). We can also deploy it on a VPS (like a DigitalOcean or Hetzner server) so it's always on, even when your laptop is closed. We'll recommend the best option for you during the intake call.</p>
+        <p>No. OpenClaw runs on Mac, Linux, and Windows (via WSL). We can also deploy it on a VPS (like a DigitalOcean or Hetzner server) so it's always on, even when your laptop is closed. We'll recommend the best option during the intake call.</p>
       </details>
-
       <details>
         <summary>What AI model does it use?</summary>
-        <p>OpenClaw works with any major AI provider — Claude (Anthropic), GPT-4o (OpenAI), Gemini, or local models via Ollama. You bring your own API key. We'll help you get set up with whichever you prefer. The model cost is separate from our setup fee.</p>
+        <p>OpenClaw works with any major AI provider — Claude (Anthropic), GPT-4o (OpenAI), Gemini, or local models via Ollama. You bring your own API key. We'll help you set up whichever you prefer. The model cost is separate from our setup fee.</p>
       </details>
-
       <details>
         <summary>Is my data private?</summary>
         <p>Yes. OpenClaw runs on your own machine or server. Your conversations, files, and integrations stay where you put them. The only external calls are to the AI model provider you choose (e.g. OpenAI or Anthropic) — same as when you use ChatGPT directly.</p>
       </details>
-
       <details>
         <summary>What if something breaks after setup?</summary>
         <p>Every plan includes at least 30 days of support. If something breaks or stops working within that window, we'll fix it. After that, ongoing support retainers are available if you want one.</p>
       </details>
-
       <details>
         <summary>How is payment handled?</summary>
         <p>We invoice via Stripe. Payment is due before work begins. We'll send a link when you book.</p>
       </details>
-
       <details>
         <summary>Can you set it up for a team?</summary>
         <p>Yes — that's the Business plan. We can configure multi-user setups, connect it to shared tools (Slack, CRM, Shopify), and build out automations your whole team benefits from.</p>
       </details>
-
     </div>
   </div>
 </section>
 
-<!-- CONTACT FORM -->
-<section id="contact">
-  <div class="section-inner">
-    <div class="section-label">// get started</div>
-    <h2 class="section-title">Book your setup</h2>
-    <p class="section-sub">Tell us which plan you want and what you need it for. We'll reply within a few hours.</p>
-
-    <form class="contact-form" onsubmit="handleForm(event)" id="contactForm" style="max-width:560px;">
-      <input type="text" name="name" placeholder="> your_name" required />
-      <input type="email" name="email" placeholder="> your_email" required />
-      <select name="service">
-        <option value="">// which plan?</option>
-        <option>Mac Personal — $499</option>
-        <option>Power User — $899</option>
-        <option>Business — $1,999</option>
-        <option>Custom / Not sure yet</option>
-      </select>
-      <textarea rows="4" name="message" placeholder="> tell us about your setup (Mac, VPS, tools you use...)" required></textarea>
-      <button type="submit" class="btn-primary" style="width:100%;text-align:center;border:2px solid #1a1a1a;">[ Send Enquiry → ]</button>
-      <p id="form-msg" style="display:none;color:#1a7a1a;font-family:'Fira Code',monospace;font-size:0.85rem;padding:0.75rem;border:2px solid #1a7a1a;background:#f0fdf0;">✓ Message sent! We'll be in touch within a few hours.</p>
-    </form>
-  </div>
-</section>
-
 <!-- CTA BAND -->
-<div class="cta-band">
-  <h2>Ready to have your own AI assistant?</h2>
-  <p>Drop us an email. We'll get back to you within a few hours.</p>
-  <a href="#contact" class="btn-white">Start Your Setup →</a>
+<div class="cta-band" id="contact">
+  <h2>Ready to get set up?</h2>
+  <p>Drop us an email. We'll reply within a few hours.</p>
+  <a href="mailto:hello@getmicroservices.com?subject=OpenClaw%20Setup%20Enquiry" class="cta-email">hello@getmicroservices.com</a>
 </div>
 
 <!-- FOOTER -->
 <footer>
-  <a href="https://getmicroservices.com" class="footer-logo">Get<span>Micro</span>Services</a>
+  <a href="https://getmicroservices.com" class="footer-logo">GetMicroservices</a>
   <p>© 2026 GetMicroservices. All rights reserved.</p>
   <div class="footer-links">
     <a href="https://getmicroservices.com">Home</a>
     <a href="https://getmicroservices.com/blog">Blog</a>
     <a href="mailto:hello@getmicroservices.com">Contact</a>
+    <a href="https://openclaw.ai" target="_blank" rel="noopener">openclaw.ai ↗</a>
   </div>
 </footer>
-
-<script>
-  function toggleMobileMenu() {
-    document.getElementById('mobileMenu').classList.toggle('open');
-  }
-  function closeMobileMenu() {
-    document.getElementById('mobileMenu').classList.remove('open');
-  }
-  document.querySelectorAll('#mobileMenu a').forEach(a => a.addEventListener('click', closeMobileMenu));
-
-  async function handleForm(e) {
-    e.preventDefault();
-    const form = e.target;
-    const btn = form.querySelector('button[type="submit"]');
-    btn.textContent = '[ Sending... ]';
-    btn.disabled = true;
-
-    const data = {
-      name: form.querySelector('[name="name"]').value,
-      email: form.querySelector('[name="email"]').value,
-      service: form.querySelector('[name="service"]').value,
-      message: form.querySelector('[name="message"]').value,
-      _token: '7f9d43fb7d9ac0b7a0f8f17ec4b08990791368a84f1bf860'
-    };
-
-    try {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 8000);
-      await fetch('https://n8n.getmicroservices.co/webhook/contact-form-cf9a4e2b', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-        signal: controller.signal
-      });
-      clearTimeout(timeout);
-    } catch(err) { /* silent fail — still show success */ }
-
-    btn.textContent = '[ Sent! ]';
-    document.getElementById('form-msg').style.display = 'block';
-    form.querySelectorAll('input, textarea').forEach(el => { el.value = ''; el.disabled = true; });
-    form.querySelectorAll('select').forEach(el => { el.selectedIndex = 0; el.disabled = true; });
-  }
-</script>
 
 </body>
 </html>
