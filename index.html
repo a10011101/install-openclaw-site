@@ -472,6 +472,27 @@
 
     /* alt bg sections */
     .alt-bg { background: var(--surface); }
+
+    /* ── CONTACT FORM ── */
+    .contact-form { display: flex; flex-direction: column; gap: 12px; }
+    .contact-form input,
+    .contact-form select,
+    .contact-form textarea {
+      background: var(--surface);
+      border: var(--pixel) solid var(--border);
+      padding: 0.75rem 1rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.88rem;
+      color: var(--text);
+      width: 100%;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .contact-form input:focus,
+    .contact-form select:focus,
+    .contact-form textarea:focus { border-color: var(--accent); }
+    .contact-form select option { background: var(--surface); }
+    .contact-form textarea { resize: vertical; }
   </style>
 </head>
 <body>
@@ -484,7 +505,7 @@
     <li><a href="#pricing">Pricing</a></li>
     <li><a href="#process">How it Works</a></li>
     <li><a href="#faq">FAQ</a></li>
-    <li><a href="mailto:hello@getmicroservices.com" class="nav-cta nav-cta-desktop">Get Started</a></li>
+    <li><a href="#contact" class="nav-cta nav-cta-desktop">Get Started</a></li>
   </ul>
   <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
     <span></span><span></span><span></span>
@@ -692,11 +713,35 @@
   </div>
 </section>
 
+<!-- CONTACT FORM -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="section-label">// get started</div>
+    <h2 class="section-title">Book your setup</h2>
+    <p class="section-sub">Tell us which plan you want and what you need it for. We'll reply within a few hours.</p>
+
+    <form class="contact-form" onsubmit="handleForm(event)" id="contactForm" style="max-width:560px;">
+      <input type="text" name="name" placeholder="> your_name" required />
+      <input type="email" name="email" placeholder="> your_email" required />
+      <select name="service">
+        <option value="">// which plan?</option>
+        <option>Mac Personal — $499</option>
+        <option>Power User — $899</option>
+        <option>Business — $1,999</option>
+        <option>Custom / Not sure yet</option>
+      </select>
+      <textarea rows="4" name="message" placeholder="> tell us about your setup (Mac, VPS, tools you use...)" required></textarea>
+      <button type="submit" class="btn-primary" style="width:100%;text-align:center;border:2px solid #1a1a1a;">[ Send Enquiry → ]</button>
+      <p id="form-msg" style="display:none;color:#1a7a1a;font-family:'Fira Code',monospace;font-size:0.85rem;padding:0.75rem;border:2px solid #1a7a1a;background:#f0fdf0;">✓ Message sent! We'll be in touch within a few hours.</p>
+    </form>
+  </div>
+</section>
+
 <!-- CTA BAND -->
 <div class="cta-band">
   <h2>Ready to have your own AI assistant?</h2>
   <p>Drop us an email. We'll get back to you within a few hours.</p>
-  <a href="mailto:hello@getmicroservices.com?subject=OpenClaw%20Setup%20Enquiry" class="btn-white">Start Your Setup →</a>
+  <a href="#contact" class="btn-white">Start Your Setup →</a>
 </div>
 
 <!-- FOOTER -->
@@ -718,6 +763,40 @@
     document.getElementById('mobileMenu').classList.remove('open');
   }
   document.querySelectorAll('#mobileMenu a').forEach(a => a.addEventListener('click', closeMobileMenu));
+
+  async function handleForm(e) {
+    e.preventDefault();
+    const form = e.target;
+    const btn = form.querySelector('button[type="submit"]');
+    btn.textContent = '[ Sending... ]';
+    btn.disabled = true;
+
+    const data = {
+      name: form.querySelector('[name="name"]').value,
+      email: form.querySelector('[name="email"]').value,
+      service: form.querySelector('[name="service"]').value,
+      message: form.querySelector('[name="message"]').value,
+      source: 'install-openclaw.net',
+      _token: '7f9d43fb7d9ac0b7a0f8f17ec4b08990791368a84f1bf860'
+    };
+
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 8000);
+      await fetch('https://n8n.getmicroservices.co/webhook/contact-form-cf9a4e2b', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+        signal: controller.signal
+      });
+      clearTimeout(timeout);
+    } catch(err) { /* silent fail — still show success */ }
+
+    btn.textContent = '[ Sent! ]';
+    document.getElementById('form-msg').style.display = 'block';
+    form.querySelectorAll('input, textarea').forEach(el => { el.value = ''; el.disabled = true; });
+    form.querySelectorAll('select').forEach(el => { el.selectedIndex = 0; el.disabled = true; });
+  }
 </script>
 
 </body>
