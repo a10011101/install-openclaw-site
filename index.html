@@ -931,10 +931,22 @@
 
     btn.textContent = '[ Sent! ]';
     document.getElementById('form-msg').style.display = 'block';
+    if(typeof gtag !== 'undefined') gtag('event', 'generate_lead', { currency: 'USD', value: 499 });
     form.querySelectorAll('input, textarea').forEach(el => { el.value = ''; el.disabled = true; });
     form.querySelectorAll('select').forEach(el => { el.selectedIndex = 0; el.disabled = true; });
   }
 </script>
 
+
+  <script>
+    // GA4 scroll engagement — prevents bounce on active readers
+    let scrollFired = false;
+    window.addEventListener('scroll', function() {
+      if (!scrollFired && (window.scrollY / (document.body.scrollHeight - window.innerHeight)) > 0.5) {
+        scrollFired = true;
+        if(typeof gtag !== 'undefined') gtag('event', 'scroll', { percent_scrolled: 50 });
+      }
+    });
+  </script>
 </body>
 </html>
