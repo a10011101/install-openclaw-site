@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpenClaw vs ChatGPT: What's the Difference? | install-openclaw.net</title>
+  <meta name="description" content="OpenClaw vs ChatGPT compared head-to-head. Learn how a self-hosted personal AI assistant differs from ChatGPT in memory, privacy, integrations, and proactive behaviour." />
+  <link rel="canonical" href="https://install-openclaw.net/blog/openclaw-vs-chatgpt" />
+
+  <!-- OG -->
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://install-openclaw.net/blog/openclaw-vs-chatgpt" />
+  <meta property="og:title" content="OpenClaw vs ChatGPT: What's the Difference?" />
+  <meta property="og:description" content="OpenClaw vs ChatGPT compared head-to-head. Memory, privacy, integrations, proactivity — which AI assistant actually fits your life?" />
+  <meta property="og:image" content="https://install-openclaw.net/og-image.png" />
+  <meta property="og:site_name" content="install-openclaw.net" />
+  <meta property="og:locale" content="en_US" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="OpenClaw vs ChatGPT: What's the Difference?" />
+  <meta name="twitter:description" content="Self-hosted AI vs SaaS chatbot. Here's how OpenClaw and ChatGPT stack up on the things that actually matter." />
+  <meta name="twitter:image" content="https://install-openclaw.net/og-image.png" />
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RKCCVN536P"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-RKCCVN536P');
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Structured Data: Article -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "OpenClaw vs ChatGPT: What's the Difference?",
+    "description": "OpenClaw vs ChatGPT compared head-to-head. Memory, privacy, integrations, proactivity — which AI assistant actually fits your life?",
+    "url": "https://install-openclaw.net/blog/openclaw-vs-chatgpt",
+    "datePublished": "2026-04-10",
+    "dateModified": "2026-04-10",
+    "author": {
+      "@type": "Organization",
+      "name": "GetMicroservices",
+      "url": "https://install-openclaw.net"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "GetMicroservices",
+      "url": "https://install-openclaw.net"
+    }
+  }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-user-select: none; -moz-user-select: none; user-select: none; }
+    input, textarea, select { -webkit-user-select: text; -moz-user-select: text; user-select: text; }
+
+    :root {
+      --bg: #f5f3ee;
+      --surface: #ffffff;
+      --border: #d9d4c7;
+      --text: #1a1a1a;
+      --muted: #6b6560;
+      --accent: #b5006a;
+      --accent-hover: #8a004f;
+      --code: #fdf6ec;
+      --pixel: 2px;
+    }
+
+    body {
+      padding-top: 64px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav:not(.toc) {
+      background: var(--surface);
+      border-bottom: var(--pixel) solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+    }
+    .nav-logo { font-family: 'Space Grotesk', sans-serif; font-weight: 400; font-size: 1.1rem; color: var(--text); text-decoration: none; display: flex; flex-direction: column; line-height: 1.2; }
+    .nav-logo .logo-tagline { font-family: 'Fira Code', monospace; font-size: 0.65rem; color: #6b6560; }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-links a { font-size: 0.9rem; color: var(--muted); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-cta {
+      background: var(--accent); color: #fff !important; padding: 0.45rem 1.1rem;
+      border: var(--pixel) solid var(--text); box-shadow: 3px 3px 0 var(--text);
+      font-weight: 700 !important; transition: box-shadow 0.15s, transform 0.15s !important;
+    }
+    .nav-cta:hover { box-shadow: 1px 1px 0 var(--text) !important; transform: translate(2px, 2px); color: #fff !important; }
+
+    .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; flex-direction: column; gap: 5px; }
+    .hamburger span { display: block; width: 22px; height: 2px; background: var(--text); }
+    .mobile-menu { display: none; position: fixed; top: 64px; left: 0; right: 0; background: var(--surface); border-bottom: var(--pixel) solid var(--border); padding: 1rem 2rem; z-index: 99; flex-direction: column; gap: 0.75rem; }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { color: var(--text); text-decoration: none; font-weight: 500; padding: 0.4rem 0; border-bottom: 1px solid var(--border); }
+    .mobile-menu a:last-child { border-bottom: none; }
+    @media (max-width: 768px) {
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+    }
+
+    /* ── ARTICLE LAYOUT ── */
+    .article-header {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 4rem 2rem 2rem;
+    }
+    .article-header .section-label {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.78rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.75rem;
+    }
+    .article-header h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+    .article-meta {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.8rem;
+      color: var(--muted);
+      display: flex;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: var(--pixel) solid var(--border);
+    }
+    .article-meta .tag { color: var(--accent); }
+
+    .article-body {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 2rem 5rem;
+    }
+    .article-body h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 2.5rem 0 0.75rem;
+      line-height: 1.3;
+    }
+    .article-body h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin: 1.75rem 0 0.5rem;
+      color: var(--text);
+    }
+    .article-body p {
+      margin-bottom: 1.25rem;
+      font-size: 1.02rem;
+      line-height: 1.75;
+      color: var(--text);
+    }
+    .article-body ul, .article-body ol {
+      margin: 0 0 1.25rem 1.5rem;
+    }
+    .article-body li {
+      margin-bottom: 0.5rem;
+      font-size: 1.02rem;
+      line-height: 1.7;
+    }
+    .article-body a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .article-body a:hover { color: var(--accent-hover); }
+
+    .callout {
+      background: var(--code);
+      border: var(--pixel) solid var(--border);
+      border-left: 4px solid var(--accent);
+      padding: 1rem 1.25rem;
+      margin: 1.75rem 0;
+      font-size: 0.97rem;
+      line-height: 1.7;
+    }
+    .callout strong { color: var(--accent); }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0 2rem;
+      font-size: 0.93rem;
+    }
+    .comparison-table th {
+      background: var(--text);
+      color: #fff;
+      padding: 0.65rem 1rem;
+      text-align: left;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .comparison-table td {
+      padding: 0.65rem 1rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .comparison-table tr:nth-child(even) td { background: var(--surface); }
+    .comparison-table .yes { color: var(--accent); font-weight: 700; }
+    .comparison-table .no { color: var(--muted); }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin: 1.5rem 0 2rem;
+    }
+    .feature-card {
+      background: var(--surface);
+      border: var(--pixel) solid var(--border);
+      box-shadow: 4px 4px 0 var(--border);
+      padding: 1.25rem 1.5rem;
+    }
+    .feature-card .feature-icon {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.78rem;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    .feature-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin: 0 0 0.4rem;
+    }
+    .feature-card p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .cta-box {
+      background: var(--accent);
+      color: #fff;
+      padding: 2.5rem 2rem;
+      margin: 3rem 0 0;
+      text-align: center;
+      border: var(--pixel) solid var(--text);
+      box-shadow: 5px 5px 0 var(--text);
+    }
+    .cta-box h2 { font-size: 1.6rem; margin-bottom: 0.75rem; }
+    .cta-box p { margin-bottom: 1.5rem; opacity: 0.9; font-size: 1rem; }
+    .btn-white {
+      display: inline-block;
+      background: #fff;
+      color: var(--accent);
+      padding: 0.8rem 2rem;
+      border: var(--pixel) solid var(--text);
+      box-shadow: 4px 4px 0 var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: box-shadow 0.15s, transform 0.15s;
+    }
+    .btn-white:hover {
+      box-shadow: 2px 2px 0 var(--text);
+      transform: translate(2px, 2px);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--surface);
+      border-top: var(--pixel) solid var(--border);
+      padding: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+    .footer-logo { font-family: 'Fira Code', monospace; font-weight: 700; font-size: 1rem; color: var(--text); }
+    .footer-logo span { color: var(--accent); }
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 1.5rem 2rem 0;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    .breadcrumb a { color: var(--muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb span { margin: 0 0.4rem; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="/" style="font-family:'Space Grotesk',sans-serif;font-weight:400;font-size:1.1rem;text-decoration:none;display:flex;flex-direction:column;line-height:1.2;">
+      <span><span style="color:#1a1a1a;">Get</span><span style="color:#b5006a;">Micro</span><span style="color:#e9c46a;">Services</span></span>
+      <span style="font-family:'Fira Code',monospace;font-size:0.65rem;color:#6b6560;">// done-for-you automation agency</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/#services">Services</a></li>
+      <li><a href="/blog/">Blog</a></li>
+      <li><a href="https://avlabs.bio" class="nav-cta">Get Started</a></li>
+    </ul>
+    <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="/">Home</a>
+    <a href="/#services">Services</a>
+    <a href="/blog/">Blog</a>
+    <a href="https://avlabs.bio">Get Started</a>
+  </div>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <a href="/">Home</a><span>›</span>
+    <a href="/blog/">Blog</a><span>›</span>
+    OpenClaw vs ChatGPT
+  </div>
+
+  <!-- ARTICLE HEADER -->
+  <header class="article-header">
+    <div class="section-label">// comparison</div>
+    <h1>OpenClaw vs ChatGPT: What's the Difference?</h1>
+    <div class="article-meta">
+      <span>April 10, 2026</span>
+      <span>·</span>
+      <span>9 min read</span>
+      <span>·</span>
+      <span class="tag">#AI #OpenClaw #ChatGPT</span>
+    </div>
+  </header>
+
+  <!-- ARTICLE BODY -->
+  <article class="article-body">
+
+    <p>Both OpenClaw and ChatGPT are AI assistants powered by large language models. Both can answer questions, draft text, and help you think through problems. That's roughly where the similarities end.</p>
+
+    <p>The difference isn't really about which AI model is smarter. It's about <em>how</em> the assistant works — where it lives, what it remembers, what it can act on, and who controls it. Once you understand that, the choice becomes obvious depending on what you actually need.</p>
+
+    <div class="callout">
+      <strong>TL;DR:</strong> ChatGPT is a brilliant chatbot you visit. OpenClaw is a persistent AI agent that lives alongside you — in your apps, on your server, working proactively.
+    </div>
+
+    <h2>The Core Difference: Stateless vs Stateful</h2>
+
+    <p>ChatGPT is fundamentally stateless by design. Each conversation starts fresh. Yes, it has a "memory" feature that can store some facts between sessions — but it's limited, managed by OpenAI, and still operates within a chat window you have to actively open.</p>
+
+    <p>OpenClaw is stateful by nature. It maintains full context across sessions through persistent memory files it writes and reads itself. It doesn't just remember facts — it remembers what you were working on, what decisions you made, what's pending, and what matters to you. And it does this without you having to open a browser tab.</p>
+
+    <h2>Where They Live</h2>
+
+    <p>ChatGPT lives at chat.openai.com (or in an app). You go to it when you want to use it. It doesn't come to you.</p>
+
+    <p>OpenClaw runs on your own server — a VPS, a Raspberry Pi, your home machine. It connects to the messaging apps you already use (Telegram, WhatsApp, Signal, Discord) so it can reach you proactively and you can message it the way you'd message a friend. No special app to open. No context-switching required.</p>
+
+    <h2>Memory & Continuity</h2>
+
+    <p>This is the biggest practical difference for anyone using an AI assistant daily.</p>
+
+    <p>With ChatGPT, you frequently re-explain context: "So I'm working on a project where..." or "As I mentioned before..." Even with memory enabled, it forgets nuance, forgets your preferences, and treats each conversation as mostly self-contained.</p>
+
+    <p>With OpenClaw, context is persistent and rich. It maintains daily memory logs, a long-term <code>MEMORY.md</code> file it updates itself, and project-specific notes. When you return after a week away, it knows what was in progress. It knows your infrastructure, your preferred stack, your business context. You don't re-explain — you continue.</p>
+
+    <div class="callout">
+      <strong>Real example:</strong> Ask OpenClaw about your server setup, and it already knows the IP, the services running, the stack you chose, and why you chose it. Ask ChatGPT the same thing and you're pasting context from scratch.
+    </div>
+
+    <h2>Proactivity</h2>
+
+    <p>ChatGPT is reactive. It waits for you. That's by design — it's a chat interface.</p>
+
+    <p>OpenClaw can work proactively through a heartbeat system. You define what to check periodically: emails, calendar events, RSS feeds, server health, scheduled publishing tasks. It runs these checks on its own and only reaches out when something actually needs your attention. The rest of the time, it's quietly working in the background.</p>
+
+    <p>This is a fundamentally different model. It's less "assistant you query" and more "agent that manages things on your behalf."</p>
+
+    <h2>Integrations</h2>
+
+    <p>ChatGPT has plugins and GPT actions that can connect to external services — but they're sandboxed, controlled by OpenAI's platform, and require the user to be in the chat to trigger them.</p>
+
+    <p>OpenClaw connects to your actual environment. It can run shell commands on your server, interact with GitHub via the <code>gh</code> CLI, post to websites, manage files, call APIs, send emails, and wire into tools like n8n or Make. Because it runs on your machine, there's no platform mediating what it can access. Skills extend its capabilities — you install what you need.</p>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">// openclaw</div>
+        <h3>GitHub + git</h3>
+        <p>Clone repos, commit changes, open PRs, read issues — directly from your server.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">// openclaw</div>
+        <h3>Shell access</h3>
+        <p>Run commands, manage services, check logs, deploy things — real system access.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">// openclaw</div>
+        <h3>Messaging channels</h3>
+        <p>Telegram, WhatsApp, Signal, Discord — reaches you where you already are.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">// openclaw</div>
+        <h3>n8n / Make / APIs</h3>
+        <p>Trigger and receive webhooks, integrate with automation tools, call external APIs.</p>
+      </div>
+    </div>
+
+    <h2>Privacy & Data Control</h2>
+
+    <p>When you use ChatGPT, your conversations go to OpenAI's servers. OpenAI uses that data for various purposes depending on your plan and settings. You can opt out of training, but you can't opt out of the data leaving your machine.</p>
+
+    <p>With OpenClaw, everything stays on your infrastructure. Your memory files, your conversations, your connected tools — all on your server. You decide what gets logged. You decide what gets retained. No third party has access to your context unless you explicitly give it.</p>
+
+    <p>For anything sensitive — business data, personal information, private projects — this is a meaningful difference.</p>
+
+    <h2>Where ChatGPT Still Wins</h2>
+
+    <p>Let's be honest: ChatGPT has a few genuine advantages.</p>
+
+    <ul>
+      <li><strong>Raw knowledge breadth.</strong> GPT-4o and o3 have exceptional general knowledge and reasoning across virtually every domain.</li>
+      <li><strong>Content generation at scale.</strong> For bulk writing, brainstorming, or creative work in a single session, ChatGPT's interface is hard to beat.</li>
+      <li><strong>Zero setup.</strong> ChatGPT works instantly, no server required. OpenClaw takes 30–60 minutes to set up properly.</li>
+      <li><strong>Image generation.</strong> DALL·E integration is native in ChatGPT. OpenClaw doesn't generate images.</li>
+      <li><strong>Voice mode.</strong> ChatGPT's voice interface is polished and natural. OpenClaw has TTS but isn't a voice assistant in the same sense.</li>
+    </ul>
+
+    <p>If you just want a smart chatbot for occasional questions and writing tasks, ChatGPT is excellent and costs nothing (on the free tier).</p>
+
+    <h2>Who OpenClaw Is For</h2>
+
+    <p>OpenClaw makes sense if you want an AI that:</p>
+
+    <ul>
+      <li>Remembers your context without re-explaining it every time</li>
+      <li>Reaches you in your preferred messaging app</li>
+      <li>Works on your own server with your own data</li>
+      <li>Acts proactively — monitors things, publishes content, checks your schedule</li>
+      <li>Integrates with your actual tools and infrastructure</li>
+      <li>Can run code, manage files, and interact with APIs on your behalf</li>
+    </ul>
+
+    <p>In short: if you want an AI assistant you work <em>with</em> over time, not an AI chatbot you query on demand, OpenClaw is built for that.</p>
+
+    <h2>Full Comparison</h2>
+
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>OpenClaw</th>
+          <th>ChatGPT</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Persistent memory</td>
+          <td class="yes">✓ Full, self-managed</td>
+          <td class="no">Partial (limited memory feature)</td>
+        </tr>
+        <tr>
+          <td>Proactive behaviour</td>
+          <td class="yes">✓ Heartbeat + cron system</td>
+          <td class="no">Reactive only</td>
+        </tr>
+        <tr>
+          <td>Messaging channels</td>
+          <td class="yes">✓ Telegram, WhatsApp, Signal, Discord</td>
+          <td class="no">Web/app only</td>
+        </tr>
+        <tr>
+          <td>Data privacy</td>
+          <td class="yes">✓ Self-hosted, your server</td>
+          <td class="no">OpenAI servers</td>
+        </tr>
+        <tr>
+          <td>Shell/system access</td>
+          <td class="yes">✓ Full (via exec tools)</td>
+          <td class="no">No</td>
+        </tr>
+        <tr>
+          <td>GitHub integration</td>
+          <td class="yes">✓ Native (gh CLI + skills)</td>
+          <td class="no">Limited (via plugins)</td>
+        </tr>
+        <tr>
+          <td>Custom skills/extensions</td>
+          <td class="yes">✓ ClawHub marketplace</td>
+          <td class="no">GPTs (limited)</td>
+        </tr>
+        <tr>
+          <td>Setup required</td>
+          <td class="no">Yes (~30–60 min)</td>
+          <td class="yes">✓ None</td>
+        </tr>
+        <tr>
+          <td>Image generation</td>
+          <td class="no">No</td>
+          <td class="yes">✓ DALL·E built-in</td>
+        </tr>
+        <tr>
+          <td>Voice mode</td>
+          <td class="no">TTS only</td>
+          <td class="yes">✓ Full voice interface</td>
+        </tr>
+        <tr>
+          <td>Cost (after setup)</td>
+          <td class="yes">✓ API costs only (~$5–15/mo)</td>
+          <td class="no">$20/mo (Plus) or API costs</td>
+        </tr>
+        <tr>
+          <td>Model flexibility</td>
+          <td class="yes">✓ Any model (Claude, GPT, Ollama)</td>
+          <td class="no">OpenAI models only</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Can You Use Both?</h2>
+
+    <p>Absolutely — and many people do. ChatGPT for quick research, writing drafts, and one-off questions. OpenClaw for ongoing project work, automation, monitoring, and anything that benefits from persistent context.</p>
+
+    <p>Think of ChatGPT as an extraordinarily smart search engine you can have a conversation with. Think of OpenClaw as a persistent AI colleague who lives on your infrastructure, knows your setup, and handles recurring work in the background.</p>
+
+    <p>They're solving different problems. The question is which problem you have.</p>
+
+    <div class="cta-box">
+      <h2>Ready to try OpenClaw?</h2>
+      <p>Set it up in under an hour. Connect it to Telegram. Let it start working for you.</p>
+      <a href="https://install-openclaw.net" class="btn-white">Install OpenClaw →</a>
+    </div>
+
+  </article>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo"><a href="/">Get<span>Micro</span>Services</a></div>
+    <div>© 2026 GetMicroservices. Built by humans. Run by automations.</div>
+    <div><a href="/blog/">Blog</a> · <a href="https://avlabs.bio">Contact</a></div>
+  </footer>
+
+  <script>
+    function toggleMobileMenu() {
+      document.getElementById('mobileMenu').classList.toggle('open');
+    }
+    function closeMobileMenu() {
+      document.getElementById('mobileMenu').classList.remove('open');
+    }
+  </script>
+
+</body>
+</html>
