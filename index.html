@@ -859,7 +859,7 @@
     <p class="section-sub">Tell us which plan you want and what you need it for. We'll reply within a few hours.</p>
 
     <form class="contact-form" onsubmit="handleForm(event)" id="contactForm" style="max-width:560px;">
-      <input type="text" name="name" placeholder="> your_name" required />
+      <input type="text" name="name" placeholder="> your_name" required pattern="[A-Za-z\s\-']+" title="Letters, spaces, hyphens and apostrophes only" oninput="this.value=this.value.replace(/[^A-Za-z\s\-']/g,'')">
       <input type="email" name="email" placeholder="> your_email" required />
       <select name="service">
         <option value="">// which plan?</option>
@@ -868,7 +868,7 @@
         <option>Business — $1,999</option>
         <option>Custom / Not sure yet</option>
       </select>
-      <textarea rows="4" name="message" placeholder="> tell us about your setup (Mac, VPS, tools you use...)" required></textarea>
+      <textarea rows="4" name="message" placeholder="> tell us about your setup (Mac, VPS, tools you use...)" required maxlength="300" oninput="this.value=this.value.replace(/[<>\'\";\`\\\/]/g,'')"></textarea>
       <button type="submit" class="btn-primary" style="width:100%;text-align:center;border:2px solid #1a1a1a;">[ Send Enquiry → ]</button>
       <p id="form-msg" style="display:none;color:#1a7a1a;font-family:'Fira Code',monospace;font-size:0.85rem;padding:0.75rem;border:2px solid #1a7a1a;background:#f0fdf0;">✓ Message sent! We'll be in touch within a few hours.</p>
     </form>
