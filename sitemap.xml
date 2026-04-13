@@ -48,4 +48,10 @@
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
+  <url>
+    <loc>https://install-openclaw.net/blog/ai-assistant-productivity/</loc>
+    <lastmod>2026-04-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
 </urlset>
