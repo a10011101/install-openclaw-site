@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to Install OpenClaw on a VPS (Step-by-Step) | install-openclaw.net</title>
+  <meta name="description" content="Step-by-step guide to installing OpenClaw on a VPS. From choosing a server to connecting Telegram, set up your personal AI assistant in under an hour." />
+  <link rel="canonical" href="https://install-openclaw.net/blog/install-openclaw-vps" />
+
+  <!-- OG -->
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://install-openclaw.net/blog/install-openclaw-vps" />
+  <meta property="og:title" content="How to Install OpenClaw on a VPS (Step-by-Step)" />
+  <meta property="og:description" content="Set up your own self-hosted AI assistant on a VPS. Full walkthrough: server choice, Node.js, OpenClaw install, API keys, and Telegram connection." />
+  <meta property="og:image" content="https://install-openclaw.net/og-image.png" />
+  <meta property="og:site_name" content="install-openclaw.net" />
+  <meta property="og:locale" content="en_US" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="How to Install OpenClaw on a VPS (Step-by-Step)" />
+  <meta name="twitter:description" content="Full guide to running OpenClaw on your own server. Pick a VPS, install Node.js, configure your AI keys, and connect Telegram." />
+  <meta name="twitter:image" content="https://install-openclaw.net/og-image.png" />
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RKCCVN536P"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-RKCCVN536P');
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Structured Data: Article -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "How to Install OpenClaw on a VPS (Step-by-Step)",
+    "description": "Step-by-step guide to installing OpenClaw on a VPS. From choosing a server to connecting Telegram, set up your personal AI assistant in under an hour.",
+    "url": "https://install-openclaw.net/blog/install-openclaw-vps",
+    "datePublished": "2026-04-13",
+    "dateModified": "2026-04-13",
+    "author": {
+      "@type": "Organization",
+      "name": "GetMicroservices",
+      "url": "https://install-openclaw.net"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "GetMicroservices",
+      "url": "https://install-openclaw.net"
+    }
+  }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-user-select: none; -moz-user-select: text; user-select: none; }
+    input, textarea, select { -webkit-user-select: text; -moz-user-select: text; user-select: text; }
+
+    :root {
+      --bg: #f5f3ee;
+      --surface: #ffffff;
+      --border: #d9d4c7;
+      --text: #1a1a1a;
+      --muted: #6b6560;
+      --accent: #b5006a;
+      --accent-hover: #8a004f;
+      --code: #fdf6ec;
+      --pixel: 2px;
+    }
+
+    body {
+      padding-top: 64px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav:not(.toc) {
+      background: var(--surface);
+      border-bottom: var(--pixel) solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+    }
+    .nav-logo { font-family: 'Space Grotesk', sans-serif; font-weight: 400; font-size: 1.1rem; color: var(--text); text-decoration: none; display: flex; flex-direction: column; line-height: 1.2; }
+    .nav-logo .logo-tagline { font-family: 'Fira Code', monospace; font-size: 0.65rem; color: #6b6560; }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-links a { color: var(--text); text-decoration: none; font-size: 0.9rem; font-weight: 500; }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-cta {
+      background: var(--accent);
+      color: #fff !important;
+      padding: 0.5rem 1.1rem;
+      border: var(--pixel) solid var(--text);
+      box-shadow: 2px 2px 0 var(--text);
+      font-weight: 700;
+      font-size: 0.85rem;
+      transition: box-shadow 0.1s, transform 0.1s;
+      text-decoration: none;
+    }
+    .nav-cta:hover { box-shadow: 1px 1px 0 var(--text) !important; transform: translate(2px, 2px); color: #fff !important; }
+
+    /* ── MOBILE NAV ── */
+    .hamburger { display: none; background: none; border: none; cursor: pointer; flex-direction: column; gap: 5px; padding: 4px; }
+    .hamburger span { display: block; width: 22px; height: 2px; background: var(--text); }
+    .mobile-menu { display: none; position: fixed; top: 64px; left: 0; right: 0; background: var(--surface); border-bottom: var(--pixel) solid var(--border); z-index: 99; padding: 1rem 2rem; flex-direction: column; gap: 1rem; }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { color: var(--text); text-decoration: none; font-size: 1rem; font-weight: 500; padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
+    .mobile-menu a:last-child { border-bottom: none; }
+
+    @media (max-width: 768px) {
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--surface);
+      border-bottom: var(--pixel) solid var(--border);
+      padding: 3rem 2rem 2.5rem;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      border: var(--pixel) solid var(--text);
+      box-shadow: 2px 2px 0 var(--text);
+      margin-bottom: 1.25rem;
+    }
+    .hero h1 { font-size: clamp(1.6rem, 4vw, 2.6rem); font-weight: 700; line-height: 1.25; max-width: 700px; margin: 0 auto 1rem; }
+    .hero-meta { font-family: 'Fira Code', monospace; font-size: 0.78rem; color: var(--muted); display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
+
+    /* ── LAYOUT ── */
+    .container { max-width: 860px; margin: 0 auto; padding: 2.5rem 2rem; display: grid; grid-template-columns: 1fr 260px; gap: 2.5rem; }
+    @media (max-width: 900px) { .container { grid-template-columns: 1fr; } .toc-sidebar { display: none; } }
+
+    /* ── ARTICLE ── */
+    article { min-width: 0; }
+    article h2 { font-size: 1.45rem; font-weight: 700; margin: 2.2rem 0 0.75rem; padding-bottom: 0.4rem; border-bottom: var(--pixel) solid var(--border); }
+    article h3 { font-size: 1.15rem; font-weight: 700; margin: 1.5rem 0 0.5rem; }
+    article p { margin-bottom: 1rem; font-size: 1rem; line-height: 1.7; -webkit-user-select: text; user-select: text; }
+    article ul, article ol { margin: 0.75rem 0 1rem 1.5rem; }
+    article li { margin-bottom: 0.4rem; font-size: 1rem; line-height: 1.6; -webkit-user-select: text; user-select: text; }
+    article strong { font-weight: 700; }
+    article a { color: var(--accent); text-decoration: underline; }
+
+    /* ── CODE BLOCKS ── */
+    pre {
+      background: #1a1a1a;
+      color: #e8e8e8;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.82rem;
+      padding: 1.1rem 1.25rem;
+      border: var(--pixel) solid var(--text);
+      box-shadow: 3px 3px 0 var(--text);
+      overflow-x: auto;
+      margin: 1rem 0 1.5rem;
+      line-height: 1.6;
+      -webkit-user-select: text; user-select: text;
+    }
+    code {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85em;
+      background: var(--code);
+      border: 1px solid var(--border);
+      padding: 0.1em 0.4em;
+      -webkit-user-select: text; user-select: text;
+    }
+    pre code { background: none; border: none; padding: 0; font-size: inherit; }
+
+    /* ── STEP BOXES ── */
+    .step-box {
+      border: var(--pixel) solid var(--border);
+      background: var(--surface);
+      box-shadow: 3px 3px 0 var(--border);
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .step-box .step-label {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.72rem;
+      color: var(--accent);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.4rem;
+    }
+    .step-box h3 { margin: 0 0 0.6rem; font-size: 1.05rem; }
+    .step-box p { margin-bottom: 0; font-size: 0.95rem; }
+
+    /* ── INFO BOXES ── */
+    .info-box {
+      background: #f0f9f4;
+      border-left: 4px solid #1a7a4a;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0 1.5rem;
+      font-size: 0.93rem;
+    }
+    .warning-box {
+      background: #fff9f0;
+      border-left: 4px solid #e07800;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0 1.5rem;
+      font-size: 0.93rem;
+    }
+    .info-box p, .warning-box p { margin-bottom: 0; }
+
+    /* ── COMPARISON TABLE ── */
+    .spec-table { width: 100%; border-collapse: collapse; margin: 1rem 0 1.5rem; font-size: 0.9rem; }
+    .spec-table th { background: var(--text); color: #fff; padding: 0.6rem 1rem; text-align: left; font-weight: 600; }
+    .spec-table td { padding: 0.55rem 1rem; border-bottom: 1px solid var(--border); }
+    .spec-table tr:nth-child(even) td { background: var(--code); }
+    .spec-table td:first-child { font-weight: 600; }
+    .badge-ok { color: #1a7a4a; font-weight: 700; }
+    .badge-min { color: #e07800; font-weight: 700; }
+
+    /* ── TOC SIDEBAR ── */
+    .toc-sidebar { align-self: start; position: sticky; top: 80px; }
+    nav.toc { background: var(--surface); border: var(--pixel) solid var(--border); box-shadow: 3px 3px 0 var(--border); padding: 1.25rem; }
+    nav.toc .toc-title { font-family: 'Fira Code', monospace; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 0.75rem; }
+    nav.toc ol { list-style: none; margin: 0; padding: 0; counter-reset: toc; }
+    nav.toc li { counter-increment: toc; margin-bottom: 0.4rem; }
+    nav.toc a { color: var(--text); text-decoration: none; font-size: 0.85rem; line-height: 1.4; display: flex; gap: 0.5rem; }
+    nav.toc a::before { content: counter(toc) "."; color: var(--accent); font-weight: 700; font-family: 'Fira Code', monospace; min-width: 1.2rem; flex-shrink: 0; }
+    nav.toc a:hover { color: var(--accent); }
+
+    /* ── CTA BOX ── */
+    .cta-box { background: var(--accent); color: #fff; padding: 2.5rem 2rem; text-align: center; border: var(--pixel) solid var(--text); box-shadow: 4px 4px 0 var(--text); margin: 3rem 0 1rem; }
+    .cta-box h2 { font-size: 1.6rem; margin-bottom: 0.75rem; border: none; padding: 0; }
+    .cta-box p { margin-bottom: 1.5rem; opacity: 0.9; font-size: 1rem; }
+    .btn-white { display: inline-block; background: #fff; color: var(--accent); font-weight: 700; font-size: 1rem; padding: 0.75rem 2rem; border: var(--pixel) solid var(--text); box-shadow: 3px 3px 0 var(--text); text-decoration: none; transition: box-shadow 0.1s, transform 0.1s; }
+    .btn-white:hover { box-shadow: 1px 1px 0 var(--text); transform: translate(2px, 2px); }
+
+    /* ── FOOTER ── */
+    footer { background: var(--text); color: #fff; text-align: center; padding: 2rem; font-size: 0.85rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    .footer-logo a { font-size: 1.1rem; font-weight: 700; color: #fff; text-decoration: none; }
+    .footer-logo span { color: var(--accent); }
+    footer a { color: #ccc; text-decoration: none; }
+    footer a:hover { color: #fff; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="/" class="nav-logo">
+      <span>
+        <span style="color:#1a1a1a">Get</span><span style="color:#b5006a">Micro</span><span style="color:#e9c46a">Services</span>
+      </span>
+      <span class="logo-tagline">// done-for-you automation agency</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/#services">Services</a></li>
+      <li><a href="/#how">How It Works</a></li>
+      <li><a href="/#pricing">Pricing</a></li>
+      <li><a href="/blog/">Blog</a></li>
+      <li><a href="https://avlabs.bio" class="nav-cta">Get Started</a></li>
+    </ul>
+    <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="/#services" onclick="closeMobileMenu()">Services</a>
+    <a href="/#how" onclick="closeMobileMenu()">How It Works</a>
+    <a href="/#pricing" onclick="closeMobileMenu()">Pricing</a>
+    <a href="/blog/" onclick="closeMobileMenu()">Blog</a>
+    <a href="https://avlabs.bio" onclick="closeMobileMenu()">Get Started</a>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge">// VPS Setup Guide</div>
+    <h1>How to Install OpenClaw on a VPS (Step-by-Step)</h1>
+    <div class="hero-meta">
+      <span>📅 April 13, 2026</span>
+      <span>⏱ 10 min read</span>
+      <span>🛠 Beginner–Intermediate</span>
+    </div>
+  </div>
+
+  <!-- MAIN LAYOUT -->
+  <div class="container">
+
+    <!-- ARTICLE -->
+    <article>
+
+      <p>OpenClaw is a self-hosted personal AI assistant. That means it runs on your own server — not on somebody else's cloud. A VPS (Virtual Private Server) is the most popular way to host it: cheap, always-on, and accessible from anywhere.</p>
+
+      <p>This guide walks you through the complete setup: picking a server, installing Node.js, configuring OpenClaw, connecting an AI model, and wiring up Telegram so you can chat with your assistant from your phone.</p>
+
+      <p>Total time: 30–60 minutes. Skill level: if you can SSH into a server, you can do this.</p>
+
+      <h2 id="requirements">What You Need</h2>
+
+      <p>Before you start, make sure you have:</p>
+
+      <ul>
+        <li>A VPS running Ubuntu 22.04 or 24.04 (Debian works too)</li>
+        <li>SSH access to the server</li>
+        <li>An API key from Anthropic (Claude) or OpenAI — OpenClaw uses these for its AI brain</li>
+        <li>A Telegram account (optional but highly recommended)</li>
+        <li>About $5–10/month for the server</li>
+      </ul>
+
+      <h2 id="choose-vps">Step 1: Choose Your VPS</h2>
+
+      <p>Any basic VPS will do. Here's what actually matters:</p>
+
+      <table class="spec-table">
+        <thead>
+          <tr><th>Resource</th><th>Minimum</th><th>Recommended</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>CPU</td><td class="badge-min">1 vCPU</td><td class="badge-ok">2 vCPU</td></tr>
+          <tr><td>RAM</td><td class="badge-min">1 GB</td><td class="badge-ok">2 GB</td></tr>
+          <tr><td>Storage</td><td class="badge-min">10 GB SSD</td><td class="badge-ok">20 GB SSD</td></tr>
+          <tr><td>OS</td><td colspan="2">Ubuntu 22.04 / 24.04 LTS</td></tr>
+          <tr><td>Location</td><td colspan="2">Closest to you (lower latency)</td></tr>
+        </tbody>
+      </table>
+
+      <p>Popular providers that work well: <strong>DigitalOcean</strong> ($6/mo Droplet), <strong>Hetzner</strong> (€4/mo — excellent value), <strong>Vultr</strong>, <strong>Linode</strong>. For the UK, Hetzner's Falkenstein or Helsinki regions are solid choices.</p>
+
+      <div class="info-box">
+        <p><strong>💡 Tip:</strong> Hetzner's CX22 (2 vCPU, 4 GB RAM, €4.35/mo) is excellent value and more than enough for OpenClaw with n8n alongside it.</p>
+      </div>
+
+      <h2 id="initial-setup">Step 2: Initial Server Setup</h2>
+
+      <p>SSH into your fresh server as root (or a sudo user):</p>
+
+      <pre><code>ssh root@YOUR_SERVER_IP</code></pre>
+
+      <p>Update the system and install basics:</p>
+
+      <pre><code>apt update && apt upgrade -y
+apt install -y curl git build-essential ufw</code></pre>
+
+      <p>Set up a basic firewall:</p>
+
+      <pre><code>ufw allow OpenSSH
+ufw allow 80/tcp
+ufw allow 443/tcp
+ufw enable</code></pre>
+
+      <div class="warning-box">
+        <p><strong>⚠️ Important:</strong> Enable the firewall <em>before</em> installing anything that opens ports. If you accidentally lock yourself out, most VPS providers have a web console you can use to recover.</p>
+      </div>
+
+      <h2 id="install-node">Step 3: Install Node.js</h2>
+
+      <p>OpenClaw requires Node.js 20 or higher. Use the NodeSource installer for the cleanest result:</p>
+
+      <pre><code>curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+apt install -y nodejs
+node --version   # should print v22.x.x
+npm --version</code></pre>
+
+      <p>That's it — no manual PATH fiddling needed with this method.</p>
+
+      <h2 id="install-openclaw">Step 4: Install OpenClaw</h2>
+
+      <p>Install OpenClaw globally via npm:</p>
+
+      <pre><code>npm install -g openclaw</code></pre>
+
+      <p>Verify the install:</p>
+
+      <pre><code>openclaw --version</code></pre>
+
+      <p>Now run the setup wizard:</p>
+
+      <pre><code>openclaw setup</code></pre>
+
+      <p>This creates the workspace at <code>~/.openclaw/workspace</code>, generates default config files, and walks you through the initial configuration interactively.</p>
+
+      <div class="step-box">
+        <div class="step-label">What setup does</div>
+        <h3>Creating your workspace</h3>
+        <p>The setup command creates <code>~/.openclaw/</code> with your workspace, secrets folder, and default config. Your conversation history, memory files, and skills all live here.</p>
+      </div>
+
+      <h2 id="configure-ai">Step 5: Configure Your AI Model</h2>
+
+      <p>OpenClaw needs an AI API key to work. It supports Claude (Anthropic), GPT (OpenAI), and local models via Ollama.</p>
+
+      <p>Edit the config:</p>
+
+      <pre><code>nano ~/.openclaw/config.json</code></pre>
+
+      <p>For Claude (recommended — best reasoning + tool use):</p>
+
+      <pre><code>{
+  "model": "anthropic/claude-sonnet-4-5",
+  "anthropicApiKey": "sk-ant-YOUR_KEY_HERE"
+}</code></pre>
+
+      <p>For OpenAI:</p>
+
+      <pre><code>{
+  "model": "openai/gpt-4o",
+  "openaiApiKey": "sk-YOUR_KEY_HERE"
+}</code></pre>
+
+      <p>Get your Anthropic key at <a href="https://console.anthropic.com" target="_blank" rel="noopener">console.anthropic.com</a>. OpenAI keys are at <a href="https://platform.openai.com" target="_blank" rel="noopener">platform.openai.com</a>.</p>
+
+      <div class="info-box">
+        <p><strong>💡 Cost reality check:</strong> With normal usage (a few dozen messages per day), you'll typically spend $5–15/month on API costs. Claude Haiku is the cheapest option; Sonnet gives the best balance of quality and cost.</p>
+      </div>
+
+      <h2 id="start-gateway">Step 6: Start the Gateway</h2>
+
+      <p>The OpenClaw Gateway is the daemon that routes messages between your assistant and channels like Telegram:</p>
+
+      <pre><code>openclaw gateway start</code></pre>
+
+      <p>Check it's running:</p>
+
+      <pre><code>openclaw gateway status</code></pre>
+
+      <p>To keep the gateway running after a reboot, set up a systemd service:</p>
+
+      <pre><code>openclaw gateway enable</code></pre>
+
+      <p>This registers it as a system service that auto-starts on boot.</p>
+
+      <h2 id="connect-telegram">Step 7: Connect Telegram</h2>
+
+      <p>This is where it gets genuinely useful. Connecting Telegram means you can message your AI assistant from your phone anywhere in the world.</p>
+
+      <ol>
+        <li>Open Telegram and search for <strong>@BotFather</strong></li>
+        <li>Send <code>/newbot</code> and follow the prompts to create a bot</li>
+        <li>Copy the bot token (looks like <code>123456789:AAFxxx...</code>)</li>
+      </ol>
+
+      <p>Add the token to your OpenClaw config:</p>
+
+      <pre><code>openclaw config set telegram.botToken YOUR_BOT_TOKEN</code></pre>
+
+      <p>Then connect your Telegram account (so the bot knows who you are):</p>
+
+      <pre><code>openclaw channel add telegram</code></pre>
+
+      <p>Follow the on-screen prompts. Once connected, send a message to your bot in Telegram — you should get a response from your AI assistant.</p>
+
+      <div class="step-box">
+        <div class="step-label">Pro tip</div>
+        <h3>Set up heartbeats</h3>
+        <p>Once Telegram is connected, OpenClaw can send you proactive messages — calendar reminders, email alerts, scheduled content publishing. Configure these in your <code>HEARTBEAT.md</code> workspace file.</p>
+      </div>
+
+      <h2 id="workspace">Step 8: Customise Your Workspace</h2>
+
+      <p>Your workspace at <code>~/.openclaw/workspace/</code> is where the magic happens. Key files to know:</p>
+
+      <ul>
+        <li><strong>SOUL.md</strong> — defines your assistant's personality and behaviour</li>
+        <li><strong>USER.md</strong> — context about you (name, timezone, preferences)</li>
+        <li><strong>MEMORY.md</strong> — long-term memory your assistant maintains</li>
+        <li><strong>HEARTBEAT.md</strong> — scheduled tasks and proactive checks</li>
+        <li><strong>AGENTS.md</strong> — workspace rules and conventions</li>
+      </ul>
+
+      <p>Edit these files to shape how your assistant behaves. The more context you give it, the more useful it becomes over time.</p>
+
+      <h2 id="skills">Step 9: Install Skills</h2>
+
+      <p>Skills extend what OpenClaw can do. Install them from ClawHub:</p>
+
+      <pre><code>openclaw skills list
+openclaw skills install github
+openclaw skills install weather</code></pre>
+
+      <p>Popular first skills to install:</p>
+
+      <ul>
+        <li><strong>github</strong> — manage repos, issues, and PRs via natural language</li>
+        <li><strong>weather</strong> — get forecasts for any location</li>
+        <li><strong>gog</strong> — Google Workspace integration (Gmail, Calendar, Drive)</li>
+        <li><strong>tmux</strong> — remote-control terminal sessions</li>
+      </ul>
+
+      <h2 id="verify">Step 10: Verify Everything Works</h2>
+
+      <p>Run a quick sanity check:</p>
+
+      <pre><code>openclaw status</code></pre>
+
+      <p>You should see: Gateway running, model connected, channels active. Then open Telegram and send your bot a message like "what can you do?" — it should respond with a summary of its capabilities.</p>
+
+      <div class="info-box">
+        <p><strong>🎉 You're done.</strong> Your personal AI assistant is now running 24/7 on your own server, accessible via Telegram, with no monthly subscription — just API costs.</p>
+      </div>
+
+      <h2 id="troubleshooting">Common Issues</h2>
+
+      <h3>Gateway won't start</h3>
+      <p>Check Node.js version (<code>node --version</code> should be 20+). Check logs with <code>openclaw gateway logs</code>. Make sure your config.json is valid JSON.</p>
+
+      <h3>Telegram bot doesn't respond</h3>
+      <p>Verify the bot token is correct. Make sure the gateway is running. Check that you've sent the bot a message in Telegram (not just added it to a group).</p>
+
+      <h3>AI responses are slow</h3>
+      <p>This is usually network latency to the AI API, not your server. Pick a VPS location geographically close to Anthropic/OpenAI's servers (US East or EU West).</p>
+
+      <h3>Out of memory errors</h3>
+      <p>Upgrade to a 2 GB RAM server. OpenClaw itself is lightweight, but if you're running other services (n8n, databases) alongside it, 1 GB runs tight.</p>
+
+      <h2 id="next">What to Do Next</h2>
+
+      <p>Once you're up and running:</p>
+
+      <ul>
+        <li><strong>Fill in USER.md</strong> with your name, timezone, and context — this dramatically improves response quality</li>
+        <li><strong>Set up HEARTBEAT.md</strong> with periodic tasks (check email, post content, monitor things)</li>
+        <li><strong>Install the github skill</strong> if you work with code</li>
+        <li><strong>Connect n8n</strong> for no-code workflow automation alongside your AI</li>
+        <li><strong>Explore ClawHub</strong> for community-built skills</li>
+      </ul>
+
+      <p>The initial setup is the hard part. After that, OpenClaw gets better over time as its memory fills with context about you and your projects.</p>
+
+      <p>If you'd rather skip the setup entirely and get a pre-configured OpenClaw instance, <a href="https://avlabs.bio">reach out</a> — we set these up as a service.</p>
+
+      <div class="cta-box">
+        <h2>Want it done for you?</h2>
+        <p>We set up OpenClaw on your VPS, configure your channels, and hand you the keys — ready to use in 24 hours.</p>
+        <a href="https://avlabs.bio" class="btn-white">Get It Set Up →</a>
+      </div>
+
+    </article>
+
+    <!-- TOC SIDEBAR -->
+    <aside class="toc-sidebar">
+      <nav class="toc">
+        <div class="toc-title">// Contents</div>
+        <ol>
+          <li><a href="#requirements">What You Need</a></li>
+          <li><a href="#choose-vps">Choose Your VPS</a></li>
+          <li><a href="#initial-setup">Initial Server Setup</a></li>
+          <li><a href="#install-node">Install Node.js</a></li>
+          <li><a href="#install-openclaw">Install OpenClaw</a></li>
+          <li><a href="#configure-ai">Configure AI Model</a></li>
+          <li><a href="#start-gateway">Start the Gateway</a></li>
+          <li><a href="#connect-telegram">Connect Telegram</a></li>
+          <li><a href="#workspace">Customise Workspace</a></li>
+          <li><a href="#skills">Install Skills</a></li>
+          <li><a href="#verify">Verify Everything</a></li>
+          <li><a href="#troubleshooting">Common Issues</a></li>
+          <li><a href="#next">What to Do Next</a></li>
+        </ol>
+      </nav>
+    </aside>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo"><a href="/">Get<span>Micro</span>Services</a></div>
+    <div>© 2026 GetMicroservices. Built by humans. Run by automations.</div>
+    <div><a href="/blog/">Blog</a> · <a href="https://avlabs.bio">Contact</a></div>
+  </footer>
+
+  <script>
+    function toggleMobileMenu() {
+      document.getElementById('mobileMenu').classList.toggle('open');
+    }
+    function closeMobileMenu() {
+      document.getElementById('mobileMenu').classList.remove('open');
+    }
+  </script>
+
+</body>
+</html>
