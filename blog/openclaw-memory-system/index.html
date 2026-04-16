@@ -1,499 +1,260 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>How OpenClaw's Memory System Works | install-openclaw.net</title>
-  <meta name="description" content="OpenClaw's memory system gives your AI assistant persistent context across sessions. Learn how MEMORY.md, daily files, heartbeats, and cron jobs create continuity that survives restarts." />
-  <link rel="canonical" href="https://install-openclaw.net/blog/openclaw-memory-system" />
-  <meta property="og:type" content="article" />
-  <meta property="og:url" content="https://install-openclaw.net/blog/openclaw-memory-system" />
-  <meta property="og:title" content="How OpenClaw's Memory System Works" />
-  <meta property="og:description" content="OpenClaw's memory system gives your AI assistant persistent context across sessions. Learn how MEMORY.md, daily files, heartbeats, and cron jobs create continuity that survives restarts." />
-  <meta property="og:image" content="https://install-openclaw.net/og-image.png" />
-  <meta property="og:site_name" content="GetMicroservices" />
-  <meta property="og:locale" content="en_US" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="How OpenClaw's Memory System Works" />
-  <meta name="twitter:description" content="MEMORY.md vs daily files, heartbeats, cron jobs, and session continuity — a deep dive into how OpenClaw remembers everything." />
-  <meta name="twitter:image" content="https://install-openclaw.net/og-image.png" />
-
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RKCCVN536P"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-RKCCVN536P');
-  </script>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": "How OpenClaw's Memory System Works",
-    "description": "OpenClaw's memory system gives your AI assistant persistent context across sessions. Learn how MEMORY.md, daily files, heartbeats, and cron jobs create continuity that survives restarts.",
-    "url": "https://install-openclaw.net/blog/openclaw-memory-system",
-    "datePublished": "2026-04-17",
-    "dateModified": "2026-04-17",
-    "author": {"@type": "Organization", "name": "GetMicroservices", "url": "https://install-openclaw.net"},
-    "publisher": {"@type": "Organization", "name": "GetMicroservices", "url": "https://install-openclaw.net"}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How OpenClaw's Memory System Works | Install OpenClaw</title>
+<meta name="description" content="Learn how OpenClaw's unique memory system maintains continuity across sessions using MEMORY.md, daily files, heartbeats, and cron jobs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RKCCVN536P"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-RKCCVN536P');
+</script>
+<style>
+  :root {
+    --bg: #f5f3ee;
+    --bg2: #e8e4dc;
+    --bg3: #dbd6cc;
+    --border: #d0c9bc;
+    --fg: #1a1a1a;
+    --dim: #6b6560;
+    --accent: #b5006a;
+    --accent2: #e9c46a;
+    --mono: 'Fira Code', monospace;
+    --sans: 'Space Grotesk', system-ui, sans-serif;
   }
-  </script>
-
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-user-select: none; user-select: none; }
-    input, textarea, select { -webkit-user-select: text; user-select: text; }
-
-    :root {
-      --bg: #f5f3ee;
-      --surface: #ffffff;
-      --border: #d9d4c7;
-      --text: #1a1a1a;
-      --muted: #6b6560;
-      --accent: #b5006a;
-      --accent-hover: #8a004f;
-      --code-bg: #fdf6ec;
-      --gold: #e9c46a;
-      --px: 2px;
-    }
-
-    body {
-      padding-top: 64px;
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Space Grotesk', sans-serif;
-      line-height: 1.65;
-    }
-
-    /* NAV */
-    nav:not(.toc) {
-      background: var(--surface);
-      border-bottom: var(--px) solid var(--border);
-      padding: 0 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 64px;
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-    }
-    .nav-brand { text-decoration: none; display: flex; flex-direction: column; }
-    .nav-brand-name { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 400; letter-spacing: -0.01em; line-height: 1; color: #1a1a1a; }
-    .nav-brand-name .pink { color: #b5006a; }
-    .nav-brand-name .gold { color: #e9c46a; }
-    .nav-brand-tag { font-family: 'Fira Code', monospace; font-size: 0.65rem; color: #6b6560; letter-spacing: 0.06em; margin-top: 3px; }
-    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
-    .nav-links a { font-size: 0.9rem; color: var(--muted); text-decoration: none; font-weight: 500; transition: color 0.2s; }
-    .nav-links a:hover { color: var(--accent); }
-    .nav-cta { background: var(--accent); color: #fff !important; padding: 0.45rem 1.1rem; border: var(--px) solid var(--text); box-shadow: 3px 3px 0 var(--text); font-weight: 700 !important; transition: box-shadow 0.15s, transform 0.15s !important; }
-    .nav-cta:hover { box-shadow: 1px 1px 0 var(--text) !important; transform: translate(2px, 2px); }
-    .hamburger { display: none; cursor: pointer; background: none; border: none; padding: 0.5rem; }
-    .hamburger span { display: block; width: 22px; height: 2px; background: var(--text); margin: 5px 0; }
-    .mobile-menu { display: none; position: fixed; top: 64px; left: 0; right: 0; z-index: 99; }
-
-    /* ARTICLE */
-    .article-header { max-width: 760px; margin: 0 auto; padding: 4rem 2rem 2rem; }
-    .section-label { font-family: 'Fira Code', monospace; font-size: 0.78rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem; }
-    .article-header h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; line-height: 1.2; margin-bottom: 1rem; }
-    .article-meta { font-family: 'Fira Code', monospace; font-size: 0.8rem; color: var(--muted); display: flex; gap: 1.25rem; flex-wrap: wrap; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: var(--px) solid var(--border); }
-    .article-meta .tag { color: var(--accent); }
-
-    .article-body { max-width: 760px; margin: 0 auto; padding: 0 2rem 5rem; }
-    .article-body h2 { font-size: 1.5rem; font-weight: 700; margin: 2.5rem 0 0.75rem; line-height: 1.3; }
-    .article-body h3 { font-size: 1.15rem; font-weight: 700; margin: 1.75rem 0 0.5rem; }
-    .article-body p { margin-bottom: 1.25rem; font-size: 1.02rem; line-height: 1.75; }
-    .article-body ul, .article-body ol { margin: 0 0 1.25rem 1.5rem; }
-    .article-body li { margin-bottom: 0.5rem; font-size: 1.02rem; line-height: 1.7; }
-    .article-body a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
-    .article-body a:hover { color: var(--accent-hover); }
-
-    .callout { background: var(--code-bg); border: var(--px) solid var(--border); border-left: 4px solid var(--accent); padding: 1rem 1.25rem; margin: 1.75rem 0; font-size: 0.97rem; line-height: 1.7; }
-    .callout strong { color: var(--accent); }
-
-    pre.code-block { background: #1a1a1a; color: #f5f3ee; font-family: 'Fira Code', monospace; font-size: 0.85rem; padding: 1.25rem 1.5rem; border: var(--px) solid var(--border); overflow-x: auto; margin: 1.5rem 0; line-height: 1.6; }
-    pre.code-block .cm { color: #6b6560; }
-    pre.code-block .kw { color: #b5006a; }
-    pre.code-block .st { color: #e9c46a; }
-
-    .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin: 1.5rem 0 2rem; }
-    .feature-card { background: var(--surface); border: var(--px) solid var(--border); box-shadow: 4px 4px 0 var(--border); padding: 1.25rem 1.5rem; }
-    .feature-card .card-icon { font-family: 'Fira Code', monospace; font-size: 0.78rem; color: var(--accent); margin-bottom: 0.5rem; }
-    .feature-card h3 { font-size: 1rem; font-weight: 700; margin: 0 0 0.4rem; }
-    .feature-card p { font-size: 0.9rem; color: var(--muted); margin: 0; line-height: 1.6; }
-
-    .comparison-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0 2rem; font-size: 0.93rem; }
-    .comparison-table th { background: var(--text); color: #fff; padding: 0.65rem 1rem; text-align: left; font-family: 'Fira Code', monospace; font-size: 0.8rem; font-weight: 600; }
-    .comparison-table td { padding: 0.65rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
-    .comparison-table tr:nth-child(even) td { background: var(--surface); }
-    .comparison-table .yes { color: var(--accent); font-weight: 700; }
-    .comparison-table .no { color: var(--muted); }
-
-    .cta-box { background: var(--accent); color: #fff; padding: 2.5rem 2rem; margin: 3rem 0 0; text-align: center; border: var(--px) solid var(--text); box-shadow: 5px 5px 0 var(--text); }
-    .cta-box h2 { font-size: 1.6rem; margin-bottom: 0.75rem; }
-    .cta-box p { margin-bottom: 1.5rem; opacity: 0.9; font-size: 1rem; }
-    .btn-white { display: inline-block; background: #fff; color: var(--accent); padding: 0.8rem 2rem; border: var(--px) solid var(--text); box-shadow: 4px 4px 0 var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 700; text-decoration: none; transition: box-shadow 0.15s, transform 0.15s; }
-    .btn-white:hover { box-shadow: 2px 2px 0 var(--text); transform: translate(2px, 2px); }
-
-    footer { background: var(--surface); border-top: var(--px) solid var(--border); padding: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
-    .footer-logo { font-family: 'Fira Code', monospace; font-weight: 700; font-size: 0.95rem; color: var(--text); text-decoration: none; }
-    .footer-logo span { color: var(--accent); }
-    footer p { font-size: 0.82rem; color: var(--muted); }
-    footer a { color: var(--muted); text-decoration: none; font-size: 0.82rem; }
-    footer a:hover { color: var(--accent); }
-    .footer-links { display: flex; gap: 1.25rem; flex-wrap: wrap; }
-
-    @media (max-width: 640px) {
-      .hamburger { display: block; }
-      .nav-links { display: none; }
-      .nav-cta-desktop { display: none; }
-      .mobile-menu { display: none; flex-direction: column; background: var(--surface); border-bottom: var(--px) solid var(--border); padding: 1rem 2rem; gap: 0.75rem; }
-      .mobile-menu.open { display: flex; }
-      .mobile-menu a { font-size: 1rem; color: var(--text); text-decoration: none; font-weight: 600; padding: 0.4rem 0; border-bottom: 1px solid var(--border); }
-      .comparison-table { font-size: 0.82rem; }
-      .comparison-table th, .comparison-table td { padding: 0.5rem 0.6rem; }
-    }
-  </style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--fg); font-family: var(--sans); line-height: 1.6; overflow-x: hidden; }
+  nav:not(.toc) { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 20px 48px; border-bottom: 1px solid var(--border); background: rgba(245, 243, 238, .97); backdrop-filter: blur(12px); }
+  .nav-logo { text-decoration: none; }
+  .nav-logo span { font-family: var(--sans); font-weight: 400; font-size: 1.1rem; color: var(--fg); }
+  .nav-logo .accent { color: var(--accent); }
+  .nav-logo .yellow { color: var(--accent2); }
+  .nav-logo div { font-family: var(--mono); font-size: 0.65rem; color: var(--dim); letter-spacing: 0.06em; margin-top: 3px; }
+  .hamburger { display: none; background: none; border: none; cursor: pointer; width: 24px; height: 18px; position: relative; }
+  .hamburger span { display: block; height: 2px; background: var(--fg); margin: 4px 0; transition: 0.3s; }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a { font-size: 0.9rem; color: var(--dim); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--fg); }
+  .nav-cta { font-family: var(--mono); font-size: 0.8rem; padding: 8px 18px; border: 1px solid var(--accent); color: var(--accent); background: transparent; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+  .nav-cta:hover { background: var(--accent); color: var(--bg); }
+  .page { max-width: 800px; margin: 0 auto; padding: 80px 48px; }
+  h1 { font-size: 2.8rem; line-height: 1.2; margin-bottom: 1rem; color: var(--fg); }
+  h2 { font-size: 1.8rem; margin: 2.5rem 0 1rem; color: var(--accent); border-bottom: 2px solid var(--accent2); padding-bottom: 0.5rem; }
+  h3 { font-size: 1.3rem; margin: 1.5rem 0 0.5rem; color: var(--dim); }
+  p { margin-bottom: 1.2rem; }
+  .lead { font-size: 1.3rem; color: var(--dim); margin-bottom: 2rem; }
+  .back-link { display: inline-block; margin-bottom: 2rem; color: var(--accent); text-decoration: none; font-family: var(--mono); }
+  .back-link:hover { text-decoration: underline; }
+  .meta { color: var(--dim); font-size: 0.9rem; margin-bottom: 2rem; font-family: var(--mono); }
+  .code-block { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 1.5rem; margin: 1.5rem 0; font-family: var(--mono); font-size: 0.9rem; overflow-x: auto; }
+  .file-structure { background: var(--bg3); padding: 1rem; border-radius: 6px; margin: 1.5rem 0; font-family: var(--mono); font-size: 0.85rem; }
+  .tip { background: #e9f7ff; border-left: 4px solid #0088ff; padding: 1rem; margin: 1.5rem 0; }
+  footer { background: var(--bg2); padding: 3rem 48px; margin-top: 4rem; }
+  .footer-top { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; max-width: 1200px; margin: 0 auto; }
+  .footer-brand { grid-column: span 2; }
+  .footer-logo { font-family: var(--sans); font-weight: 400; font-size: 1.1rem; color: var(--fg); margin-bottom: 0.5rem; }
+  .footer-logo .accent { color: var(--accent); }
+  .footer-logo .yellow { color: var(--accent2); }
+  .footer-col h4 { margin-bottom: 1rem; color: var(--fg); }
+  .footer-col ul { list-style: none; }
+  .footer-col li { margin-bottom: 0.5rem; }
+  .footer-col a { color: var(--dim); text-decoration: none; }
+  .footer-col a:hover { color: var(--fg); }
+  .footer-bottom { max-width: 1200px; margin: 2rem auto 0; padding-top: 2rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; color: var(--dim); font-size: 0.9rem; }
+  @media (max-width: 768px) {
+    nav:not(.toc) { padding: 15px 20px; }
+    .nav-links { display: none; }
+    .hamburger { display: block; }
+    .page { padding: 60px 20px; }
+    h1 { font-size: 2.2rem; }
+    .footer-top { grid-template-columns: 1fr; }
+    .footer-brand { grid-column: span 1; }
+  }
+</style>
 </head>
 <body>
-
 <nav>
-  <a href="https://install-openclaw.net" class="nav-brand">
-    <span class="nav-brand-name">Get<span class="pink">Micro</span><span class="gold">Services</span></span>
-    <span class="nav-brand-tag">// done-for-you automation agency</span>
+  <a href="/" style="text-decoration:none;" class="nav-logo">
+    <span>Get<span class="accent">Micro</span><span class="yellow">services</span></span>
+    <div style="font-size:0.65rem; color:var(--muted); letter-spacing:0.06em; margin-top:3px;">// done-for-you automation agency</div>
   </a>
-  <ul class="nav-links">
-    <li><a href="https://install-openclaw.net/#services">Services</a></li>
-    <li><a href="https://install-openclaw.net/#how">How It Works</a></li>
-    <li><a href="https://install-openclaw.net/#pricing">Pricing</a></li>
-    <li><a href="https://install-openclaw.net/#faq">FAQ</a></li>
-    <li><a href="https://install-openclaw.net/about">About</a></li>
-    <li><a href="/blog/">Blog</a></li>
-    <li><a href="https://install-openclaw.net/#contact" class="nav-cta nav-cta-desktop">Start Now</a></li>
-  </ul>
-  <button class="hamburger" onclick="document.getElementById('mob').classList.toggle('open')" aria-label="Menu">
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="/#services">Services</a></li>
+    <li><a href="/#how">Process</a></li>
+    <li><a href="/#pricing">Pricing</a></li>
+    <li><a href="/#faq">FAQ</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/blog">Blog</a></li>
+    <li><a href="/#contact" class="nav-cta">Start Now</a></li>
+    <li><button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">☀</button></li>
+  </ul>
 </nav>
 
-<div class="mobile-menu" id="mob">
-  <a href="https://install-openclaw.net/#services">Services</a>
-  <a href="https://install-openclaw.net/#how">How It Works</a>
-  <a href="https://install-openclaw.net/#pricing">Pricing</a>
-  <a href="https://install-openclaw.net/#faq">FAQ</a>
-  <a href="https://install-openclaw.net/about">About</a>
-  <a href="/blog/">Blog</a>
-  <a href="https://install-openclaw.net/#contact">Start Now</a>
+<div class="page">
+  <a href="/blog" class="back-link">← Back to blog</a>
+  <div class="meta">Published April 17, 2026 · 8 min read</div>
+  
+  <h1>How OpenClaw's Memory System Works</h1>
+  <p class="lead">Unlike traditional chatbots that forget everything when the session ends, OpenClaw maintains continuity through a clever file-based memory system. Here's how it remembers who you are and what you're working on.</p>
+  
+  <h2>The Core Concept: Files as Memory</h2>
+  <p>OpenClaw treats text files as its long-term memory. Each session starts by reading key memory files, and ends by updating them. This simple approach creates remarkable persistence.</p>
+  
+  <div class="file-structure">
+workspace/<br>
+├── MEMORY.md              # Long-term curated memory<br>
+├── memory/<br>
+│   ├── 2026-04-16.md      # Yesterday's raw logs<br>
+│   └── 2026-04-17.md      # Today's raw logs<br>
+├── HEARTBEAT.md           # Periodic task checklist<br>
+└── heartbeat-state.json   # State tracking
+  </div>
+  
+  <h2>Two Types of Memory</h2>
+  
+  <h3>1. Daily Files (Raw Logs)</h3>
+  <p>Each day gets its own file: <code>memory/YYYY-MM-DD.md</code>. These are like a journal—raw, unfiltered notes of what happened:</p>
+  <div class="code-block">
+# 2026-04-17.md<br>
+- Published best-nmn.com post on David Sinclair protocol<br>
+- Fixed abandoned cart system on avlabs.bio<br>
+- Cron jobs failing due to ChatGPT rate limits<br>
+- Switched to DeepSeek model for cron tasks
+  </div>
+  
+  <h3>2. MEMORY.md (Curated Wisdom)</h3>
+  <p>This is the distilled essence—like a human's long-term memory. Updated periodically by reviewing daily files and extracting what's worth keeping:</p>
+  <div class="code-block">
+# MEMORY.md<br>
+## Infrastructure<br>
+- VPS: 1558324.xorek.cloud | IP: 144.31.142.235<br>
+- OpenClaw: 2026.2.26 | Gateway: running healthy<br>
+- n8n: https://n8n.getmicroservices.co<br>
+<br>
+## Key User Info<br>
+- Telegram ID: 285283827<br>
+- Business context: automation, bots, surf directory
+  </div>
+  
+  <div class="tip">
+    <strong>Security note:</strong> MEMORY.md is only loaded in main sessions (direct chats). It's never loaded in group chats or shared contexts to prevent leaking personal information.
+  </div>
+  
+  <h2>The Session Lifecycle</h2>
+  
+  <h3>On Startup (Every Session)</h3>
+  <p>OpenClaw automatically reads:</p>
+  <ol>
+    <li><strong>SOUL.md</strong> — Personality and behavior guidelines</li>
+    <li><strong>USER.md</strong> — Information about the human</li>
+    <li><strong>Today's memory file</strong> — What happened recently</li>
+    <li><strong>Yesterday's memory file</strong> — Context from previous day</li>
+    <li><strong>MEMORY.md</strong> — Only in main sessions (security)</li>
+  </ol>
+  
+  <h3>During Session</h3>
+  <p>Important events are written to today's memory file immediately. No "mental notes"—if it's worth remembering, it goes in a file.</p>
+  
+  <h3>On Completion</h3>
+  <p>The session updates memory files with decisions, lessons learned, and context for next time.</p>
+  
+  <h2>Heartbeats: Proactive Maintenance</h2>
+  <p>Heartbeats are periodic checks (every ~30 minutes) where OpenClaw can do background work:</p>
+  <div class="code-block">
+# HEARTBEAT.md<br>
+## Posting Schedules<br>
+- best-nmn.com: Every 3 days<br>
+- getmicroservices.com: Mon & Thu<br>
+- install-openclaw.net: Tue & Fri<br>
+<br>
+## Weekly Checks<br>
+- GA Tag Integrity Audit<br>
+- IndexNow submissions
+  </div>
+  
+  <p>During a heartbeat, OpenClaw checks what's overdue and takes action without being asked.</p>
+  
+  <h2>Cron Jobs: Scheduled Automation</h2>
+  <p>For precise timing, OpenClaw uses cron jobs that spawn isolated subagents:</p>
+  <div class="code-block">
+# Example cron job<br>
+Name: best-nmn-blog-post<br>
+Schedule: 0 10 */3 * * (every 3 days at 10:00)<br>
+Task: Write and publish next blog post<br>
+Model: deepseek/deepseek-chat<br>
+Delivery: Announce to Telegram when done
+  </div>
+  
+  <h2>Practical Examples</h2>
+  
+  <h3>Remembering Preferences</h3>
+  <p>When you say "I prefer Nova voice for TTS":</p>
+  <div class="code-block">
+# Updated TOOLS.md<br>
+### TTS<br>
+- Preferred voice: "Nova" (warm, slightly British)<br>
+- Default speaker: Kitchen HomePod
+  </div>
+  
+  <h3>Project Continuity</h3>
+  <p>Working on a multi-day project? Each session picks up where the last left off by reading the memory files.</p>
+  
+  <h3>Learning Over Time</h3>
+  <p>Mistakes are documented so they're not repeated. Success patterns are added to skills or documentation.</p>
+  
+  <h2>Why This Works Better</h2>
+  
+  <h3>1. Transparency</h3>
+  <p>You can read the memory files anytime. No black box.</p>
+  
+  <h3>2. Control</h3>
+  <p>Edit MEMORY.md to correct errors or remove outdated info.</p>
+  
+  <h3>3. Portability</h3>
+  <p>Memory files travel with the workspace. Switch machines? Your assistant remembers everything.</p>
+  
+  <h3>4. Cost Efficiency</h3>
+  <p>Files are cheaper than stuffing everything into context windows.</p>
+  
+  <h2>Getting the Most From It</h2>
+  
+  <p><strong>For users:</strong> Be specific about what you want remembered. "Add this to memory" or "Remember that I prefer X."</p>
+  
+  <p><strong>For assistants:</strong> Write things down. If you think "I should remember this," update a file immediately.</p>
+  
+  <p><strong>For developers:</strong> The system is extensible. Add your own memory files, create custom heartbeat checks, or build skills that read/write specialized memory.</p>
+  
+  <h2>The Bottom Line</h2>
+  
+  <p>OpenClaw's memory system turns the fundamental limitation of AI (statelessness) into a strength. By externalizing memory to files, it creates continuity, learns over time, and maintains context across sessions—all while remaining transparent and controllable.</p>
+  
+  <p>The system isn't perfect (it relies on the assistant actually writing things down), but when used consistently, it creates an AI that feels like it remembers you, your projects, and your preferences.</p>
+  
+  <p style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+    <strong>Ready to try OpenClaw?</strong> Check out our <a href="/">installation guide</a> or <a href="/#contact">book a consultation</a> to get your personal AI assistant set up.
+  </p>
 </div>
 
-<header class="article-header">
-  <div class="section-label">// deep dive</div>
-  <h1>How OpenClaw's Memory System Works</h1>
-  <div class="article-meta">
-    <span class="tag">// architecture</span>
-    <span>April 17, 2026</span>
-    <span>11 min read</span>
-  </div>
-</header>
-
-<article class="article-body">
-
-  <p>One of the most common questions people ask after installing OpenClaw is: <em>"How does it actually remember things?"</em> The answer is more interesting — and more practical — than most people expect. Unlike cloud AI assistants that store a hidden conversation history somewhere on vendor servers, OpenClaw's memory is entirely file-based, transparent, and under your control.</p>
-
-  <p>This post is a thorough walkthrough of how the memory system works: the two-tier memory architecture (MEMORY.md vs daily files), how heartbeats keep your assistant aware between conversations, how cron jobs extend that awareness into scheduled action, and how everything survives server restarts. By the end you'll understand not just <em>what</em> the system does, but why it's designed this way — and how to get the most out of it.</p>
-
-  <div class="callout">
-    <strong>TL;DR:</strong> OpenClaw memory lives in plain Markdown files on your server. <code>MEMORY.md</code> is curated long-term memory. Daily files (<code>memory/YYYY-MM-DD.md</code>) are raw session logs. Heartbeats keep the assistant proactive between chats. Cron jobs handle scheduled tasks. All of it persists across restarts because it's just files — no database, no vendor dependency.
-  </div>
-
-  <h2>The Problem: AI Assistants Are Amnesiac by Default</h2>
-
-  <p>Every standard AI assistant — ChatGPT, Claude, Gemini — suffers from the same architectural limitation: they're stateless. Each new session starts from zero. The model has no idea who you are, what you were working on yesterday, what decisions you made last week, or what your preferences are. You have to re-explain your context every single time.</p>
-
-  <p>This isn't an accident. It's a consequence of how these systems are designed — short-term context windows, no persistent storage, no connection between conversations. The result is that even if you use an AI assistant every day for months, it never <em>knows</em> you. It's perpetually meeting you for the first time.</p>
-
-  <p>OpenClaw solves this with a simple but powerful design principle: <strong>memory is just files</strong>. Files that persist. Files that the assistant reads at the start of every session. Files that it writes to as things happen. Files that you can inspect, edit, and understand. No black boxes.</p>
-
-  <h2>The Two-Tier Memory Architecture</h2>
-
-  <p>OpenClaw uses two distinct layers of memory, each serving a different purpose. Understanding the difference is the key to understanding the whole system.</p>
-
-  <h3>Tier 1: MEMORY.md — Long-Term, Curated Memory</h3>
-
-  <p><code>MEMORY.md</code> is the equivalent of your AI assistant's long-term memory — the kind of things a human would remember about a colleague they've worked with for a year. It's not a transcript of conversations. It's curated, distilled knowledge about you, your preferences, your projects, and your context.</p>
-
-  <p>What goes in MEMORY.md?</p>
-
-  <ul>
-    <li>Your name, how you like to be addressed, your timezone</li>
-    <li>Ongoing projects and their current status</li>
-    <li>Decisions you've made and why</li>
-    <li>Things you explicitly asked the assistant to remember</li>
-    <li>Lessons learned from past interactions</li>
-    <li>Your communication style preferences</li>
-    <li>Important recurring context (your team, your tools, your workflow)</li>
-  </ul>
-
-  <p>MEMORY.md is loaded at the start of every main session — the direct conversation between you and your assistant. It's intentionally <em>not</em> loaded in shared contexts like group chats or Discord servers, for the obvious reason that it contains personal information that shouldn't be visible to strangers.</p>
-
-  <div class="callout">
-    <strong>Important design choice:</strong> MEMORY.md is only for the main session. This is a deliberate privacy boundary. When your assistant participates in a group chat, it doesn't have access to your personal long-term memory — only to the current conversation context.
-  </div>
-
-  <p>The assistant can read, edit, and update MEMORY.md freely. If you say "remember that I prefer short responses", it writes that to MEMORY.md. If a project changes status, it updates the entry. The file is yours to read and edit too — there's nothing opaque about it.</p>
-
-  <h3>Tier 2: Daily Memory Files — Raw Session Logs</h3>
-
-  <p>The second tier is the <code>memory/</code> directory, which holds date-stamped files in the format <code>memory/YYYY-MM-DD.md</code>. These are raw logs of what happened each day — the equivalent of a notebook you scribble in during a meeting, versus the refined notes you'd write up afterwards.</p>
-
-  <p>At the start of each session, the assistant reads today's file and yesterday's file. This gives it a working memory of recent events without having to load everything that's ever happened. The pattern is:</p>
-
-<pre class="code-block"><span class="cm"># memory/2026-04-17.md</span>
-
-<span class="cm">## 09:14 — Main session</span>
-User asked me to draft the Q2 report outline.
-Drafted outline with 6 sections, sent via Telegram.
-Reminded to follow up with the finance team by Thursday.
-
-<span class="cm">## 14:30 — Heartbeat check</span>
-Email inbox: 3 new messages, none urgent.
-Calendar: board call tomorrow at 10am. Flagged to user.
-
-<span class="cm">## 16:45 — Main session</span>
-User approved the outline. Began drafting section 1.
-Decision: use the 2025 data for baseline comparisons.</pre>
-
-  <p>Daily files serve several purposes: they give the assistant recent context when a session starts, they form a searchable audit trail of what happened and when, and they're the raw material from which MEMORY.md gets updated.</p>
-
-  <h3>The Memory Maintenance Loop</h3>
-
-  <p>Over time, daily files accumulate. Left alone, they'd eventually contain months of raw logs that would be expensive to load in full. OpenClaw handles this with a maintenance loop: periodically (usually during a heartbeat), the assistant reviews recent daily files, extracts insights worth keeping long-term, and distills them into MEMORY.md. Stale or redundant information in MEMORY.md gets pruned.</p>
-
-  <p>Think of it like a person reviewing their notebook and updating their mental model. The daily file is the notebook. MEMORY.md is the mental model — smaller, more organized, and far more useful for ongoing context.</p>
-
-  <h2>How Sessions Work: Starting Fresh, But Not Empty</h2>
-
-  <p>Each OpenClaw session starts fresh — a new conversation, a clean context window. But "fresh" doesn't mean "empty". At session start, the assistant loads:</p>
-
-  <ol>
-    <li><strong>SOUL.md</strong> — the persona and behavioral guidelines (who the assistant is)</li>
-    <li><strong>USER.md</strong> — basic information about you (name, timezone, preferences)</li>
-    <li><strong>MEMORY.md</strong> — long-term curated memory (main session only)</li>
-    <li><strong>Today's and yesterday's daily files</strong> — recent context</li>
-    <li><strong>Any injected workspace files</strong> — project-specific context</li>
-  </ol>
-
-  <p>The result: by the time you send your first message, your assistant already knows who you are, what you were working on yesterday, what decisions are pending, and what your current context looks like. You don't have to re-introduce yourself or re-explain your projects. The session picks up where the last one left off.</p>
-
-  <div class="callout">
-    <strong>Real example:</strong> You close a Telegram conversation at 11pm on Tuesday after discussing a client proposal. On Wednesday morning you say "anything new?". Your assistant has already read Tuesday's daily file, knows about the proposal, and can immediately respond with relevant context — what was decided, what's still open, and what it noticed during overnight heartbeats.
-  </div>
-
-  <h2>Heartbeats: Keeping Your Assistant Aware Between Sessions</h2>
-
-  <p>Memory files solve the problem of persistence across sessions. But they don't solve a different problem: what happens <em>between</em> sessions? If your assistant only ever acts when you message it, you lose a huge chunk of its potential value — the proactive, initiative-taking behavior that makes it genuinely useful rather than just reactive.</p>
-
-  <p>That's what heartbeats are for.</p>
-
-  <p>A heartbeat is a scheduled poll — a message sent to the assistant on a regular interval (every 15–60 minutes is typical) that wakes it up and asks: <em>is there anything worth doing or flagging right now?</em></p>
-
-  <p>The assistant responds to a heartbeat by running through its configured checklist. Typical heartbeat tasks:</p>
-
-  <div class="feature-grid">
-    <div class="feature-card">
-      <div class="card-icon">// inbox</div>
-      <h3>Email Check</h3>
-      <p>Scan unread messages. Flag anything urgent, time-sensitive, or requiring a decision. Ignore noise. Batch low-priority items for a morning summary.</p>
-    </div>
-    <div class="feature-card">
-      <div class="card-icon">// calendar</div>
-      <h3>Calendar Watch</h3>
-      <p>Look for events in the next 24–48 hours. Notify proactively when something is approaching — especially if prep work is needed.</p>
-    </div>
-    <div class="feature-card">
-      <div class="card-icon">// weather</div>
-      <h3>Weather &amp; Context</h3>
-      <p>Surface relevant environmental context. Is it going to rain during your planned outdoor meeting? Worth a heads-up.</p>
-    </div>
-    <div class="feature-card">
-      <div class="card-icon">// projects</div>
-      <h3>Project Status</h3>
-      <p>Check git status, pending PRs, open tasks, or stale issues. Flag anything that's been quiet too long or needs attention.</p>
-    </div>
-  </div>
-
-  <p>The key design principle of heartbeats is <strong>quality over quantity</strong>. If there's nothing worth flagging, the assistant responds with a quiet OK and logs the check. It does <em>not</em> send you a notification just to prove it ran. You don't want to be spammed; you want to be informed when it matters.</p>
-
-  <p>Heartbeat state is tracked in a JSON file (typically <code>memory/heartbeat-state.json</code>), which records the timestamp of each check type. This prevents redundant checks — if the assistant checked email 10 minutes ago, it won't check it again on the next heartbeat.</p>
-
-<pre class="code-block">{
-  <span class="st">"lastChecks"</span>: {
-    <span class="st">"email"</span>: 1745004800,
-    <span class="st">"calendar"</span>: 1745001200,
-    <span class="st">"weather"</span>: null
-  }
-}</pre>
-
-  <p>Heartbeats also handle proactive background work: updating documentation, committing and pushing workspace files, reviewing memory files, and performing maintenance tasks that don't need your involvement. Your assistant can do productive work while you sleep.</p>
-
-  <h2>Cron Jobs: Scheduled, Isolated Tasks</h2>
-
-  <p>Heartbeats are great for periodic checks that benefit from conversational context. But some tasks need exact timing, need to run independently of the main session, or need a different model or isolation level. That's where cron jobs come in.</p>
-
-  <p>OpenClaw supports a cron-style scheduling system for tasks like:</p>
-
-  <ul>
-    <li><strong>Daily digest emails</strong> — summarize the day's activity and send it to you at 8am sharp</li>
-    <li><strong>Weekly reports</strong> — compile a project status report every Monday morning</li>
-    <li><strong>One-shot reminders</strong> — "remind me about this in exactly 2 hours"</li>
-    <li><strong>Monitoring jobs</strong> — check an external service every 5 minutes and alert on failure</li>
-    <li><strong>Cleanup tasks</strong> — archive old files, prune logs, tidy the workspace at midnight</li>
-  </ul>
-
-  <p>The practical difference between heartbeats and cron is timing precision and context. Heartbeats can drift — "roughly every 30 minutes" is fine. Cron jobs fire at exact times. Heartbeats share the main session context. Cron jobs run in isolation, which means they don't pollute your conversation history with background noise.</p>
-
-  <table class="comparison-table">
-    <thead>
-      <tr>
-        <th>Feature</th>
-        <th>Heartbeat</th>
-        <th>Cron Job</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Timing precision</td>
-        <td class="no">Approximate (can drift)</td>
-        <td class="yes">Exact schedule</td>
-      </tr>
-      <tr>
-        <td>Shares session context</td>
-        <td class="yes">Yes — conversational memory</td>
-        <td class="no">Isolated — clean slate</td>
-      </tr>
-      <tr>
-        <td>Best for</td>
-        <td>Batched checks, background work</td>
-        <td>Timed tasks, standalone jobs</td>
-      </tr>
-      <tr>
-        <td>Output delivery</td>
-        <td>May surface to main session</td>
-        <td class="yes">Direct to channel</td>
-      </tr>
-      <tr>
-        <td>API cost efficiency</td>
-        <td class="yes">Batches multiple checks</td>
-        <td>One task per invocation</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <p>A practical rule: if you're thinking "check every ~30 min whether anything needs attention", use a heartbeat. If you're thinking "send me a report at 9am every Monday", use cron.</p>
-
-  <h2>Surviving Restarts: Why File-Based Memory Is the Right Choice</h2>
-
-  <p>Here's where the design really shines. Because all memory is stored in plain files on your server's filesystem, it survives everything:</p>
-
-  <ul>
-    <li><strong>Process crashes</strong> — the files are on disk, not in RAM</li>
-    <li><strong>Server reboots</strong> — systemd starts OpenClaw back up, it reads the files, picks up where it left off</li>
-    <li><strong>Model upgrades</strong> — switch from Claude to GPT-4 to Gemini; the memory files are model-agnostic</li>
-    <li><strong>OpenClaw updates</strong> — update the runtime, the memory remains intact</li>
-    <li><strong>Migration to a new server</strong> — rsync the workspace directory, everything moves with it</li>
-  </ul>
-
-  <p>There's no database to back up, no vendor API to stay synced with, no hidden state to worry about. Your assistant's memory is as durable as your filesystem. If you run backups (and you should), your assistant's entire context is included automatically.</p>
-
-  <p>This is a deliberate departure from how most AI products work. Most cloud AI products store your conversation history on their servers, in formats you can't inspect or control. If they go down, change their API, or discontinue the product, your history is gone or inaccessible. With OpenClaw, you own the files. They're yours, in plain text, forever.</p>
-
-  <h2>Practical Usage: Getting the Most from the Memory System</h2>
-
-  <h3>Explicit Memory Commands</h3>
-
-  <p>You can always tell your assistant to remember something explicitly:</p>
-
-  <ul>
-    <li><em>"Remember that I prefer bullet points over paragraphs for summaries"</em></li>
-    <li><em>"Note that the client project has moved to phase 2 as of today"</em></li>
-    <li><em>"Update my profile: I've switched to using VS Code instead of Vim"</em></li>
-  </ul>
-
-  <p>The assistant will write these to MEMORY.md immediately. On next session load, the updated context will be there.</p>
-
-  <h3>Querying Memory Directly</h3>
-
-  <p>Because memory is in files, you can ask the assistant to look things up:</p>
-
-  <ul>
-    <li><em>"What did we decide about the API architecture last week?"</em></li>
-    <li><em>"What was the client's feedback on the last proposal?"</em></li>
-    <li><em>"When did I last update the project documentation?"</em></li>
-  </ul>
-
-  <p>The assistant can search its daily files and MEMORY.md to surface answers. It's not perfect recall — it depends on what was written down — but if you've been using OpenClaw consistently, the paper trail is usually there.</p>
-
-  <h3>Cross-Context Memory Safety</h3>
-
-  <p>OpenClaw's memory system has a built-in privacy model. MEMORY.md (which contains personal context) is only loaded in the main session. In group chats, the assistant operates on the current conversation alone. You never have to worry about your assistant accidentally leaking personal information into a group context because it simply doesn't have that information loaded.</p>
-
-  <p>Skills can also store their own state — in JSON files, in the workspace, in skill-specific directories. The Shopify skill might track last sync times; the GitHub skill might cache PR status. These are separate from your personal memory and managed by each skill independently.</p>
-
-  <h3>Memory Hygiene</h3>
-
-  <p>Over months of use, MEMORY.md can grow stale — outdated project entries, obsolete preferences, context that no longer applies. The assistant periodically prunes this during heartbeats, but you can also prompt it manually:</p>
-
-  <ul>
-    <li><em>"Do a memory review — clean up anything outdated"</em></li>
-    <li><em>"Archive the project X entries from MEMORY.md"</em></li>
-    <li><em>"Read through last month's daily files and update MEMORY.md with anything important"</em></li>
-  </ul>
-
-  <p>The goal is a MEMORY.md that stays tight and relevant — the distilled essence of what matters — not a sprawling dump of everything that's ever happened.</p>
-
-  <h2>How This Compares to Cloud AI Memory Features</h2>
-
-  <p>Major AI providers have started adding "memory" features to their products. OpenAI added memory to ChatGPT; Google has history in Gemini. These are better than nothing, but they're fundamentally different from OpenClaw's approach:</p>
-
-  <ul>
-    <li><strong>Opacity:</strong> You can't easily read or edit what they've stored about you. OpenClaw's memory is a text file you can open in any editor.</li>
-    <li><strong>Ownership:</strong> Vendor-side memory belongs to the vendor. Your OpenClaw memory files belong to you.</li>
-    <li><strong>Portability:</strong> If you switch AI providers, your OpenClaw memory goes with you. Cloud memory is tied to the platform.</li>
-    <li><strong>Scope:</strong> Vendor memory captures conversation snippets. OpenClaw memory is actively maintained, curated, and can include anything you want — including context from outside the AI conversation itself.</li>
-    <li><strong>Privacy:</strong> Cloud memory trains on or informs future model behavior. OpenClaw memory stays on your server.</li>
-  </ul>
-
-  <h2>The Bigger Picture: Memory as Identity</h2>
-
-  <p>There's something worth reflecting on here. For an AI assistant, memory <em>is</em> identity. Without memory, every conversation is with a stranger. With memory, you're talking to someone who knows you — your history, your preferences, your context, your ongoing work.</p>
-
-  <p>OpenClaw's file-based memory system makes that possible not through some proprietary magic, but through the most durable and transparent mechanism available: text files on disk. MEMORY.md is your assistant's accumulated self. Daily files are its journal. Heartbeats are its awareness between conversations.</p>
-
-  <p>Together, these form a system that gives you an AI assistant that genuinely persists — that you can build a real working relationship with over months and years, rather than starting over every morning.</p>
-
-  <p>That's the design. And it works remarkably well.</p>
-
-  <div class="cta-box">
-    <h2>Want an AI assistant that actually remembers?</h2>
-    <p>We set up OpenClaw for you — memory system, heartbeats, messaging integration, and all — in 24 hours. No terminal, no debugging, no guesswork.</p>
-    <a href="https://install-openclaw.net" class="btn-white">Get Your OpenClaw Setup &rarr;</a>
-  </div>
-
-</article>
-
 <footer>
-  <a href="https://install-openclaw.net" class="footer-logo">Get<span>Micro</span>Services</a>
-  <p>&copy; 2026 GetMicroservices. All rights reserved.</p>
-  <div class="footer-links">
-    <a href="https://install-openclaw.net">Home</a>
-    <a href="/blog/">Blog</a>
-    <a href="mailto:hello@getmicroservices.com">Contact</a>
-  </div>
-</footer>
-
-</body>
-</html>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <span class="footer-logo">Get<span class="accent">Micro</span><span class="yellow">services</span></span>
+      <p>Fast, affordable automation and microservices for businesses that want to scale without hiring a dev team.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="/#services">Automation</a></li>
+        <li><a href="/#services">AI Bots</a></li>
+        <li><a href="/#services">APIs</a></li>
+        <li><a href="/
