@@ -869,6 +869,10 @@
         <option>Custom / Not sure yet</option>
       </select>
       <textarea rows="4" name="message" placeholder="> tell us about your setup (Mac, VPS, tools you use...)" required maxlength="300" oninput="this.value=this.value.replace(/[<>\'\";\`\\\/]/g,'')"></textarea>
+    <!-- Honeypot field -->
+    <input type="text" name="_honey" style="display:none !important; opacity:0; position:absolute; left:-9999px;" tabindex="-1" autocomplete="off">
+    <!-- Honeypot field -->
+    <input type="text" name="_honey" style="display:none !important; opacity:0; position:absolute; left:-9999px;" tabindex="-1" autocomplete="off">
       <button type="submit" class="btn-primary" style="width:100%;text-align:center;border:2px solid #1a1a1a;">[ Send Enquiry → ]</button>
       <p id="form-msg" style="display:none;color:#1a7a1a;font-family:'Fira Code',monospace;font-size:0.85rem;padding:0.75rem;border:2px solid #1a7a1a;background:#f0fdf0;">✓ Message sent! We'll be in touch within a few hours.</p>
     </form>
@@ -890,6 +894,8 @@
     <a href="https://getmicroservices.com">Home</a>
     <a href="https://getmicroservices.com/blog">Blog</a>
     <a href="mailto:hello@getmicroservices.com">Contact</a>
+    <a href="/privacy-policy.html">Privacy</a>
+    <a href="/terms-of-service.html">Terms</a>
   </div>
 </footer>
 
@@ -909,6 +915,15 @@
     btn.textContent = '[ Sending... ]';
     btn.disabled = true;
 
+    // Check honeypot (bots fill hidden fields)
+    const honey = form.querySelector("[name='_honey']").value;
+    if (honey) {
+      // Bot detected - show success but don't send
+      btn.textContent = '[ Sent! ]';
+      document.getElementById("form-msg").style.display = "block";
+      return;
+    }
+
     const data = {
       name: form.querySelector('[name="name"]').value,
       email: form.querySelector('[name="email"]').value,
@@ -920,7 +935,7 @@
     try {
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 8000);
-      await fetch('https://n8n.getmicroservices.co/webhook/contact-form-cf9a4e2b', {
+      await fetch('https://n8n.getmicroservices.co/webhook/install-openclaw-contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
