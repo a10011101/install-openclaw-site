@@ -257,4 +257,62 @@ Delivery: Announce to Telegram when done
         <li><a href="/">Automation</a></li>
         <li><a href="/">AI Bots</a></li>
         <li><a href="/">APIs</a></li>
-        <li><a href="/
+MVPs</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="/">Pricing</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/blog">Blog</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="/">Free Consultation</a></li>
+        <li><a href="mailto:hello@getmicroservices.com">hello@getmicroservices.com</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 GetMicroservices. All rights reserved.</p>
+    <div class="footer-socials"><a href="#">Privacy</a><a href="#">Terms</a></div>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() {
+    const navLinks = document.getElementById('navLinks');
+    const hamburger = document.getElementById('hamburger');
+    navLinks.classList.toggle('open');
+    hamburger.classList.toggle('open');
+  }
+  
+  function toggleTheme() {
+    const themeBtn = document.getElementById('themeBtn');
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (isDark) {
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem('theme', 'light');
+      themeBtn.textContent = '☾';
+    } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('theme', 'dark');
+      themeBtn.textContent = '☀';
+    }
+  }
+  
+  // Set initial theme
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  const themeBtn = document.getElementById('themeBtn');
+  if (savedTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    themeBtn.textContent = '☀';
+  } else {
+    themeBtn.textContent = '☾';
+  }
+</script>
+</body>
+</html>
