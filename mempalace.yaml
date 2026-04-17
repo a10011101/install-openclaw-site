@@ -1,0 +1,90 @@
+wing: workspace
+rooms:
+- name: getmicroservices_site
+  description: Files from getmicroservices-site/
+  keywords:
+  - getmicroservices_site
+  - getmicroservices-site
+- name: shopify_agent
+  description: Files from shopify-agent/
+  keywords:
+  - shopify_agent
+  - shopify-agent
+- name: logs
+  description: Files from logs/
+  keywords:
+  - logs
+  - logs
+- name: n8n_stack
+  description: Files from n8n-stack/
+  keywords:
+  - n8n_stack
+  - n8n-stack
+- name: scripts
+  description: Files from scripts/
+  keywords:
+  - scripts
+  - scripts
+- name: peptides_site
+  description: Files from peptides-site/
+  keywords:
+  - peptides_site
+  - peptides-site
+- name: ruflo
+  description: Files from ruflo/
+  keywords:
+  - ruflo
+  - ruflo
+- name: gms_logo
+  description: Files from gms-logo/
+  keywords:
+  - gms_logo
+  - gms-logo
+- name: gms_blog
+  description: Files from gms-blog/
+  keywords:
+  - gms_blog
+  - gms-blog
+- name: vision_site
+  description: Files from vision-site/
+  keywords:
+  - vision_site
+  - vision-site
+- name: configuration
+  description: Files from config/
+  keywords:
+  - configuration
+  - config
+- name: best_nmn
+  description: Files from best-nmn/
+  keywords:
+  - best_nmn
+  - best-nmn
+- name: memory
+  description: Files from memory/
+  keywords:
+  - memory
+  - memory
+- name: install_openclaw_site
+  description: Files from install-openclaw-site/
+  keywords:
+  - install_openclaw_site
+  - install-openclaw-site
+- name: skills
+  description: Files from skills/
+  keywords:
+  - skills
+  - skills
+- name: backend
+  description: Files from services/
+  keywords:
+  - backend
+  - services
+- name: testing
+  description: Files from tests/
+  keywords:
+  - testing
+  - tests
+- name: general
+  description: Files that don't fit other rooms
+  keywords: []
