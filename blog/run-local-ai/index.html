@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Run Your Own Local AI: OpenClaw + Ollama Guide | install-openclaw.net</title>
+  <meta name="description" content="Run AI completely offline with OpenClaw and Ollama. No API keys, no subscriptions, full privacy. Complete setup guide for local AI."/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RKCCVN536P"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-RKCCVN536P');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="canonical" href="https://install-openclaw.net/blog/run-local-ai/"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--bg:#f5f3ee;--fg:#1a1a1a;--muted:#6b6560;--accent:#b5006a;--yellow:#e9c46a;--border:#e0ddd4;}
+    body{font-family:'Space Grotesk',system-ui,sans-serif;background:var(--bg);color:var(--fg);line-height:1.7;}
+    nav:not(.toc){position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:2px solid var(--border);padding:0 5%;display:flex;align-items:center;justify-content:space-between;min-height:60px;}
+    .nav-logo{text-decoration:none;display:flex;flex-direction:column;}
+    .nav-logo .logo-text{font-family:'Space Grotesk',sans-serif;font-weight:400;font-size:1.1rem;line-height:1;}
+    .nav-logo .logo-text .get{color:#1a1a1a;}
+    .nav-logo .logo-text .micro{color:#b5006a;}
+    .nav-logo .logo-text .services{color:#e9c46a;}
+    .nav-logo .tagline{font-family:'Fira Code',monospace;font-size:0.65rem;color:var(--muted);margin-top:3px;}
+    .nav-links{display:flex;gap:20px;list-style:none;}
+    .nav-links a{color:var(--muted);text-decoration:none;font-size:0.9rem;}
+    .nav-links a:hover{color:var(--accent);}
+    .nav-cta{color:var(--accent)!important;font-weight:600;}
+    .article-header{max-width:760px;margin:0 auto;padding:60px 24px 40px;}
+    .back-link{display:inline-block;font-family:'Fira Code',monospace;font-size:0.78rem;color:var(--muted);text-decoration:none;margin-bottom:24px;}
+    .back-link:hover{color:var(--accent);}
+    .post-tag{font-family:'Fira Code',monospace;font-size:0.75rem;color:var(--accent);margin-bottom:8px;}
+    .post-meta{font-size:0.82rem;color:var(--muted);margin-bottom:20px;}
+    h1{font-size:clamp(1.6rem,4vw,2.3rem);font-weight:700;line-height:1.3;margin-bottom:16px;}
+    .lead{font-size:1.05rem;color:var(--muted);line-height:1.8;border-left:3px solid var(--yellow);padding-left:16px;}
+    .article-body{max-width:760px;margin:0 auto;padding:40px 24px 80px;}
+    .article-body h2{font-size:1.15rem;font-weight:700;color:var(--fg);margin:40px 0 14px;border-left:3px solid var(--accent);padding-left:12px;}
+    .article-body p{color:var(--muted);font-size:1rem;line-height:1.8;margin-bottom:18px;}
+    .article-body p strong{color:var(--fg);}
+    .article-body ul{margin:0 0 18px 20px;}
+    .article-body ul li{color:var(--muted);font-size:1rem;line-height:1.8;margin-bottom:6px;}
+    .article-body ul li strong{color:var(--fg);}
+    .article-body a{color:var(--accent);}
+    .highlight-box{background:#fff;border:1px solid var(--border);border-left:3px solid var(--accent);padding:24px;margin:32px 0;}
+    .hb-title{font-family:'Fira Code',monospace;font-size:0.78rem;color:var(--accent);margin-bottom:12px;text-transform:uppercase;}
+    code{background:#fdf6ec;padding:2px 6px;border-radius:2px;font-family:'Fira Code',monospace;font-size:0.85rem;color:var(--fg);}
+    pre{background:#1a1a1a;color:#f5f3ee;padding:20px;border-radius:4px;font-family:'Fira Code',monospace;font-size:0.82rem;overflow-x:auto;margin:16px 0;}
+    footer{background:var(--bg);border-top:2px solid var(--border);padding:32px 5%;text-align:center;color:var(--muted);font-size:0.82rem;font-family:'Fira Code',monospace;}
+    footer a{color:var(--accent);text-decoration:none;}
+    @media(max-width:600px){nav:not(.toc){padding:0 4%;}.nav-links{display:none;}.article-header,.article-body{padding-left:16px;padding-right:16px;}}
+  </style>
+  <meta property="og:title" content="Run Your Own Local AI: OpenClaw + Ollama Guide"/>
+  <meta property="og:description" content="Run AI completely offline with OpenClaw and Ollama. No API keys, no subscriptions, full privacy."/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:url" content="https://install-openclaw.net/blog/run-local-ai/"/>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="/">
+    <span class="logo-text"><span class="get">Get</span><span class="micro">Micro</span><span class="services">Services</span></span>
+    <span class="tagline">// done-for-you automation agency</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/#install" class="nav-cta">Install OpenClaw →</a></li>
+  </ul>
+</nav>
+
+<div class="article-header">
+  <a class="back-link" href="/blog/">← Back to Blog</a>
+  <div class="post-tag">// guide</div>
+  <div class="post-meta">2026-04-24 · 7 min read</div>
+  <h1>Run Your Own Local AI: OpenClaw + Ollama Guide</h1>
+  <p class="lead">No API keys. No monthly subscriptions. No data leaving your machine. Here's how to run a fully local AI assistant with OpenClaw and Ollama.</p>
+</div>
+
+<div class="article-body">
+  <p>Most AI assistants rely on cloud APIs — every message you type goes to OpenAI, Anthropic, or Google's servers. For some use cases that's fine. But for privacy-conscious users, offline setups, or anyone who wants zero recurring costs, a fully local AI stack is the answer.</p>
+
+  <p>OpenClaw + Ollama delivers exactly that. Ollama runs large language models locally on your machine. OpenClaw connects to it as the AI backend. The result: a personal AI assistant that never touches the internet for inference, costs nothing to run (beyond your hardware), and keeps every conversation on your own disk.</p>
+
+  <h2>What You'll Need</h2>
+  <ul>
+    <li>A machine with at least 8GB RAM (16GB recommended)</li>
+    <li>Linux, macOS, or Windows (WSL2)</li>
+    <li>OpenClaw installed</li>
+    <li>Ollama installed</li>
+    <li>30 minutes</li>
+  </ul>
+
+  <h2>Step 1: Install Ollama</h2>
+  <p>If you haven't already, install Ollama on your machine. The quickest way on Linux:</p>
+  <pre>curl -fsSL https://ollama.ai/install.sh | sh</pre>
+  <p>For macOS, download the installer from <a href="https://ollama.ai">ollama.ai</a>. For Windows, use WSL2 and the Linux install command.</p>
+
+  <h2>Step 2: Pull a Model</h2>
+  <p>Ollama supports dozens of models. For a balance of speed and capability with OpenClaw, start with Llama 3.2 (3B) or Mistral 7B:</p>
+  <pre>ollama pull llama3.2:3b</pre>
+  <p>For better results (at the cost of more RAM), use:</p>
+  <pre>ollama pull mistral
+ollama pull llama3.2:latest</pre>
+
+  <h2>Step 3: Configure OpenClaw for Ollama</h2>
+  <p>OpenClaw's config file lets you set Ollama as the AI provider. Edit your <code>openclaw.yaml</code> (usually at <code>~/.openclaw/config.yaml</code>):</p>
+  <pre>agents:
+  defaults:
+    model: ollama/llama3.2:3b
+    provider: openai  # OpenClaw uses OpenAI-compatible API format
+    apiBase: http://127.0.0.1:11434/v1
+    apiKey: ollama    # Ollama doesn't require a real key</pre>
+  <p>Ollama exposes a fully OpenAI-compatible API at <code>http://127.0.0.1:11434/v1</code>, so OpenClaw treats it like any other OpenAI provider — just pointed at your local machine.</p>
+
+  <h2>Step 4: Restart and Test</h2>
+  <p>Restart the OpenClaw gateway:</p>
+  <pre>openclaw gateway restart</pre>
+  <p>Then send a message to your assistant. If Ollama is running and the model is loaded, you'll get responses from your local AI — no internet connection required.</p>
+
+  <div class="highlight-box">
+    <div class="hb-title">✓ Why Go Local?</div>
+    <ul>
+      <li><strong>Privacy:</strong> No data ever leaves your machine</li>
+      <li><strong>Cost:</strong> Zero API fees — one-time hardware cost only</li>
+      <li><strong>Offline:</strong> Works without internet access</li>
+      <li><strong>No rate limits:</strong> Unlimited conversations</li>
+      <li><strong>Custom models:</strong> Run Llama, Mistral, Phi, Gemma, or anything Ollama supports</li>
+    </ul>
+  </div>
+
+  <h2>When to Use Local vs Cloud</h2>
+  <p>Local models are great for: private conversations, sensitive data analysis, offline environments, cost-sensitive setups, and prototyping.</p>
+  <p>Cloud models (Claude, GPT-4) are better for: complex reasoning, long-form content generation, detailed coding assistance, and tasks that benefit from a larger model's capability.</p>
+  <p>You can configure OpenClaw to use both — switch between your local model and a cloud provider depending on the task. Set Ollama as the default and Claude/GPT-4 as a fallback for complex queries.</p>
+
+  <h2>Performance Notes</h2>
+  <ul>
+    <li>3B parameter models run well on 8GB RAM machines and respond in 1-3 seconds</li>
+    <li>7B models need 12-16GB for comfortable use</li>
+    <li>13B+ parameter models are better suited for machines with 24GB+ RAM or a GPU</li>
+    <li>For best performance, use a machine with CUDA or Metal GPU acceleration</li>
+  </ul>
+
+  <p>The beauty of this setup is that it scales with your hardware. Start with a tiny 3B model and upgrade as your infrastructure grows. OpenClaw stays the same — just change the model name in config.</p>
+
+  <p>Ready to get started with OpenClaw? <a href="/#install">Install OpenClaw →</a></p>
+</div>
+
+<footer>
+  <p>// install-openclaw.net · <a href="/blog/">Blog</a> · <a href="/#install">Install</a> · <a href="https://getmicroservices.com" target="_blank">GetMicroservices</a></p>
+</footer>
+</body>
+</html>
