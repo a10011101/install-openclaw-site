@@ -48,6 +48,15 @@
     footer a{color:var(--accent);text-decoration:none;}
     @media(max-width:600px){nav:not(.toc){padding:0 4%;}.nav-links{display:none;}.article-header,.article-body{padding-left:16px;padding-right:16px;}}
   </style>
+    .further-reading {
+      max-width: 780px; margin: 2.5rem auto; padding: 1.5rem 2rem 0.5rem;
+      border-top: 2px solid var(--border);
+    }
+    .further-reading h2 { font-size: 1.25rem; margin-bottom: 0.75rem; }
+    .further-reading ul { list-style: none; padding: 0; }
+    .further-reading li { margin-bottom: 0.5rem; }
+    .further-reading a { color: var(--accent); text-decoration: none; font-weight: 500; }
+    .further-reading a:hover { text-decoration: underline; }
   <meta property="og:title" content="Run Your Own Local AI: OpenClaw + Ollama Guide"/>
   <meta property="og:description" content="Run AI completely offline with OpenClaw and Ollama. No API keys, no subscriptions, full privacy."/>
   <meta property="og:type" content="article"/>
@@ -147,5 +156,15 @@ ollama pull llama3.2:latest</pre>
 <footer>
   <p>// install-openclaw.net · <a href="/blog/">Blog</a> · <a href="/#install">Install</a> · <a href="https://getmicroservices.com" target="_blank">GetMicroservices</a></p>
 </footer>
+
+<div class="further-reading">
+  <h2>📖 Further Reading</h2>
+  <ul>
+    <li><a href="/blog/what-is-openclaw/">What Is OpenClaw? Your Personal AI Assistant Explained</a></li>
+        <li><a href="/blog/personal-ai-assistant-2026/">Best Personal AI Assistants in 2026: Ranked & Reviewed</a></li>
+        <li><a href="/blog/ai-assistant-productivity/">How an AI Assistant Saves Me 10 Hours a Week</a></li>
+  </ul>
+</div>
+
 </body>
 </html>

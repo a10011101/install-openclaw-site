@@ -78,6 +78,15 @@
     .footer-brand { grid-column: span 1; }
   }
 </style>
+    .further-reading {
+      max-width: 780px; margin: 2.5rem auto; padding: 1.5rem 2rem 0.5rem;
+      border-top: 2px solid var(--border);
+    }
+    .further-reading h2 { font-size: 1.25rem; margin-bottom: 0.75rem; }
+    .further-reading ul { list-style: none; padding: 0; }
+    .further-reading li { margin-bottom: 0.5rem; }
+    .further-reading a { color: var(--accent); text-decoration: none; font-weight: 500; }
+    .further-reading a:hover { text-decoration: underline; }
   <link rel="canonical" href="https://install-openclaw.net/blog/openclaw-memory-system/">
 </head>
 <body>
@@ -315,5 +324,15 @@ MVPs</a></li>
     themeBtn.textContent = '☾';
   }
 </script>
+
+<div class="further-reading">
+  <h2>📖 Further Reading</h2>
+  <ul>
+    <li><a href="/blog/openclaw-n8n-integration/">OpenClaw + n8n: Automate Your Life</a></li>
+        <li><a href="/blog/install-openclaw-vps/">How to Install OpenClaw on a VPS (Step-by-Step)</a></li>
+        <li><a href="/blog/openclaw-telegram-bot-setup/">OpenClaw Telegram Bot Setup: Talk to Your AI Assistant from Anywhere</a></li>
+  </ul>
+</div>
+
 </body>
 </html>

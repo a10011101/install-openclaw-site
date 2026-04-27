@@ -45,6 +45,15 @@
     footer a{color:var(--accent);text-decoration:none;}
     @media(max-width:600px){nav:not(.toc){padding:0 4%;}.nav-links{display:none;}.article-header,.article-body{padding-left:16px;padding-right:16px;}}
   </style>
+    .further-reading {
+      max-width: 780px; margin: 2.5rem auto; padding: 1.5rem 2rem 0.5rem;
+      border-top: 2px solid var(--border);
+    }
+    .further-reading h2 { font-size: 1.25rem; margin-bottom: 0.75rem; }
+    .further-reading ul { list-style: none; padding: 0; }
+    .further-reading li { margin-bottom: 0.5rem; }
+    .further-reading a { color: var(--accent); text-decoration: none; font-weight: 500; }
+    .further-reading a:hover { text-decoration: underline; }
   <meta property="og:title" content="OpenClaw + n8n: Automate Your Life"/>
   <meta property="og:description" content="Connect OpenClaw to n8n to build powerful automations triggered by your AI assistant. Workflows, webhooks, and real examples."/>
   <meta property="og:type" content="article"/>
@@ -129,5 +138,15 @@
 <footer>
   <p>// install-openclaw.net · <a href="/blog/">Blog</a> · <a href="/#install">Install</a> · <a href="https://getmicroservices.com" target="_blank">GetMicroservices</a></p>
 </footer>
+
+<div class="further-reading">
+  <h2>📖 Further Reading</h2>
+  <ul>
+    <li><a href="/blog/openclaw-telegram-bot-setup/">OpenClaw Telegram Bot Setup: Talk to Your AI Assistant from Anywhere</a></li>
+        <li><a href="/blog/openclaw-memory-system/">How OpenClaw's Memory System Works</a></li>
+        <li><a href="/blog/openclaw-telegram-setup/">Connect OpenClaw to Telegram in 10 Minutes</a></li>
+  </ul>
+</div>
+
 </body>
 </html>
