@@ -386,7 +386,7 @@
 
     <p>Claude has excellent long-context windows (up to 200K tokens with Sonnet, more with Opus). For a single session — a code review, an analysis of a large document, a deep research dive — Claude can hold an enormous amount of context. But that context is session-only. Close the tab, and it's gone.</p>
 
-    <p>OpenClaw's memory model is fundamentally different. It maintains daily memory logs in <code>memory/YYYY-MM-DD.md</code>, a curated long-term <code>MEMORY.md</code> file it updates itself, project-specific context about your infrastructure, and heartbeat state for what's in progress. When you message OpenClaw after a week away, it already knows your setup, reads its memory files, checks what was in progress, and continues.</p>
+    <p>OpenClaw's memory model is fundamentally different. It maintains daily memory logs in <code>memory/YYYY-MM-DD.md</code>, a curated long-term <code>MEMORY.md</code> file it updates itself, project-specific context about your infrastructure, and heartbeat state for what's in progress — detailed in <a href="/blog/openclaw-memory-system/">How OpenClaw's Memory System Works</a>. When you message OpenClaw after a week away, it already knows your setup, reads its memory files, checks what was in progress, and continues.</p>
 
     <h2>Proactivity vs Reactivity</h2>
 
@@ -404,7 +404,7 @@
 
     <p>Claude runs Claude models exclusively. You get Anthropic's excellent models, but you don't choose.</p>
 
-    <p>OpenClaw can use any model: Claude (via Anthropic API), GPT-4o/GPT-5 (via OpenAI), Llama/DeepSeek/Mistral (via Ollama, local and free), Gemini, Grok, or any OpenAI-compatible endpoint. The primary model, fallback model, and thinking model are all configurable. This matters for cost, privacy, and redundancy — use a cheap local model for routine checks, route complex tasks to Claude.</p>
+    <p>OpenClaw can use any model: Claude (via Anthropic API), GPT-4o/GPT-5 (via OpenAI), Llama/DeepSeek/Mistral (via Ollama, local and free), Gemini, Grok, or any OpenAI-compatible endpoint. The primary model, fallback model, and thinking model are all configurable. This matters for cost, privacy, and redundancy — use a cheap local model for routine checks, route complex tasks to Claude. See our <a href="/blog/run-local-ai/">OpenClaw + Ollama guide</a> for setting up a fully local model backend.</p>
 
     <h2>Full Comparison</h2>
 
@@ -472,7 +472,7 @@
 
     <h2>The Bottom Line</h2>
 
-    <p>Claude is one of the best AI models available. If you need deep reasoning, long-form writing, or a coding assistant that understands your codebase, Claude is excellent.</p>
+    <p>Claude is one of the best AI models available. If you need deep reasoning, long-form writing, or a coding assistant that understands your codebase, Claude is excellent. For a comparison with OpenAI's offering, see our <a href="/blog/openclaw-vs-chatgpt/">OpenClaw vs ChatGPT</a> article and the <a href="/blog/personal-ai-assistant-2026/">best personal AI assistants of 2026 ranking</a>.</p>
 
     <p>OpenClaw is a different category of tool. It's not a model you query — it's an agent that lives on your infrastructure, remembers everything, works proactively, and connects to your tools. And because it's model-agnostic, you can give it Claude's brain while keeping OpenClaw's architecture.</p>
 

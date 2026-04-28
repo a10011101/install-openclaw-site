@@ -187,7 +187,7 @@
 
     <p>Running OpenClaw on a VPS means your AI assistant is always available — whether your laptop is closed, on a plane, or just turned off. Unlike a local Mac install, a VPS setup gives you 24/7 uptime, a static IP, and the ability to receive webhooks and messages at any hour. For a comprehensive comparison, see <a href="/blog/openclaw-vs-chatgpt/" style="color:var(--accent);">OpenClaw vs ChatGPT</a> and our <a href="/blog/what-is-openclaw/" style="color:var(--accent);">complete OpenClaw introduction</a>.</p>
 
-    <p>This guide walks you through a full <strong>OpenClaw VPS installation</strong> from scratch, using a clean Ubuntu 22.04 server. The same steps work on Hetzner, DigitalOcean, Vultr, Linode, or any comparable provider. If you prefer a step-by-step non-VPS approach, see <a href="/blog/install-openclaw-vps/" style="color:var(--accent);">how to install OpenClaw on a VPS</a>.</p>
+    <p>This guide walks you through a full <strong>OpenClaw VPS installation</strong> from scratch, using a clean Ubuntu 22.04 server. The same steps work on Hetzner, DigitalOcean, Vultr, Linode, or any comparable provider. If you prefer a step-by-step non-VPS approach, see <a href="/blog/install-openclaw-vps/" style="color:var(--accent);">how to install OpenClaw on a VPS</a> or our <a href="/blog/run-local-ai/" style="color:var(--accent);">local AI setup with Ollama</a>.</p>
 
     <div class="callout"><strong>Don't want to do this yourself?</strong> We offer a done-for-you <a href="https://install-openclaw.net/#pricing">OpenClaw VPS setup service</a> — live in 24 hours, no terminal required.</div>
 
@@ -216,7 +216,7 @@
     <pre><code>apt update && apt upgrade -y</code></pre>
 
     <h2 id="step2">Step 2 — Install Node.js</h2>
-    <p>OpenClaw requires Node.js 22 LTS or higher. Install it using the NodeSource setup script:</p>
+    <p>OpenClaw requires Node.js 22 LTS or higher. Install it using the NodeSource setup script. For a comparison of why you might choose OpenClaw over alternatives, see our <a href="/blog/personal-ai-assistant-2026/" style="color:var(--accent);">AI assistant ranking</a>:</p>
     <pre><code>curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
 apt install -y nodejs</code></pre>
     <p>Verify it installed correctly:</p>
@@ -304,7 +304,8 @@ systemctl status openclaw</code></pre>
     <ul>
       <li><strong>Add a domain</strong> — point a subdomain at your VPS IP for a cleaner webhook URL</li>
       <li><strong>Connect email & calendar</strong> — let your assistant read and respond to your inbox</li>
-      <li><strong>Set up n8n</strong> — pair OpenClaw with n8n for powerful workflow automations</li>
+      <li><strong>Set up n8n</strong> — pair OpenClaw with <a href="/blog/openclaw-n8n-integration/">n8n for powerful workflow automations</a></li>
+      <li><strong>Configure memory</strong> — teach your assistant about your projects with the <a href="/blog/openclaw-memory-system/">memory system</a></li>
       <li><strong>Configure memory</strong> — teach your assistant about your projects, preferences, and context</li>
       <li><strong>Add skills</strong> — extend OpenClaw with community skills from ClawHub</li>
     </ul>
