@@ -69,7 +69,9 @@
       --text: #1a1a1a;
       --muted: #6b6560;
       --accent: #b5006a;
-      --accent-hover: #8a004f;
+      --accent-hover: #8c0052;
+      --blue: #0066cc;
+      --blue-hover: #0052a3;
       --code: #fdf6ec;
       --pixel: 2px;
     }
@@ -97,9 +99,9 @@
     }
     .nav-logo { font-family: 'Fira Code', monospace; font-weight: 700; font-size: 1.1rem; color: var(--text); text-decoration: none; }
     .nav-logo span { color: var(--accent); }
-    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
-    .nav-links a { font-size: 0.9rem; color: var(--muted); text-decoration: none; font-weight: 500; transition: color 0.2s; }
-    .nav-links a:hover { color: var(--accent); }
+    .nav-links { display: flex; gap: 8px; list-style: none; }
+    .nav-links a { font-size: 0.82rem; color: #fff; text-decoration: none; font-weight: 600; padding: 6px 12px; background: var(--blue); transition: background 0.15s; }
+    .nav-links a:hover { background: var(--blue-hover); }
     .nav-cta {
       background: var(--accent); color: #fff !important; padding: 0.45rem 1.1rem;
       border: var(--pixel) solid var(--text);

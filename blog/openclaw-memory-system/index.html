@@ -24,6 +24,8 @@
     --fg: #1a1a1a;
     --dim: #6b6560;
     --accent: #b5006a;
+      --blue: #0066cc;
+      --blue-hover: #0052a3;
     --accent2: #e9c46a;
     --mono: 'Fira Code', monospace;
     --sans: 'Space Grotesk', system-ui, sans-serif;
@@ -40,7 +42,7 @@
   .hamburger { display: none; background: none; border: none; cursor: pointer; width: 24px; height: 18px; position: relative; }
   .hamburger span { display: block; height: 2px; background: var(--fg); margin: 4px 0; transition: 0.3s; }
   .nav-links { display: flex; gap: 32px; list-style: none; }
-  .nav-links a { font-size: 0.9rem; color: var(--dim); text-decoration: none; transition: color 0.2s; }
+  .nav-links a { font-size: 0.82rem; color: #fff; text-decoration: none; font-weight: 600; padding: 6px 12px; background: var(--blue); transition: background 0.15s; }
   .nav-links a:hover { color: var(--fg); }
   .nav-cta {
       background: var(--accent); color: #fff !important; padding: 0.45rem 1.1rem;
