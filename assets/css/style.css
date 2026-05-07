@@ -116,7 +116,7 @@ nav:not(.toc) {
 /* ── POST CTA / FOOTER ── */
 .post-footer { margin-top: 3rem; }
 .post-cta {
-  background: var(--text); color: #fff; padding: 2.5rem 2rem;
+  border: 3px solid var(--accent); background: var(--text); color: #fff; padding: 2.5rem 2rem;
   text-align: center;
 }
 .post-cta h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem; color: #fff; }
@@ -166,9 +166,11 @@ footer a:hover { color: var(--accent); }
 /* ── TOC ── */
 nav.toc {
   background: var(--surface); border: var(--pixel) solid var(--border);
-  box-shadow: 4px 4px 0 var(--border); padding: 1.5rem 1.75rem;
+  padding: 1.5rem 1.75rem;
   max-width: 760px; margin: 0 auto 2.5rem;
+  transition: border-color 0.2s, transform 0.15s, box-shadow 0.15s;
 }
+nav.toc:hover { border-color: var(--accent); transform: translate(-2px,-2px); box-shadow: 4px 4px 0 var(--border); }
 nav.toc h2 { font-family: 'Fira Code', monospace; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); margin-bottom: 0.75rem; }
 nav.toc ol { padding-left: 1.2rem; }
 nav.toc li { margin-bottom: 0.35rem; }
@@ -190,9 +192,11 @@ nav.toc a:hover { color: var(--accent); }
 /* ── CARD BOXES ── */
 .time-card {
   background: var(--surface); border: var(--pixel) solid var(--border);
-  box-shadow: 4px 4px 0 var(--border); padding: 1.5rem 1.75rem; margin: 1.75rem 0;
+  padding: 1.5rem 1.75rem; margin: 1.75rem 0;
   display: flex; gap: 1.5rem; align-items: flex-start; flex-wrap: wrap;
+  transition: border-color 0.2s, transform 0.15s, box-shadow 0.15s;
 }
+.time-card:hover { border-color: var(--accent); transform: translate(-3px,-3px); box-shadow: 4px 4px 0 var(--accent); }
 .time-card .time-num { font-family: 'Fira Code', monospace; font-size: 2.5rem; font-weight: 700; color: var(--accent); line-height: 1; white-space: nowrap; }
 .time-card .time-label { font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem; }
 .time-card .time-desc { font-size: 0.9rem; color: var(--muted); }

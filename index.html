@@ -373,13 +373,13 @@
     .pixel-box {
       background: var(--surface);
       border: var(--pixel) solid var(--border);
-      box-shadow: 4px 4px 0 var(--border);
       padding: 2rem;
       position: relative;
+      transition: border-color 0.2s, transform 0.15s, box-shadow 0.15s;
     }
+    .pixel-box:hover { border-color: var(--accent); transform: translate(-3px,-3px); box-shadow: 4px 4px 0 var(--accent); }
     .pixel-box.featured {
       border-color: var(--accent);
-      box-shadow: 4px 4px 0 var(--accent);
     }
     .badge {
       position: absolute;
@@ -451,9 +451,10 @@
     .step {
       background: var(--surface);
       border: var(--pixel) solid var(--border);
-      box-shadow: 4px 4px 0 var(--border);
       padding: 1.5rem;
+      transition: border-color 0.2s, transform 0.15s, box-shadow 0.15s;
     }
+    .step:hover { border-color: var(--accent); transform: translate(-3px,-3px); box-shadow: 4px 4px 0 var(--accent); }
     .step-num {
       font-family: 'Fira Code', monospace;
       font-size: 1.8rem;
@@ -479,8 +480,9 @@
       border: var(--pixel) solid var(--border);
       background: var(--surface);
       margin-bottom: 0.75rem;
-      box-shadow: 3px 3px 0 var(--border);
+      transition: border-color 0.2s;
     }
+    details[open] { border-color: var(--accent); }
     summary {
       font-weight: 600;
       font-size: 0.98rem;

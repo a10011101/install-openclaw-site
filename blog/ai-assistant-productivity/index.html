@@ -144,11 +144,11 @@
     nav.toc {
       background: var(--surface);
       border: var(--pixel) solid var(--border);
-      box-shadow: 4px 4px 0 var(--border);
       padding: 1.5rem 1.75rem;
       max-width: 760px;
       margin: 0 auto 2.5rem;
     }
+    nav.toc:hover { transform: translate(-2px,-2px); box-shadow: 4px 4px 0 var(--border); }
     nav.toc h2 {
       font-family: 'Fira Code', monospace;
       font-size: 0.8rem;
@@ -201,7 +201,6 @@
     .time-card {
       background: var(--surface);
       border: var(--pixel) solid var(--border);
-      box-shadow: 4px 4px 0 var(--border);
       padding: 1.5rem 1.75rem;
       margin: 1.75rem 0;
       display: flex;
@@ -209,6 +208,7 @@
       align-items: flex-start;
       flex-wrap: wrap;
     }
+    .time-card:hover { border-color: var(--accent); transform: translate(-3px,-3px); box-shadow: 4px 4px 0 var(--accent); }
     .time-card .time-num {
       font-family: 'Fira Code', monospace;
       font-size: 2.5rem;
@@ -252,6 +252,7 @@
     .highlight-box strong { display: block; font-family: 'Fira Code', monospace; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); margin-bottom: 0.5rem; }
 
     .cta-box {
+      border: 3px solid var(--accent);
       background: var(--text);
       color: #fff;
       padding: 2.5rem 2rem;
