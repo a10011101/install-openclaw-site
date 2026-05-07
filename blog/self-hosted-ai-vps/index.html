@@ -51,6 +51,8 @@
     .nav-links a:hover { color: var(--accent); }
     .nav-cta { background: var(--accent); color: #fff !important; padding: 0.45rem 1.1rem; border: var(--pixel) solid var(--text); box-shadow: 3px 3px 0 var(--text); font-weight: 700 !important; transition: box-shadow 0.15s, transform 0.15s !important; }
     .nav-cta:hover { box-shadow: 1px 1px 0 var(--text) !important; transform: translate(2px, 2px); color: #fff !important; }
+    .nav-cta:active { box-shadow: 0 0 0 var(--text) !important; transform: translate(3px, 3px); }
+    .nav-cta:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
     .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; flex-direction: column; gap: 5px; }
     .hamburger span { display: block; width: 22px; height: 2px; background: var(--text); }
     .mobile-menu { display: none; position: fixed; top: 64px; left: 0; right: 0; background: var(--surface); border-bottom: var(--pixel) solid var(--border); padding: 1rem 2rem; z-index: 99; flex-direction: column; gap: 0.75rem; }

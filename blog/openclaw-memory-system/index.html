@@ -44,6 +44,8 @@
   .nav-links a:hover { color: var(--fg); }
   .nav-cta { font-family: var(--mono); font-size: 0.8rem; padding: 8px 18px; border: 1px solid var(--accent); color: var(--accent); background: transparent; cursor: pointer; transition: all 0.2s; text-decoration: none; }
   .nav-cta:hover { background: var(--accent); color: var(--bg); }
+    .nav-cta:active { box-shadow: 0 0 0 var(--text); transform: translate(3px, 3px); }
+    .nav-cta:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
   .page { max-width: 800px; margin: 0 auto; padding: 80px 48px; }
   h1 { font-size: 2.8rem; line-height: 1.2; margin-bottom: 1rem; color: var(--fg); }
   h2 { font-size: 1.8rem; margin: 2.5rem 0 1rem; color: var(--accent); border-bottom: 2px solid var(--accent2); padding-bottom: 0.5rem; }
