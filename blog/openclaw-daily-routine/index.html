@@ -27,18 +27,35 @@
   </script>
 </head>
 <body>
-  <nav class="toc">
-    <a href="/" class="nav-logo"><span>Get<span class="pink">Micro</span><span class="gold">Services</span></span><span class="nav-tagline">// personal AI, installed right</span></a>
-    <div class="nav-links" id="navLinks">
-      <a href="/blog/what-is-openclaw/">What is OpenClaw</a>
-      <a href="/blog/install-openclaw-vps/">Install Guide</a>
-      <a href="/blog/openclaw-vs-chatgpt/">OpenClaw vs ChatGPT</a>
-      <a href="/blog/openclaw-n8n-integration/">Integrations</a>
-      <a href="/blog/">Blog</a>
-      <a href="/#pricing" class="nav-cta">[ start project ]</a>
-    </div>
-    <button class="nav-toggle" onclick="toggleMenu()">☰</button>
-  </nav>
+  <nav>
+  <a href="https://install-openclaw.net" class="nav-logo" style="text-decoration:none;display:flex;flex-direction:column;" aria-label="GetMicroServices home">
+    <span style="font-family:'Space Grotesk',sans-serif;font-weight:400;font-size:1.1rem;line-height:1.2;">
+      <span style="color:#1a1a1a;">Get</span><span style="color:#b5006a;">Micro</span><span style="color:#1a1a1a;">Services</span>
+    </span>
+    <span style="font-family:'Fira Code',monospace;font-size:0.65rem;color:#6b6560;line-height:1.3;">// done-for-you automation agency</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="https://install-openclaw.net/#services">Services</a></li>
+    <li><a href="https://install-openclaw.net/#how">How It Works</a></li>
+    <li><a href="https://install-openclaw.net/#pricing">Pricing</a></li>
+    <li><a href="https://install-openclaw.net/#faq">FAQ</a></li>
+    <li><a href="https://install-openclaw.net/about">About</a></li>
+    <li><a href="/blog/" style="color:var(--accent);">Blog</a></li>
+    <li><a href="https://install-openclaw.net/#contact" class="nav-cta nav-cta-desktop">Start Now</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="https://install-openclaw.net/#services">Services</a>
+  <a href="https://install-openclaw.net/#how">How It Works</a>
+  <a href="https://install-openclaw.net/#pricing">Pricing</a>
+  <a href="https://install-openclaw.net/#faq">FAQ</a>
+  <a href="https://install-openclaw.net/about">About</a>
+  <a href="/blog/">Blog</a>
+  <a href="https://install-openclaw.net/#contact">→ Start Now</a>
+</div>
 
   <main class="blog-post">
     <div class="post-container">
@@ -198,7 +215,7 @@
   </footer>
 
   <script>
-    function toggleMenu() {
+    function toggleMobileMenu() {
       document.getElementById('navLinks').classList.toggle('active');
     }
   </script>
