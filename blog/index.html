@@ -36,12 +36,10 @@
     .nav-links a:hover { color: var(--accent); }
     .nav-cta {
       background: var(--accent); color: #fff !important; padding: 0.45rem 1.1rem;
-      border: var(--pixel) solid var(--text); box-shadow: 3px 3px 0 var(--text);
-      font-weight: 700 !important; transition: box-shadow 0.15s, transform 0.15s !important;
+      border: var(--pixel) solid var(--text);
+      font-weight: 700 !important; transition: background 0.15s !important;
     }
-    .nav-cta:hover { box-shadow: 1px 1px 0 var(--text) !important; transform: translate(2px, 2px); }
-    .nav-cta:active { box-shadow: 0 0 0 var(--text) !important; transform: translate(3px, 3px); }
-    .nav-cta:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+    .nav-cta:hover { background: var(--accent-hover); color: #fff !important; }
     .page-header { text-align: center; padding: 4rem 2rem 2.5rem; max-width: 700px; margin: 0 auto; }
     .page-header .section-label { font-family: 'Fira Code', monospace; font-size: 0.78rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; }
     .page-header h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; margin-bottom: 0.75rem; }
@@ -53,7 +51,7 @@
       text-decoration: none; color: inherit; display: block;
       transition: box-shadow 0.15s, transform 0.15s;
     }
-    .post-card:hover { box-shadow: 2px 2px 0 var(--border); transform: translate(2px, 2px); }
+    .post-card:hover { box-shadow: 3px 3px 0 var(--border); transform: translate(-2px, -2px); }
     .post-meta { font-family: 'Fira Code', monospace; font-size: 0.78rem; color: var(--muted); margin-bottom: 0.6rem; display: flex; gap: 1rem; flex-wrap: wrap; }
     .post-tag { color: var(--accent); }
     .post-card h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; }
