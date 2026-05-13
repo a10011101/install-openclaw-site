@@ -72,101 +72,76 @@
 </div>
 
 <div class="article-body">
-  <p>Out of the box, OpenClaw is a capable AI assistant. It can chat, remember context, run commands, and manage files. But the real power comes from its <strong>skills system</strong> — a modular framework that lets you bolt on new capabilities like GitHub integration, web search, weather data, or entire automation workflows. Think of skills as apps for your AI.</p>
+  <p>Out of the box, <a href="/blog/what-is-openclaw/">OpenClaw</a> can chat, search the web, read files, and run shell commands. That's useful — but the real power comes from the skill system. Skills are modular capability packs that teach your AI assistant how to interact with specific tools, APIs, and workflows. Think of them as plugins, except they're just markdown files with instructions.</p>
 
   <h2>What Are OpenClaw Skills?</h2>
+  <p>A skill in OpenClaw is a directory containing a <strong>SKILL.md</strong> file — a structured document that tells the AI how to use a specific tool or perform a specific task. When you ask your assistant to do something, OpenClaw checks the available skills, finds the relevant one, reads its instructions, and follows them.</p>
+  <p>Skills aren't code in the traditional sense. They're closer to detailed runbooks. A GitHub skill might explain how to use the <code>gh</code> CLI to create issues, review PRs, and check CI status. A weather skill tells the assistant which API to call and how to format the response. The AI reads the skill, understands the tool, and executes accordingly.</p>
+  <p>This design means anyone can create a skill — you don't need to write a plugin in a specific language or conform to a framework. Write clear instructions in markdown, and your AI can follow them.</p>
 
-  <p>A skill in OpenClaw is a self-contained package that teaches your assistant how to do something new. Each skill has a <strong>SKILL.md file</strong> — a markdown document that describes what the skill does, when to use it, and how to execute it. OpenClaw reads this file at runtime and uses the instructions to guide its behavior.</p>
+  <h2>How Skills Get Loaded</h2>
+  <p>OpenClaw scans skill directories on startup and builds a registry of available capabilities. When a request comes in, the system matches it against skill descriptions using semantic understanding — not just keyword matching. If you ask "check my GitHub issues," OpenClaw knows to load the GitHub skill even if you didn't say the word "skill."</p>
+  <p>Skills are loaded lazily. The system reads only the SKILL.md file for the matched skill at the time it's needed, keeping token usage efficient. If a skill references other files (scripts, templates, configs), those are resolved relative to the skill's directory.</p>
+  <p>The skill registry is visible in your session context. You can ask your assistant "what skills do you have?" and it will list every loaded capability with a short description.</p>
 
-  <p>Skills can do simple things (check the weather) or complex ones (manage a Shopify store, open pull requests, run n8n workflows). They can wrap external tools, define command-line workflows, or connect to MCP (Model Context Protocol) servers that expose structured APIs.</p>
+  <h2>Popular Skills Worth Installing</h2>
+  <p>Here are the skills most users install first:</p>
 
-  <p>The beauty of the system is its simplicity. A skill is just a folder with a SKILL.md file. No compilation, no build step, no package manager complexity. If you can write a markdown file with clear instructions, you can create a skill.</p>
+  <p><strong>GitHub</strong> — Full GitHub integration via the <code>gh</code> CLI. Create and manage issues, open PRs, review code, check CI runs, and query repos. If you're a developer, this is non-negotiable. Your assistant becomes a code review partner that can triage issues and monitor your repos.</p>
 
-  <h2>Finding and Installing Skills with ClawHub</h2>
+  <p><strong>Weather</strong> — Current conditions, forecasts, and rain alerts for any location. Pairs well with the <a href="/blog/openclaw-memory-system/">heartbeat system</a> — your assistant can check the weather before you leave the house and send a heads-up via Telegram.</p>
 
-  <p>OpenClaw ships with a skill registry called <strong>ClawHub</strong>. It's the central catalog where community and official skills are published, versioned, and discoverable. To install a skill, you run a single command:</p>
+  <p><strong>Exa Web Search</strong> — Neural web search that understands semantic meaning, not just keywords. Better than basic web search for research, finding similar pages, and extracting clean content from URLs. Free tier available.</p>
 
-  <p><code>clawhub install &lt;skill-name&gt;</code></p>
+  <p><strong>n8n Integration</strong> — Connect your AI assistant to <a href="/blog/openclaw-n8n-integration/">n8n workflows</a> for complex automations. Trigger workflows from chat, pass data between systems, and build multi-step processes that your assistant can kick off on demand.</p>
 
-  <p>That's it. The skill gets downloaded into your workspace, and OpenClaw automatically picks it up on the next session. You can browse available skills with <code>clawhub search</code>, check for updates with <code>clawhub update</code>, and publish your own with <code>clawhub publish</code>.</p>
+  <p><strong>Brave Search</strong> — A lightweight alternative for web search and content extraction. Good for quick lookups without the overhead of a full research tool.</p>
 
-  <p>ClawHub handles versioning, dependencies, and conflict resolution. If two skills try to register the same capability, OpenClaw will let you know and let you choose which one to keep.</p>
+  <p><strong>mcporter</strong> — Manage MCP (Model Context Protocol) servers. If you're connecting OpenClaw to external tools via MCP — databases, APIs, custom services — this skill handles the configuration and communication.</p>
 
-  <h2>Popular Built-In and Community Skills</h2>
-
-  <p>Here are some of the most useful skills you can install today:</p>
-
-  <p><strong>GitHub Integration</strong> — The <code>github</code> skill wraps the <code>gh</code> CLI and lets your AI manage issues, open pull requests, review code, check CI status, and query repositories. Instead of switching to GitHub's web interface, just ask: "Open an issue about the login bug" or "What's the status of PR #42?"</p>
-
-  <p><strong>Weather</strong> — The <code>weather</code> skill provides current conditions, forecasts, and rain data for any location. Useful for trip planning, daily briefings, or just answering "Do I need an umbrella today?"</p>
-
-  <p><strong>n8n / MCP Automation</strong> — If you run n8n (a self-hosted workflow automation tool), the MCP-based skills let your AI trigger workflows, check execution status, and even build new automations. We covered this in detail in our <a href="/blog/openclaw-n8n-integration/">OpenClaw n8n integration guide</a>.</p>
-
-  <p><strong>Web Search (Exa & Brave)</strong> — Need to search the internet? The <code>web-search-exa</code> and <code>brave-search</code> skills give your AI semantic web search, content extraction, and research capabilities. The Exa skill is particularly powerful — it can find research papers, company information, and code examples with neural search rather than keyword matching.</p>
-
-  <p><strong>Skill Creator</strong> — A meta-skill that helps you build new skills. It guides you through creating SKILL.md files, defining tool access, testing, and publishing to ClawHub. It's the fastest way to go from "I wish my AI could do X" to a working skill.</p>
-
-  <p><strong>Healthcheck</strong> — Audits your server for security issues: SSH configuration, firewall rules, system updates, exposed services, and risk posture. Great for the security-conscious self-hoster.</p>
-
-  <h2>How Skills Work Under the Hood</h2>
-
-  <p>When OpenClaw starts a session, it scans the skills directory and reads each SKILL.md file. These files are injected into the system prompt as available capabilities. When a user's request matches a skill's description, OpenClaw loads the full SKILL.md and follows its instructions.</p>
-
-  <p>A SKILL.md file typically contains:</p>
-
+  <h2>Installing Skills with ClawHub</h2>
+  <p>ClawHub is the skill registry — think of it as npm for OpenClaw skills. The CLI makes installation straightforward:</p>
   <ul>
-    <li><strong>Description</strong> — What the skill does and when to trigger it</li>
-    <li><strong>Instructions</strong> — Step-by-step guidance for the AI to follow</li>
-    <li><strong>Tool access</strong> — Which tools the skill needs (exec, web_fetch, specific CLIs)</li>
-    <li><strong>Examples</strong> — Sample inputs and expected outputs</li>
-    <li><strong>Configuration</strong> — Any required environment variables or setup steps</li>
+    <li><strong>Search:</strong> <code>clawhub search github</code> — find skills by keyword or description</li>
+    <li><strong>Install:</strong> <code>clawhub install github</code> — downloads the skill to your workspace</li>
+    <li><strong>List:</strong> <code>clawhub list</code> — see what's installed</li>
+    <li><strong>Update:</strong> <code>clawhub update</code> — pull latest versions of installed skills</li>
   </ul>
+  <p>Skills install to <code>~/.openclaw/workspace/skills/</code> by default. Each skill gets its own directory with the SKILL.md file and any supporting assets. You can also install skills manually by placing the directory in the right location — no build step required.</p>
 
-  <p>Skills can also reference external scripts, Python files, or configuration templates that live alongside the SKILL.md file. This keeps complex logic in executable code while the SKILL.md handles orchestration and decision-making.</p>
+  <h2>Creating Your Own Skills</h2>
+  <p>The real unlock is building custom skills for your specific workflows. The format is simple:</p>
+  <ul>
+    <li><strong>SKILL.md</strong> — The main instruction file. Describe what the skill does, when to use it, and step-by-step instructions for the AI to follow.</li>
+    <li><strong>Supporting files</strong> — Scripts, templates, config files, or reference docs the skill needs. Everything lives in one directory.</li>
+  </ul>
+  <p>A good SKILL.md includes a clear description (so the AI knows when to activate it), a list of what tools or APIs it uses, detailed instructions for each action, and error handling guidance. The more specific your instructions, the better the AI performs.</p>
+  <p>For example, a skill for managing your Shopify store might include instructions for authenticating with the Admin API, a list of common operations (inventory checks, order lookups, product updates), and templates for how to format responses. You're essentially writing a manual that an AI can follow.</p>
 
-  <h2>The MCP Connection</h2>
+  <h2>MCP: The Connection Layer</h2>
+  <p>Many skills use the <strong>Model Context Protocol (MCP)</strong> under the hood. MCP is a standard way for AI assistants to communicate with external tools and data sources. An MCP server exposes a set of tools (functions the AI can call), and the skill tells the AI how and when to use them.</p>
+  <p>The mcporter skill handles MCP server management — connecting, authenticating, listing available tools, and inspecting results. If you're building complex integrations with databases, APIs, or custom services, understanding MCP is worth the investment.</p>
 
-  <p>The <strong>Model Context Protocol (MCP)</strong> is an open standard for connecting AI models to external tools and data sources. OpenClaw's skill system has deep MCP integration — skills can wrap MCP servers and expose their tools natively.</p>
-
-  <p>For example, the n8n skill connects to an MCP server that exposes n8n's workflow API as structured tools. Your AI doesn't need to know HTTP or JSON — it just calls the tools that the MCP server provides, and the skill handles the translation.</p>
-
-  <p>This architecture means any MCP-compatible service can become a skill. As the MCP ecosystem grows, new capabilities become available without changing OpenClaw's core. Connect a database MCP server, and your AI can query data. Connect a calendar MCP server, and it can manage your schedule. We explored this pattern in our <a href="/blog/openclaw-memory-system/">memory system deep-dive</a>, where MCP helps persist and retrieve structured context.</p>
-
-  <h2>Creating Your Own Custom Skill</h2>
-
-  <p>Building a custom skill is straightforward. Here's the minimal structure:</p>
-
-  <p>Create a folder in your skills directory (e.g., <code>skills/my-custom-skill/</code>) and add a SKILL.md file:</p>
-
-  <p><code># My Custom Skill</code><br/>
-  <code>## Description</code><br/>
-  <code>Does something specific when triggered.</code><br/>
-  <code>## When to Use</code><br/>
-  <code>Trigger on keywords: "deploy", "release", "ship it"</code><br/>
-  <code>## Instructions</code><br/>
-  <code>1. Check git status</code><br/>
-  <code>2. Run tests</code><br/>
-  <code>3. Push to main</code></p>
-
-  <p>The skill creator tool can walk you through this interactively, or you can write it by hand. Once it's in your skills directory, OpenClaw will recognize it automatically.</p>
-
-  <p>Real-world example: someone added the GitHub skill and now their AI opens PRs, reviews code, manages issues, and monitors CI — all through chat. No browser, no context switching. That's the kind of workflow unlock skills provide.</p>
-
-  <h2>Getting Started</h2>
-
-  <p>If you already have OpenClaw running, start exploring skills with <code>clawhub search</code>. Install a few, try them out, and see what fits your workflow. If you're still setting up your AI assistant, check our <a href="/blog/what-is-openclaw/">introductory guide to OpenClaw</a> or our <a href="/blog/openclaw-telegram-setup/">Telegram setup walkthrough</a>.</p>
-
-  <p>Skills turn a generic AI assistant into <em>your</em> AI assistant — one that knows your tools, your workflows, and your stack. That's the real difference between a chatbot and a capable agent.</p>
+  <h2>Skill Security Considerations</h2>
+  <p>Skills can include shell commands and API calls, so trust matters. A few guidelines:</p>
+  <ul>
+    <li><strong>Review before installing</strong> — Read the SKILL.md of any third-party skill. Understand what it does.</li>
+    <li><strong>Prefer ClawHub</strong> — Skills in the registry go through a vetting process. Random GitHub repos carry more risk.</li>
+    <li><strong>Sandbox when possible</strong> — OpenClaw runs skills in controlled environments, but you should still understand the blast radius.</li>
+    <li><strong>Use the skill-vetter</strong> — OpenClaw includes a skill-vetter capability that checks for red flags, suspicious permission patterns, and unexpected behaviors before you install.</li>
+  </ul>
 
   <div class="highlight-box">
     <div class="hb-title">✓ Key Points</div>
     <ul>
-      <li>Skills are modular capability extensions — each one is a folder with a SKILL.md file</li>
-      <li>Install skills instantly with <code>clawhub install &lt;name&gt;</code> from the ClawHub registry</li>
-      <li>Popular skills include GitHub, weather, n8n/MCP automation, web search, and healthcheck</li>
-      <li>Skills can wrap MCP servers, giving your AI access to any MCP-compatible service</li>
+      <li>Skills are markdown-based instruction files — no code framework required</li>
+      <li>Install community skills via ClawHub or build your own for custom workflows</li>
+      <li>Popular starters: GitHub, Weather, Exa Search, n8n, and mcporter</li>
+      <li>Skills connect to external tools via MCP or direct API/CLI calls</li>
     </ul>
   </div>
+
+  <p>The skill system is what turns OpenClaw from a general-purpose chatbot into a tool that actually knows your stack. Start with the built-in skills, add a few from ClawHub, and build custom ones for the workflows that matter most to you.</p>
 
   <p>Ready to install? → <a href="/#install">Get OpenClaw running on your server</a></p>
 </div>
