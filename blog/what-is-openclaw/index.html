@@ -86,7 +86,7 @@
 
     /* ── NAV ── */
     nav:not(.toc) {
-      background: var(--surface);
+      background: var(--text);
       border-bottom: var(--pixel) solid var(--border);
       padding: 0 2rem;
       display: flex;
@@ -198,7 +198,7 @@
       margin: 1.5rem 0 2rem;
     }
     .feature-card {
-      background: var(--surface);
+      background: var(--text);
       border: var(--pixel) solid var(--border);
       box-shadow: 4px 4px 0 var(--border);
       padding: 1.25rem 1.5rem;
@@ -241,7 +241,7 @@
       border-bottom: 1px solid var(--border);
       vertical-align: top;
     }
-    .comparison-table tr:nth-child(even) td { background: var(--surface); }
+    .comparison-table tr:nth-child(even) td { background: var(--text); }
     .comparison-table .yes { color: var(--accent); font-weight: 700; }
     .comparison-table .no { color: var(--muted); }
 
@@ -271,20 +271,19 @@
 
     /* ── FOOTER ── */
     footer {
-      background: var(--surface);
-      border-top: var(--pixel) solid var(--border);
-      padding: 2rem;
+      background: var(--text);
+      padding: 2.5rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 1rem;
+      gap: 1.25rem;
     }
-    .footer-logo { font-family: 'Fira Code', monospace; font-weight: 700; font-size: 0.95rem; color: var(--text); text-decoration: none; }
+    .footer-logo { font-family: 'Fira Code', monospace; font-weight: 700; font-size: 0.95rem; color: #fff; text-decoration: none; }
     .footer-logo span { color: var(--accent); }
-    footer p { font-size: 0.82rem; color: var(--muted); }
-    footer a { color: var(--muted); text-decoration: none; font-size: 0.82rem; }
-    footer a:hover { color: var(--accent); }
+    footer p { font-size: 0.82rem; color: #888; }
+    footer a { color: #aaa; text-decoration: none; font-size: 0.82rem; }
+    footer a:hover { color: #fff; }
     .footer-links { display: flex; gap: 1.25rem; flex-wrap: wrap; }
 
     /* ── MOBILE ── */
@@ -296,7 +295,7 @@
       .hamburger { display: block; }
       .nav-links { display: none; }
       .nav-cta-desktop { display: none; }
-      .mobile-menu { display: none; flex-direction: column; background: var(--surface); border-bottom: var(--pixel) solid var(--border); padding: 1rem 2rem; gap: 0.75rem; }
+      .mobile-menu { display: none; flex-direction: column; background: var(--text); border-bottom: var(--pixel) solid var(--border); padding: 1rem 2rem; gap: 0.75rem; }
       .mobile-menu.open { display: flex; }
       .mobile-menu a { font-size: 1rem; color: var(--text); text-decoration: none; font-weight: 600; padding: 0.4rem 0; border-bottom: 1px solid var(--border); }
       .comparison-table { font-size: 0.82rem; }

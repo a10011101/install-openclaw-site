@@ -86,7 +86,7 @@
 
     /* ── NAV ── */
     nav:not(.toc) {
-      background: var(--surface);
+      background: var(--text);
       border-bottom: var(--pixel) solid var(--border);
       padding: 0 2rem;
       display: flex;
@@ -111,7 +111,7 @@
 
     .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; flex-direction: column; gap: 5px; }
     .hamburger span { display: block; width: 22px; height: 2px; background: var(--text); }
-    .mobile-menu { display: none; position: fixed; top: 64px; left: 0; right: 0; background: var(--surface); border-bottom: var(--pixel) solid var(--border); padding: 1rem 2rem; z-index: 99; flex-direction: column; gap: 0.75rem; }
+    .mobile-menu { display: none; position: fixed; top: 64px; left: 0; right: 0; background: var(--text); border-bottom: var(--pixel) solid var(--border); padding: 1rem 2rem; z-index: 99; flex-direction: column; gap: 0.75rem; }
     .mobile-menu.open { display: flex; }
     .mobile-menu a { color: var(--text); text-decoration: none; font-weight: 500; padding: 0.4rem 0; border-bottom: 1px solid var(--border); }
     .mobile-menu a:last-child { border-bottom: none; }
@@ -222,7 +222,7 @@
       border-bottom: 1px solid var(--border);
       vertical-align: top;
     }
-    .comparison-table tr:nth-child(even) td { background: var(--surface); }
+    .comparison-table tr:nth-child(even) td { background: var(--text); }
     .comparison-table .yes { color: var(--accent); font-weight: 700; }
     .comparison-table .no { color: var(--muted); }
 
@@ -233,7 +233,7 @@
       margin: 1.5rem 0 2rem;
     }
     .feature-card {
-      background: var(--surface);
+      background: var(--text);
       border: var(--pixel) solid var(--border);
       box-shadow: 4px 4px 0 var(--border);
       padding: 1.25rem 1.5rem;
@@ -282,20 +282,19 @@
 
     /* ── FOOTER ── */
     footer {
-      background: var(--surface);
-      border-top: var(--pixel) solid var(--border);
-      padding: 2rem;
+      background: var(--text);
+      padding: 2.5rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 1rem;
+      gap: 1.25rem;
       font-size: 0.85rem;
       color: var(--muted);
     }
-    footer a { color: var(--muted); text-decoration: none; }
-    footer a:hover { color: var(--accent); }
-    .footer-logo { font-family: 'Fira Code', monospace; font-weight: 700; font-size: 1rem; color: var(--text); }
+    footer a { color: #aaa; text-decoration: none; }
+    footer a:hover { color: #fff; }
+    .footer-logo { font-family: 'Fira Code', monospace; font-weight: 700; font-size: 0.95rem; color: #fff; }
     .footer-logo span { color: var(--accent); }
 
     /* ── BREADCRUMB ── */
