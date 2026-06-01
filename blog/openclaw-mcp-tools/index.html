@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OpenClaw MCP Tools: Connect Your AI to Any Service | install-openclaw.net</title>
+  <meta name="description" content="MCP (Model Context Protocol) lets OpenClaw connect to GitHub, databases, Slack, and hundreds of other services. Here's how it works and how to set it up."/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RKCCVN536P"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-RKCCVN536P');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="canonical" href="https://install-openclaw.net/blog/openclaw-mcp-tools/"/>
+  <meta property="og:title" content="OpenClaw MCP Tools: Connect Your AI to Any Service"/>
+  <meta property="og:description" content="MCP (Model Context Protocol) lets OpenClaw connect to GitHub, databases, Slack, and hundreds of other services. Here's how it works and how to set it up."/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:url" content="https://install-openclaw.net/blog/openclaw-mcp-tools/"/>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "OpenClaw MCP Tools: Connect Your AI to Any Service",
+    "description": "MCP (Model Context Protocol) lets OpenClaw connect to GitHub, databases, Slack, and hundreds of other services. Here's how it works and how to set it up.",
+    "url": "https://install-openclaw.net/blog/openclaw-mcp-tools/",
+    "datePublished": "2026-06-01",
+    "dateModified": "2026-06-01",
+    "author": {"@type": "Organization", "name": "GetMicroServices", "url": "https://install-openclaw.net"},
+    "publisher": {"@type": "Organization", "name": "GetMicroServices", "url": "https://install-openclaw.net"},
+    "mainEntityOfPage": {"@type": "WebPage", "@id": "https://install-openclaw.net/blog/openclaw-mcp-tools/"}
+  }
+  </script>
+  <link rel="stylesheet" href="/assets/style.css"/>
+  <style>
+    nav:not(.toc) {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg, #f5f3ee);
+      border-bottom: 2px solid var(--border, #222);
+    }
+    .toc {
+      background: #fff;
+      border: 2px solid var(--border, #222);
+      border-radius: 4px;
+      padding: 1.25rem 1.5rem;
+      margin: 2rem 0;
+      max-width: 520px;
+    }
+    .toc-title { font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; }
+    .toc ol { margin: 0; padding-left: 1.25rem; }
+    .toc li { margin-bottom: 0.35rem; }
+    .toc a { color: var(--accent, #b5006a); text-decoration: none; font-size: 0.95rem; }
+    .toc a:hover { text-decoration: underline; }
+    .code-block {
+      background: #1a1a1a;
+      color: #e8e8e8;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.88rem;
+      padding: 1.25rem 1.5rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      margin: 1.25rem 0;
+      line-height: 1.6;
+    }
+    .code-block .comment { color: #888; }
+    .code-block .key { color: #79c0ff; }
+    .code-block .val { color: #a5d6ff; }
+    .code-block .str { color: #a8d7a8; }
+  </style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="/">
+    <span class="logo-text"><span class="get">Get</span><span class="micro">Micro</span><span class="services">Services</span></span>
+    <span class="tagline">// done-for-you automation agency</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/#install" class="nav-cta">Install OpenClaw →</a></li>
+  </ul>
+</nav>
+
+<div class="article-header">
+  <a class="back-link" href="/blog/">← Back to Blog</a>
+  <div class="post-tag">// guide</div>
+  <div class="post-meta">2026-06-01 · 9 min read</div>
+  <h1>OpenClaw MCP Tools: Connect Your AI to Any Service</h1>
+  <p class="lead">MCP (Model Context Protocol) turns OpenClaw into a universal connector — link your AI assistant to GitHub, databases, Slack, Google Drive, and hundreds of other services without writing custom integrations.</p>
+</div>
+
+<div class="article-body">
+
+  <nav class="toc">
+    <div class="toc-title">// Contents</div>
+    <ol>
+      <li><a href="#what-is-mcp">What Is MCP?</a></li>
+      <li><a href="#how-openclaw-uses-mcp">How OpenClaw Uses MCP</a></li>
+      <li><a href="#popular-mcp-servers">Popular MCP Servers</a></li>
+      <li><a href="#setup-guide">Setting Up an MCP Server</a></li>
+      <li><a href="#real-world-examples">Real-World Examples</a></li>
+      <li><a href="#build-your-own">Building Your Own MCP Server</a></li>
+      <li><a href="#mcp-vs-skills">MCP vs OpenClaw Skills</a></li>
+    </ol>
+  </nav>
+
+  <h2 id="what-is-mcp">What Is MCP?</h2>
+  <p>Model Context Protocol (MCP) is an open standard created by Anthropic that defines how <a href="/blog/personal-ai-assistant-2026/">AI assistant</a>s communicate with external tools and data sources. Think of it as a universal plug format — any service that implements the MCP server spec can be connected to any MCP-capable AI client, including <a href="/blog/what-is-openclaw/">OpenClaw</a>.</p>
+  <p>Before MCP, every AI integration was bespoke. Want your assistant to read a GitHub issue? Write a GitHub-specific integration. Want it to query a Postgres database? Write a Postgres-specific integration. Each connection required its own code, its own authentication flow, its own maintenance burden.</p>
+  <p>MCP standardizes the handshake. An MCP server exposes a set of <em>tools</em> (callable functions), <em>resources</em> (readable data), and <em>prompts</em> (templated interactions). An MCP client — like OpenClaw — discovers those capabilities and uses them through a consistent protocol. Write the server once; connect it to any compatible client.</p>
+
+  <div class="highlight-box">
+    <div class="hb-title">MCP in One Line</div>
+    <p>MCP is to AI tools what USB is to hardware peripherals — one standard connector for everything.</p>
+  </div>
+
+  <h2 id="how-openclaw-uses-mcp">How OpenClaw Uses MCP</h2>
+  <p>OpenClaw acts as an MCP client. When you configure an MCP server, OpenClaw starts it as a subprocess (for stdio servers) or connects to it over HTTP (for remote servers). At session start, OpenClaw queries the server for its tool list, then makes those tools available to the AI model as callable functions.</p>
+  <p>The model can then invoke those tools during a conversation. If you ask OpenClaw to "open a GitHub issue for the bug we discussed," it calls the GitHub MCP server's <code>create_issue</code> tool. If you ask it to "query last week's orders," it calls the database MCP server's <code>query</code> tool. The plumbing is invisible — you just talk.</p>
+  <p>This integrates naturally with OpenClaw's <a href="/blog/openclaw-skills-system/">skills system</a>. Skills can wrap MCP servers, adding configuration templates, authentication helpers, and documentation so your AI knows when and how to use each connection.</p>
+
+  <h2 id="popular-mcp-servers">Popular MCP Servers</h2>
+  <p>The MCP ecosystem has grown rapidly since the spec was released. Here are the servers OpenClaw users connect most often:</p>
+
+  <div class="highlight-box">
+    <div class="hb-title">🔧 Developer Tools</div>
+    <ul>
+      <li><strong>GitHub MCP:</strong> Read/write issues, PRs, commits, branches, and repos</li>
+      <li><strong>GitLab MCP:</strong> Same for self-hosted GitLab instances</li>
+      <li><strong>Filesystem MCP:</strong> Controlled read/write access to specific directories</li>
+      <li><strong>Git MCP:</strong> Direct git operations — log, diff, status, commit</li>
+    </ul>
+  </div>
+
+  <div class="highlight-box">
+    <div class="hb-title">📊 Data &amp; Databases</div>
+    <ul>
+      <li><strong>Postgres MCP:</strong> Run SQL queries against PostgreSQL databases</li>
+      <li><strong>SQLite MCP:</strong> Query local SQLite databases</li>
+      <li><strong>Google Sheets MCP:</strong> Read and write spreadsheet data</li>
+      <li><strong>Airtable MCP:</strong> CRUD operations on Airtable bases</li>
+    </ul>
+  </div>
+
+  <div class="highlight-box">
+    <div class="hb-title">💬 Communication &amp; Productivity</div>
+    <ul>
+      <li><strong>Slack MCP:</strong> Post messages, read channels, manage threads</li>
+      <li><strong>Google Drive MCP:</strong> Browse, read, and create Drive files</li>
+      <li><strong>Gmail MCP:</strong> Read, search, and send email</li>
+      <li><strong>Linear MCP:</strong> Manage engineering issues and projects</li>
+    </ul>
+  </div>
+
+  <div class="highlight-box">
+    <div class="hb-title">🌐 Web &amp; Search</div>
+    <ul>
+      <li><strong>Brave Search MCP:</strong> Web search without leaving your assistant</li>
+      <li><strong>Puppeteer MCP:</strong> Control a browser — navigate, click, screenshot</li>
+      <li><strong>Fetch MCP:</strong> Retrieve and parse web pages as markdown</li>
+      <li><strong>Exa MCP:</strong> Neural semantic search across the web</li>
+    </ul>
+  </div>
+
+  <h2 id="setup-guide">Setting Up an MCP Server</h2>
+  <p>OpenClaw configures MCP servers in your gateway config. Here's the general pattern, then a concrete GitHub example:</p>
+
+  <div class="code-block">
+<span class="comment"># openclaw.yaml — MCP server configuration</span>
+<span class="key">mcp</span>:
+  <span class="key">servers</span>:
+    <span class="key">github</span>:
+      <span class="key">command</span>: <span class="str">npx</span>
+      <span class="key">args</span>: [<span class="str">"-y"</span>, <span class="str">"@modelcontextprotocol/server-github"</span>]
+      <span class="key">env</span>:
+        <span class="key">GITHUB_PERSONAL_ACCESS_TOKEN</span>: <span class="str">"${GITHUB_TOKEN}"</span>
+    <span class="key">postgres</span>:
+      <span class="key">command</span>: <span class="str">npx</span>
+      <span class="key">args</span>: [<span class="str">"-y"</span>, <span class="str">"@modelcontextprotocol/server-postgres"</span>]
+      <span class="key">env</span>:
+        <span class="key">DATABASE_URL</span>: <span class="str">"${DB_URL}"</span>
+  </div>
+
+  <p>OpenClaw starts each listed server when the gateway boots. The servers run as child processes communicating via stdin/stdout (the stdio transport). For remote MCP servers running as HTTP services, use the <code>url</code> key instead of <code>command</code>:</p>
+
+  <div class="code-block">
+<span class="key">mcp</span>:
+  <span class="key">servers</span>:
+    <span class="key">my-remote-tool</span>:
+      <span class="key">url</span>: <span class="str">"https://my-tool.example.com/mcp"</span>
+      <span class="key">headers</span>:
+        <span class="key">Authorization</span>: <span class="str">"Bearer ${MY_API_KEY}"</span>
+  </div>
+
+  <p>After saving, restart the OpenClaw gateway. On the next session, your AI will have access to all the tools the MCP server exposes. You can verify with the built-in <code>mcporter</code> skill — it lists active servers and lets you test individual tool calls.</p>
+
+  <p>For step-by-step VPS setup including MCP configuration, see the <a href="/blog/install-openclaw-vps/">full install guide</a>.</p>
+
+  <h2 id="real-world-examples">Real-World Examples</h2>
+  <p>Theory is one thing. Here's what this looks like in practice when you're using OpenClaw day-to-day:</p>
+
+  <h3>Code Review Workflow</h3>
+  <p>With the GitHub MCP server connected, a conversation might go like this:</p>
+  <blockquote style="border-left: 3px solid var(--accent,#b5006a); padding: 0.5rem 1rem; margin: 1rem 0; color: var(--muted, #555);">
+    "Review the open PRs in my backend repo and flag any that have been waiting for review for over 48 hours."
+  </blockquote>
+  <p>OpenClaw calls <code>list_pull_requests</code>, filters by age, then posts a summary to your <a href="/blog/openclaw-telegram-setup/">Telegram</a>. No browser tab needed. Pair this with a <a href="/blog/openclaw-n8n-integration/">n8n workflow</a> to auto-assign reviewers and you have a lightweight code review pipeline.</p>
+
+  <h3>Database Reporting</h3>
+  <p>With a Postgres MCP server pointing at your analytics database:</p>
+  <blockquote style="border-left: 3px solid var(--accent,#b5006a); padding: 0.5rem 1rem; margin: 1rem 0; color: var(--muted, #555);">
+    "What were the top 5 pages by visits last week? Compare to the week before."
+  </blockquote>
+  <p>OpenClaw writes and runs the SQL, formats the comparison, and sends you the result. No BI tool required for quick sanity checks.</p>
+
+  <h3>Incident Response</h3>
+  <p>When something breaks at 2am, having Slack, GitHub, and your infrastructure MCP servers connected means your <a href="/blog/ai-agent-with-memory/">AI agent</a> can:</p>
+  <ul>
+    <li>Read the Slack alert thread for context</li>
+    <li>Check the GitHub commit history for recent changes</li>
+    <li>Post a status update to the ops channel</li>
+    <li>Open a tracking issue — all from a single natural-language request</li>
+  </ul>
+
+  <h2 id="build-your-own">Building Your Own MCP Server</h2>
+  <p>The MCP spec is simple enough that building a custom server for your internal tools takes a few hours, not weeks. The official SDKs cover TypeScript, Python, and Kotlin. A minimal TypeScript server looks like this:</p>
+
+  <div class="code-block">
+<span class="comment">// my-tool-server.ts</span>
+<span class="key">import</span> { Server } <span class="key">from</span> <span class="str">"@modelcontextprotocol/sdk/server/index.js"</span>;
+<span class="key">import</span> { StdioServerTransport } <span class="key">from</span> <span class="str">"@modelcontextprotocol/sdk/server/stdio.js"</span>;
+
+<span class="key">const</span> server = <span class="key">new</span> Server({ name: <span class="str">"my-tool"</span>, version: <span class="str">"1.0.0"</span> });
+
+server.setRequestHandler(<span class="str">"tools/list"</span>, <span class="key">async</span> () => ({
+  tools: [{
+    name: <span class="str">"get_status"</span>,
+    description: <span class="str">"Returns service health status"</span>,
+    inputSchema: { type: <span class="str">"object"</span>, properties: {} }
+  }]
+}));
+
+server.setRequestHandler(<span class="str">"tools/call"</span>, <span class="key">async</span> (req) => {
+  <span class="key">if</span> (req.params.name === <span class="str">"get_status"</span>) {
+    <span class="key">return</span> { content: [{ type: <span class="str">"text"</span>, text: <span class="str">"All systems operational"</span> }] };
+  }
+});
+
+<span class="key">await</span> server.connect(<span class="key">new</span> StdioServerTransport());
+  </div>
+
+  <p>Add this to your OpenClaw MCP config and your assistant can call <code>get_status</code> anytime. The real power comes from wrapping your actual internal APIs — deployment scripts, monitoring endpoints, internal databases — in this thin layer.</p>
+
+  <h2 id="mcp-vs-skills">MCP vs OpenClaw Skills</h2>
+  <p>OpenClaw has two extensibility systems: MCP servers and the <a href="/blog/openclaw-skills-system/">skills system</a>. They serve different purposes and work together.</p>
+
+  <div class="highlight-box">
+    <div class="hb-title">When to Use MCP</div>
+    <ul>
+      <li>Connecting to external services with existing MCP servers</li>
+      <li>Wrapping internal APIs for AI access</li>
+      <li>Data read/write operations against databases or file systems</li>
+      <li>Anything that benefits from a standardized protocol</li>
+    </ul>
+  </div>
+
+  <div class="highlight-box">
+    <div class="hb-title">When to Use Skills</div>
+    <ul>
+      <li>Codifying how OpenClaw should approach a task (instructions + context)</li>
+      <li>Packaging workflow logic that combines multiple tools</li>
+      <li>Sharing reusable agent behaviors with the community via ClawHub</li>
+      <li>Lightweight integrations that don't need the full MCP protocol</li>
+    </ul>
+  </div>
+
+  <p>In practice, the best setups use both. An MCP server provides raw access to a service; a skill wraps that access with intelligence — knowing when to use it, how to format the output, and how to chain multiple tools into a useful workflow.</p>
+  <p>For example, the <a href="/blog/openclaw-n8n-integration/">n8n integration</a> uses an MCP server to call n8n's API and a skill that tells OpenClaw when to trigger specific workflows based on conversational context.</p>
+
+  <h2>The Big Picture</h2>
+  <p>MCP is one of the most important developments in the self-hosted AI space. It means the ecosystem of AI-compatible tools grows independently of any single assistant or model provider. A GitHub MCP server built today works with OpenClaw, Claude Desktop, any future MCP-compatible client.</p>
+  <p>For people running <a href="/blog/private-ai-assistant/">private AI assistants</a> on their own infrastructure, this matters a lot. You're not locked into a platform's approved integrations list. You connect what you need, control the authentication, and the assistant gains capabilities accordingly.</p>
+  <p>Combined with OpenClaw's <a href="/blog/openclaw-memory-system/">persistent memory</a> and scheduling system, MCP tools turn a conversational AI into something closer to a digital coworker — one that knows your tools, your codebase, and your workflows.</p>
+
+  <div class="highlight-box">
+    <div class="hb-title">✓ Quick Summary</div>
+    <ul>
+      <li>MCP is an open standard for connecting AI assistants to external services</li>
+      <li>OpenClaw acts as an MCP client — configure servers in <code>openclaw.yaml</code></li>
+      <li>100+ community MCP servers cover GitHub, databases, Slack, search, and more</li>
+      <li>Build custom servers for internal tools in hours using official SDKs</li>
+      <li>Combine MCP servers with OpenClaw skills for intelligent, context-aware usage</li>
+      <li>All data flows through your infrastructure — no third-party relay</li>
+    </ul>
+  </div>
+
+  <p>Ready to start? → <a href="/blog/install-openclaw-vps/">Install OpenClaw on a VPS</a> and configure your first MCP server in under an hour.</p>
+
+</div>
+
+<footer>
+  <p>// install-openclaw.net · <a href="/blog/">Blog</a> · <a href="/#install">Install</a> · <a href="https://getmicroservices.com" target="_blank">GetMicroservices</a></p>
+</footer>
+</body>
+</html>
