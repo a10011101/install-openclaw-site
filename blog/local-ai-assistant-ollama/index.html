@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Local AI Assistant with Ollama and OpenClaw | install-openclaw.net</title>
+  <meta name="description" content="Run a local AI assistant with Ollama and OpenClaw for private, low-cost automation on your own hardware."/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RKCCVN536P"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-RKCCVN536P');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="canonical" href="https://install-openclaw.net/blog/local-ai-assistant-ollama/"/>
+  <link rel="stylesheet" href="/assets/style.css"/>
+  <meta property="og:title" content="Local AI Assistant with Ollama and OpenClaw"/>
+  <meta property="og:description" content="Run a local AI assistant with Ollama and OpenClaw for private, low-cost automation on your own hardware."/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:url" content="https://install-openclaw.net/blog/local-ai-assistant-ollama/"/>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="/">
+    <span class="logo-text"><span class="get">Get</span><span class="micro">Micro</span><span class="services">Services</span></span>
+    <span class="tagline">// done-for-you automation agency</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/#install" class="nav-cta">Install OpenClaw →</a></li>
+  </ul>
+</nav>
+
+<div class="article-header">
+  <a class="back-link" href="/blog/">← Back to Blog</a>
+  <div class="post-tag">// local AI</div>
+  <div class="post-meta">2026-06-02 · 9 min read</div>
+  <h1>Local AI Assistant with Ollama and OpenClaw</h1>
+  <p class="lead">Run a local AI assistant with Ollama and OpenClaw for private, low-cost automation on your own hardware.</p>
+</div>
+
+<div class="article-body">
+  <p><a href="/blog/what-is-openclaw/">OpenClaw</a> is changing how people interact with AI. Rather than a stateless chatbot you open and close, it's a persistent assistant that lives on your infrastructure, remembers your context, and proactively helps you without being asked. This guide breaks down everything you need to know.</p>
+
+  <h2>Why a Personal AI Assistant Changes Everything</h2>
+  <p>The difference between a chatbot and a personal AI assistant is the difference between a calculator and an accountant. One answers questions when asked. The other understands your situation, tracks context over time, and works on your behalf.</p>
+  <p>OpenClaw is designed around this distinction. It runs continuously, maintains memory across sessions through file-based context, and can be configured to check in proactively — scanning emails, monitoring calendars, running scheduled tasks — without requiring you to open a chat window.</p>
+
+  <h2>Core Capabilities</h2>
+  <ul>
+    <li><strong>Persistent memory:</strong> Remembers context between sessions via MEMORY.md and daily logs</li>
+    <li><strong>Multi-channel:</strong> Available via Telegram, WhatsApp, web UI, or API</li>
+    <li><strong>Skill system:</strong> Extend with skills for GitHub, Google Workspace, n8n, weather, and more</li>
+    <li><strong>Heartbeat system:</strong> Proactive checks — email, calendar, scheduled posts — without being asked</li>
+    <li><strong>Self-hosted:</strong> <a href="/blog/private-ai-assistant/">Your data</a>, your server, your control</li>
+    <li><strong>Model flexibility:</strong> Use Claude, GPT-4, Gemini, or local <a href="/blog/run-local-ai/">Ollama</a> models</li>
+  </ul>
+
+  <h2>Getting Started</h2>
+  <p>The fastest path to a running OpenClaw instance:</p>
+  <ul>
+    <li>A VPS with 1GB+ RAM (DigitalOcean, Hetzner, or any Ubuntu 22.04 host)</li>
+    <li>Node.js 18+ installed</li>
+    <li>An API key for your preferred AI provider (or Ollama for local models)</li>
+    <li>15–30 minutes</li>
+  </ul>
+  <p>Full installation guide: <a href="/blog/install-openclaw-vps/">How to Install OpenClaw on a VPS →</a></p>
+
+  <h2>Connecting to Telegram</h2>
+  <p>Most users connect OpenClaw to Telegram for always-on mobile access. The setup takes under 10 minutes — create a bot via BotFather, add the token to your OpenClaw config, and your assistant is available from any device.</p>
+  <p>Step-by-step: <a href="/blog/openclaw-telegram-setup/">Connect OpenClaw to Telegram in 10 Minutes →</a></p>
+
+  <h2>The Memory System</h2>
+  <p>OpenClaw's memory is file-based and human-readable. Key files include:</p>
+  <ul>
+    <li><strong>MEMORY.md:</strong> Long-term curated memory — significant context, preferences, ongoing projects</li>
+    <li><strong>memory/YYYY-MM-DD.md:</strong> Daily logs — raw session notes</li>
+    <li><strong>USER.md:</strong> About the person you're helping</li>
+    <li><strong>SOUL.md:</strong> Personality and behaviour configuration</li>
+  </ul>
+  <p>Deep dive: <a href="/blog/openclaw-memory-system/">How OpenClaw's Memory System Works →</a></p>
+
+  <div class="highlight-box">
+    <div class="hb-title">✓ Quick Start Summary</div>
+    <ul>
+      <li>Install on a VPS in under 30 minutes</li>
+      <li>Connect to Telegram for mobile access</li>
+      <li>Configure memory files to personalise behaviour</li>
+      <li>Add skills for GitHub, Google, n8n, and more</li>
+      <li>Set up heartbeat for proactive monitoring</li>
+    </ul>
+  </div>
+
+  <p>Ready to install? → <a href="/#install">Get OpenClaw running on your server</a></p>
+</div>
+
+<footer>
+  <p>// install-openclaw.net · <a href="/blog/">Blog</a> · <a href="/#install">Install</a> · <a href="https://getmicroservices.com" target="_blank">GetMicroservices</a></p>
+</footer>
+</body>
+</html>
