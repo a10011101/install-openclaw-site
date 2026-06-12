@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Connect OpenClaw to Discord: Complete Setup Guide | install-openclaw.net</title>
+  <meta name="description" content="Step-by-step guide to connecting OpenClaw to Discord — bring your personal AI assistant into your server channels in under 15 minutes."/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RKCCVN536P"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-RKCCVN536P');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="canonical" href="https://install-openclaw.net/blog/openclaw-discord-setup/"/>
+  <link rel="stylesheet" href="/assets/style.css"/>
+  <meta property="og:title" content="Connect OpenClaw to Discord: Complete Setup Guide"/>
+  <meta property="og:description" content="Step-by-step guide to connecting OpenClaw to Discord — bring your personal AI assistant into your server channels in under 15 minutes."/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:url" content="https://install-openclaw.net/blog/openclaw-discord-setup/"/>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Connect OpenClaw to Discord: Complete Setup Guide",
+    "description": "Step-by-step guide to connecting OpenClaw to Discord — bring your personal AI assistant into your server channels in under 15 minutes.",
+    "url": "https://install-openclaw.net/blog/openclaw-discord-setup/",
+    "datePublished": "2026-06-12",
+    "dateModified": "2026-06-12",
+    "author": {
+      "@type": "Organization",
+      "name": "GetMicroservices"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "GetMicroservices",
+      "url": "https://getmicroservices.com"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://install-openclaw.net/blog/openclaw-discord-setup/"
+    }
+  }
+  </script>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="/">
+    <span class="logo-text"><span class="get">Get</span><span class="micro">Micro</span><span class="services">Services</span></span>
+    <span class="tagline">// done-for-you automation agency</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/#install" class="nav-cta">Install OpenClaw →</a></li>
+  </ul>
+</nav>
+
+<div class="article-header">
+  <a class="back-link" href="/blog/">← Back to Blog</a>
+  <div class="post-tag">// channels</div>
+  <div class="post-meta">2026-06-12 · 7 min read</div>
+  <h1>Connect OpenClaw to Discord: Complete Setup Guide</h1>
+  <p class="lead">Step-by-step guide to connecting OpenClaw to Discord — bring your personal AI assistant into your server channels in under 15 minutes.</p>
+</div>
+
+<div class="article-body">
+  <p><a href="/blog/what-is-openclaw/">OpenClaw</a> supports multiple messaging channels out of the box. While <a href="/blog/openclaw-telegram-setup/">Telegram</a> is the most popular choice, Discord offers something compelling for teams, communities, and power users who already live in Discord: a shared <a href="/blog/personal-ai-assistant-2026/">AI assistant</a> that participates in your server, responds in channels, and maintains context across conversations.</p>
+
+  <p>This guide covers everything from creating a Discord bot to configuring OpenClaw's channel permissions, with practical tips for keeping your assistant useful without it dominating every conversation.</p>
+
+  <h2>Why Discord?</h2>
+  <p>If you use Discord for work, gaming, or community management, having your AI assistant there means zero context-switching. Instead of tabbing to a separate app, you ask your question in the channel where the work is already happening.</p>
+  <p>Discord's channel structure also maps well to OpenClaw's multi-context capabilities — you can configure different behaviour per channel, limiting the assistant to specific servers or categories. Compare this to <a href="/blog/ai-assistant-whatsapp-telegram/">WhatsApp or Telegram setups</a>, where the assistant is more personal and single-user by default.</p>
+
+  <h2>Prerequisites</h2>
+  <ul>
+    <li>A running OpenClaw instance (see: <a href="/blog/install-openclaw-vps/">Install OpenClaw on a VPS</a>)</li>
+    <li>A Discord account with a server where you have admin permissions</li>
+    <li>Node.js 18+ on your server (already present if OpenClaw is running)</li>
+    <li>About 15 minutes</li>
+  </ul>
+
+  <h2>Step 1: Create a Discord Application</h2>
+  <p>Go to the <strong>Discord Developer Portal</strong> (discord.com/developers/applications) and click <strong>New Application</strong>. Give it a name — something like "OpenClaw" or whatever you want your bot to be called in your server.</p>
+  <p>Inside the application, navigate to the <strong>Bot</strong> section and click <strong>Add Bot</strong>. You'll see a token appear — copy it and keep it safe. This is your bot's password; treat it like one.</p>
+
+  <h2>Step 2: Set Bot Permissions</h2>
+  <p>In the Bot settings, enable these <strong>Privileged Gateway Intents</strong>:</p>
+  <ul>
+    <li><strong>Message Content Intent</strong> — lets the bot read message content (required for OpenClaw to see what you send)</li>
+    <li><strong>Server Members Intent</strong> — optional, useful if you want the bot to know who's in the server</li>
+  </ul>
+  <p>Under the <strong>OAuth2 → URL Generator</strong>, select the <code>bot</code> scope and grant these permissions:</p>
+  <ul>
+    <li>Read Messages / View Channels</li>
+    <li>Send Messages</li>
+    <li>Read Message History</li>
+    <li>Add Reactions (optional — OpenClaw can react to messages)</li>
+  </ul>
+  <p>Copy the generated URL, paste it in your browser, and invite the bot to your server.</p>
+
+  <h2>Step 3: Configure OpenClaw</h2>
+  <p>Open your OpenClaw config file and add the Discord channel configuration:</p>
+  <pre><code>{
+  "channels": {
+    "discord": {
+      "enabled": true,
+      "token": "YOUR_BOT_TOKEN_HERE",
+      "guildId": "YOUR_SERVER_ID",
+      "allowedChannelIds": ["CHANNEL_ID_1", "CHANNEL_ID_2"],
+      "respondToMentions": true,
+      "respondToDirectMessages": true,
+      "reactionMode": "minimal"
+    }
+  }
+}</code></pre>
+  <p>A few notes on these settings:</p>
+  <ul>
+    <li><strong>allowedChannelIds:</strong> Restrict OpenClaw to specific channels. Leave empty to allow all channels — but this gets noisy fast in active servers.</li>
+    <li><strong>respondToMentions:</strong> When <code>true</code>, OpenClaw only responds when @mentioned. Recommended for shared servers.</li>
+    <li><strong>reactionMode:</strong> Set to <code>minimal</code> to have OpenClaw use emoji reactions sparingly, or <code>off</code> to disable them entirely.</li>
+  </ul>
+
+  <h2>Step 4: Get Your Server and Channel IDs</h2>
+  <p>To find IDs in Discord, enable Developer Mode: go to <strong>User Settings → Advanced → Developer Mode</strong>. Then right-click any server name to copy the Server ID, or right-click a channel to copy the Channel ID.</p>
+
+  <h2>Step 5: Restart OpenClaw</h2>
+  <p>With the config saved, restart your OpenClaw instance:</p>
+  <pre><code>openclaw gateway restart</code></pre>
+  <p>OpenClaw will connect to Discord and log in. You should see the bot appear online in your server within a few seconds. Test it by sending a message in an allowed channel — either @mention the bot or send a direct message to it.</p>
+
+  <h2>Behaviour in Shared Servers</h2>
+  <p>OpenClaw's AGENTS.md guidelines include specific rules for group chat behaviour — the assistant won't respond to every message, only when it can genuinely add value. This is especially important in Discord servers where conversations flow fast.</p>
+  <p>By default, the assistant:</p>
+  <ul>
+    <li>Responds when directly @mentioned</li>
+    <li>Stays quiet during casual banter between humans</li>
+    <li>Uses reactions to acknowledge messages without cluttering the chat</li>
+    <li>Avoids triple-posting or fragmenting responses</li>
+  </ul>
+  <p>You can tune this behaviour in your OpenClaw workspace's <code>SOUL.md</code> file — adjusting how assertive or reserved the assistant is depending on your community's vibe.</p>
+
+  <h2>Privacy Considerations</h2>
+  <p>One important note: OpenClaw's <a href="/blog/openclaw-memory-system/">memory system</a> stores context from conversations. In shared Discord servers, be thoughtful about what memory is loaded. The <code>MEMORY.md</code> file (which contains personal context) should only be loaded in private/direct message contexts, not in public channels.</p>
+  <p>OpenClaw's default AGENTS.md already includes this separation — main session vs shared context — but confirm your configuration matches your privacy expectations before deploying in a community server.</p>
+
+  <div class="highlight-box">
+    <div class="hb-title">✓ Discord Setup Checklist</div>
+    <ul>
+      <li>Discord app created in Developer Portal</li>
+      <li>Message Content Intent enabled</li>
+      <li>Bot invited to your server with correct permissions</li>
+      <li>Token added to OpenClaw config</li>
+      <li>allowedChannelIds set (restrict to avoid noise)</li>
+      <li>respondToMentions: true for shared servers</li>
+      <li>OpenClaw restarted and bot showing as online</li>
+    </ul>
+  </div>
+
+  <h2>Troubleshooting</h2>
+  <p><strong>Bot appears offline:</strong> Check that the token is correct and Message Content Intent is enabled in the Developer Portal.</p>
+  <p><strong>Bot doesn't respond to messages:</strong> Confirm the channel ID is in your allowedChannelIds list, and that respondToMentions is configured correctly.</p>
+  <p><strong>Bot responds to everything:</strong> Set <code>respondToMentions: true</code> and add specific channel IDs to limit scope.</p>
+  <p><strong>Permission errors:</strong> Re-invite the bot using a fresh OAuth URL with the correct permissions selected.</p>
+
+  <p>Once connected, your <a href="/blog/openclaw-use-cases/">OpenClaw assistant</a> brings the same automation capabilities — scheduled tasks, file operations, web searches, memory — directly into your Discord workflow. Ask it to summarise a discussion, look something up, or run a background task, all without leaving your server.</p>
+
+  <p>Ready to get started? → <a href="/#install">Install OpenClaw on your server</a></p>
+</div>
+
+<footer>
+  <p>// install-openclaw.net · <a href="/blog/">Blog</a> · <a href="/#install">Install</a> · <a href="https://getmicroservices.com" target="_blank">GetMicroservices</a></p>
+</footer>
+</body>
+</html>
