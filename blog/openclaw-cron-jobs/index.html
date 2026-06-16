@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>How to Schedule Tasks with OpenClaw Cron Jobs | install-openclaw.net</title>
+  <meta name="description" content="Learn how to use OpenClaw's built-in cron job system to schedule recurring tasks, reminders, and automated workflows — no external tools required."/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RKCCVN536P"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-RKCCVN536P');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="canonical" href="https://install-openclaw.net/blog/openclaw-cron-jobs/"/>
+  <link rel="stylesheet" href="/assets/style.css"/>
+  <meta property="og:title" content="How to Schedule Tasks with OpenClaw Cron Jobs"/>
+  <meta property="og:description" content="Learn how to use OpenClaw's built-in cron job system to schedule recurring tasks, reminders, and automated workflows — no external tools required."/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:url" content="https://install-openclaw.net/blog/openclaw-cron-jobs/"/>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "How to Schedule Tasks with OpenClaw Cron Jobs",
+    "description": "Learn how to use OpenClaw's built-in cron job system to schedule recurring tasks, reminders, and automated workflows — no external tools required.",
+    "url": "https://install-openclaw.net/blog/openclaw-cron-jobs/",
+    "datePublished": "2026-06-16",
+    "dateModified": "2026-06-16",
+    "author": {
+      "@type": "Organization",
+      "name": "GetMicroservices"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "GetMicroservices",
+      "url": "https://getmicroservices.com"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://install-openclaw.net/blog/openclaw-cron-jobs/"
+    }
+  }
+  </script>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="/">
+    <span class="logo-text"><span class="get">Get</span><span class="micro">Micro</span><span class="services">Services</span></span>
+    <span class="tagline">// done-for-you automation agency</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/#install" class="nav-cta">Install OpenClaw →</a></li>
+  </ul>
+</nav>
+
+<div class="article-header">
+  <a class="back-link" href="/blog/">← Back to Blog</a>
+  <div class="post-tag">// automation</div>
+  <div class="post-meta">2026-06-16 · 8 min read</div>
+  <h1>How to Schedule Tasks with OpenClaw Cron Jobs</h1>
+  <p class="lead">OpenClaw's built-in cron system lets you schedule recurring tasks, daily briefings, and automated workflows — all controlled by your AI assistant, no external scheduler needed.</p>
+</div>
+
+<div class="article-body">
+  <p>Most people set up <a href="/blog/what-is-openclaw/">OpenClaw</a> for on-demand conversations — you ask, it answers. But there's a second mode that's arguably more powerful: scheduled execution. OpenClaw's cron job system lets you define recurring tasks that run automatically, whether you're at your desk or not.</p>
+
+  <p>This means your AI assistant can send you a morning briefing every day at 7am, check your email inbox every 30 minutes, publish blog posts on a schedule, or run maintenance scripts weekly — all without you lifting a finger after setup. If you've been using OpenClaw primarily as a chat interface, cron jobs will change how you think about <a href="/blog/ai-assistant-productivity/">what your AI assistant can actually do</a>.</p>
+
+  <h2>How OpenClaw Cron Jobs Work</h2>
+  <p>OpenClaw's cron system is built directly into the Gateway — the core server process that runs your assistant. When the Gateway starts, it loads any configured cron schedules and begins ticking. At each scheduled interval, it spins up a restricted execution agent, runs the defined prompt or script, and (optionally) delivers the output to a channel like Telegram or Discord.</p>
+
+  <p>This is fundamentally different from running a shell cron job that calls a script. OpenClaw cron jobs are AI-aware: the agent that executes has access to your skills, tools, and memory system. It can read files, make API calls, write summaries, and deliver results as natural language messages — not just log output.</p>
+
+  <p>Three key things to understand:</p>
+  <ul>
+    <li><strong>Isolated by default:</strong> Each cron run starts in an isolated context. It doesn't see your chat history unless you explicitly fork session context.</li>
+    <li><strong>Tool access:</strong> The cron agent has the same tool permissions as your main agent, unless you restrict them per-job.</li>
+    <li><strong>Output routing:</strong> Results can be sent to any connected channel (Telegram, Discord, email via skill) or written to a file.</li>
+  </ul>
+
+  <h2>Setting Up Your First Cron Job</h2>
+  <p>Cron jobs are defined in OpenClaw's configuration. If you've followed the <a href="/blog/install-openclaw-vps/">VPS installation guide</a>, your config lives at <code>~/.openclaw/config.yaml</code>. Look for (or add) the <code>crons</code> section:</p>
+
+  <pre><code>crons:
+  - id: morning-briefing
+    schedule: "0 7 * * *"
+    label: "Daily Morning Briefing"
+    prompt: |
+      Check my email for anything urgent received in the last 24 hours.
+      Check today's calendar events.
+      Summarise in 5 bullet points and send to Telegram.
+    channel: telegram
+    model: default</code></pre>
+
+  <p>Save the file and restart the Gateway:</p>
+
+  <pre><code>openclaw gateway restart</code></pre>
+
+  <p>That's it. At 7:00 AM every day, OpenClaw will spin up an agent, run that prompt with your email and calendar skills, and push a summary to your Telegram.</p>
+
+  <h2>Cron Schedule Syntax</h2>
+  <p>OpenClaw uses standard 5-field cron syntax:</p>
+
+  <pre><code># ┌── minute (0-59)
+# │ ┌── hour (0-23)
+# │ │ ┌── day of month (1-31)
+# │ │ │ ┌── month (1-12)
+# │ │ │ │ ┌── day of week (0-6, Sun=0)
+# │ │ │ │ │
+  * * * * *
+
+# Examples:
+"0 7 * * *"      # Every day at 7:00 AM
+"0 9 * * 1"      # Every Monday at 9:00 AM
+"*/30 * * * *"   # Every 30 minutes
+"0 9,17 * * 1-5" # 9 AM and 5 PM, weekdays only
+"0 0 * * 0"      # Every Sunday at midnight</code></pre>
+
+  <p>If you're not confident with cron syntax, you can ask OpenClaw directly in chat: <em>"What's the cron expression for every weekday at 8:30am?"</em> — it'll generate it for you.</p>
+
+  <h2>Practical Cron Job Examples</h2>
+
+  <h3>Daily Morning Briefing</h3>
+  <pre><code>- id: morning-briefing
+  schedule: "0 7 * * *"
+  label: "Morning Briefing"
+  prompt: |
+    Summarise: unread emails from the last 12 hours, today's calendar,
+    and any urgent tasks in my task list. Send to Telegram as bullet points.
+  channel: telegram</code></pre>
+
+  <h3>Weekly Blog Post Publisher</h3>
+  <pre><code>- id: blog-publish-tue
+  schedule: "0 10 * * 2"
+  label: "Blog Post — Tuesday"
+  prompt: |
+    You are a RESTRICTED execution agent for install-openclaw.net blog publishing.
+    Check heartbeat-state.json for the next slug. Write, publish, and push.
+  channel: telegram</code></pre>
+
+  <h3>Inbox Zero Checker (Every 30 Minutes)</h3>
+  <pre><code>- id: email-check
+  schedule: "*/30 * * * *"
+  label: "Email Check"
+  prompt: |
+    Check for new emails. If there are any marked urgent or from known
+    clients, summarise and send to Telegram. Otherwise stay silent (HEARTBEAT_OK).
+  channel: telegram</code></pre>
+
+  <h3>End-of-Day Summary</h3>
+  <pre><code>- id: eod-summary
+  schedule: "0 18 * * 1-5"
+  label: "End-of-Day Summary"
+  prompt: |
+    What did I accomplish today? Check my calendar completed events,
+    any files modified today in the workspace, and any Telegram messages
+    I sent. Write a short summary and save to memory/YYYY-MM-DD.md.
+  channel: telegram</code></pre>
+
+  <h2>Cron vs Heartbeat: Which Should You Use?</h2>
+  <p>OpenClaw has two scheduling mechanisms and choosing the right one matters:</p>
+
+  <p><strong>Use cron when:</strong></p>
+  <ul>
+    <li>Exact timing matters ("9:00 AM sharp, every Monday")</li>
+    <li>The task needs isolation from your main session history</li>
+    <li>You want a different model or thinking level for the task</li>
+    <li>The output should be delivered to a channel independently</li>
+    <li>One-shot reminders ("remind me in 20 minutes")</li>
+  </ul>
+
+  <p><strong>Use heartbeat when:</strong></p>
+  <ul>
+    <li>Multiple checks can batch together (email + calendar + notifications)</li>
+    <li>You need conversational context from recent messages</li>
+    <li>Timing can drift slightly (every ~30 min is fine)</li>
+    <li>You want to reduce API calls by combining periodic checks</li>
+  </ul>
+
+  <p>In practice: heartbeat for ambient awareness, cron for precision tasks. If you're running <a href="/blog/openclaw-n8n-integration/">OpenClaw alongside n8n</a>, you can also trigger cron jobs from n8n webhooks — giving you the best of both worlds.</p>
+
+  <h2>Advanced: Session Context and Memory</h2>
+  <p>By default, cron agents start isolated — they can't read your chat history. But you can change this:</p>
+
+  <pre><code>- id: weekly-review
+  schedule: "0 10 * * 0"
+  label: "Weekly Review"
+  context: fork
+  prompt: |
+    Review this week's memory files and the last 7 days of daily notes.
+    Write a weekly summary to memory/weekly-YYYY-WW.md and send highlights
+    to Telegram.
+  channel: telegram</code></pre>
+
+  <p>The <code>context: fork</code> setting clones the current session state into the cron agent, giving it access to recent conversation history. Use this sparingly — it increases token usage and can introduce noise if your session context is large.</p>
+
+  <p>For most scheduled tasks, isolated is better. The agent reads what it needs from files (memory, state JSON, workspace files) rather than inheriting conversation history.</p>
+
+  <h2>Debugging Cron Jobs</h2>
+  <p>When a cron job doesn't seem to be running, check these in order:</p>
+
+  <ol>
+    <li><strong>Gateway logs:</strong> <code>openclaw gateway status</code> will show recent cron fire events</li>
+    <li><strong>Schedule syntax:</strong> Double-check your cron expression with an online validator</li>
+    <li><strong>Timezone:</strong> OpenClaw uses the system timezone by default — confirm with <code>date</code> on your VPS. Set <code>timezone: Europe/London</code> in your cron config if needed</li>
+    <li><strong>Channel config:</strong> If output isn't reaching Telegram, verify your channel is connected (<a href="/blog/openclaw-telegram-setup/">Telegram setup guide</a>)</li>
+    <li><strong>Skill permissions:</strong> If the agent can't access email or calendar, check that those skills are installed and configured</li>
+  </ol>
+
+  <p>You can also test a cron job manually — just run it as a one-shot prompt in your main session with the same instructions. If it works there, it'll work in cron.</p>
+
+  <h2>Cron Jobs and the OpenClaw Memory System</h2>
+  <p>One of the most powerful patterns is using cron jobs to maintain your <a href="/blog/openclaw-memory-system/">OpenClaw memory system</a> automatically. Rather than relying on yourself to update memory files, a nightly cron job can do it for you:</p>
+
+  <pre><code>- id: nightly-memory-update
+  schedule: "0 23 * * *"
+  label: "Nightly Memory Update"
+  prompt: |
+    Read today's workspace activity: any new or modified files, terminal
+    commands run, Telegram messages received. Write a daily note to
+    memory/YYYY-MM-DD.md. Keep it under 500 words.
+  channel: telegram</code></pre>
+
+  <p>Combine this with a weekly memory consolidation job that reads the daily notes and updates <code>MEMORY.md</code> with distilled insights, and your AI assistant builds a continuously improving understanding of your work — without you ever having to manually maintain it.</p>
+
+  <h2>Real-World Cron Stack</h2>
+  <p>Here's a practical cron setup for a typical solopreneur using OpenClaw:</p>
+
+  <pre><code>crons:
+  # Morning briefing — daily at 7am
+  - id: morning-briefing
+    schedule: "0 7 * * *"
+    prompt: "Check email and calendar. Send 5-bullet summary to Telegram."
+    channel: telegram
+
+  # Email check — every 30 min during work hours
+  - id: email-watch
+    schedule: "*/30 9-18 * * 1-5"
+    prompt: "Any urgent emails? Notify Telegram if yes. HEARTBEAT_OK if not."
+    channel: telegram
+
+  # Weekly review — Sunday at 10am
+  - id: weekly-review
+    schedule: "0 10 * * 0"
+    context: fork
+    prompt: "Summarise this week. Update MEMORY.md highlights."
+    channel: telegram
+
+  # Nightly memory log — 11pm
+  - id: nightly-log
+    schedule: "0 23 * * *"
+    prompt: "Log today's activity to memory/YYYY-MM-DD.md."
+    channel: telegram</code></pre>
+
+  <p>This stack gives you ambient awareness without being overwhelming. The email watch uses conditional output — it only notifies you when something needs attention, keeping your Telegram clean the rest of the time.</p>
+
+  <h2>What's Next</h2>
+  <p>Cron jobs are where OpenClaw transitions from a reactive chat tool to an active <a href="/blog/ai-agent-with-memory/">AI agent with memory</a> that works for you around the clock. Start simple: one morning briefing job. Run it for a week, tune the prompt, then layer in more jobs as you identify the repetitive tasks you want automated.</p>
+
+  <p>For more on building comprehensive automation workflows with OpenClaw, see the <a href="/blog/openclaw-use-cases/">15 Things You Can Automate with OpenClaw</a> — many of those use cases work best when paired with a cron schedule.</p>
+</div>
+
+<div class="article-footer">
+  <p>Questions about cron setup? <a href="https://getmicroservices.com">GetMicroservices</a> offers done-for-you OpenClaw configuration and automation consulting.</p>
+</div>
+
+<script>
+(() => {
+  const CONFIG = {
+    'best-nmn.com': {
+      magnet: 'NMN Beginner\'s Guide',
+      pdfUrl: '/lead-magnets/nmn-beginners-guide.pdf',
+      title: '🧬 Free NMN Beginner\'s Guide',
+      desc: 'Dosage, timing, stacking — everything you need before taking NMN.',
+      webhook: 'https://n8n.getmicroservices.co/webhook/lead-magnet-cf9a4e2b'
+    },
+    'install-openclaw.net': {
+      magnet: 'OpenClaw Quick-Start Cheatsheet',
+      pdfUrl: '/lead-magnets/openclaw-cheatsheet.pdf',
+      title: '⚡ Free OpenClaw Quick-Start Guide',
+      desc: 'Installation commands, config tips, and Telegram setup in one page.',
+      webhook: 'https://n8n.getmicroservices.co/webhook/lead-magnet-cf9a4e2b'
+    },
+    'avlabs.bio': {
+      magnet: 'The Longevity Stack Guide',
+      pdfUrl: '/lead-magnets/avlabs-longevity-stack.pdf',
+      title: '🔬 Free Longevity Stack Guide',
+      desc: 'How to stack NMN + CoQ10 + Vitamin D3 for maximum anti-aging benefit.',
+      webhook: 'https://n8n.getmicroservices.co/webhook/lead-magnet-cf9a4e2b'
+    }
+  };
+
+  const domain = window.location.hostname.replace('www.', '');
+  const cfg = CONFIG[domain] || CONFIG[Object.keys(CONFIG).find(d => domain.endsWith(d))];
+
+  if (!cfg) return;
+
+  const wrap = document.createElement('div');
+  wrap.className = 'leadmagnet-wrap';
+  wrap.innerHTML = `
+    <div class="leadmagnet-card" id="lmCard">
+      <button class="leadmagnet-close" onclick="document.getElementById('lmCard').classList.remove('open')">×</button>
+      <h3>${cfg.title}</h3>
+      <p>${cfg.desc}</p>
+      <input type="text" id="lmName" placeholder="Your first name" required />
+      <input type="email" id="lmEmail" placeholder="Your email address" required />
+      <button id="lmBtn" onclick="lmSubmit()">Get Free PDF →</button>
+      <div class="leadmagnet-success" id="lmSuccess">✓ PDF sent! Check your inbox.</div>
+    </div>
+    <button class="leadmagnet-pill" onclick="document.getElementById('lmCard').classList.toggle('open')">
+      📘 Free Guide
+    </button>
+  `;
+  document.body.appendChild(wrap);
+
+  window.lmSubmit = async function() {
+    const name = document.getElementById('lmName').value.trim();
+    const email = document.getElementById('lmEmail').value.trim();
+    const btn = document.getElementById('lmBtn');
+    const success = document.getElementById('lmSuccess');
+
+    if (!name || !email) { return; }
+    if (!email.includes('@')) { return; }
+
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+
+    try {
+      await fetch(cfg.webhook, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name, email,
+          magnet: cfg.magnet,
+          pdfUrl: cfg.pdfUrl,
+          site: domain,
+          _token: '7f9d43fb7d9ac0b7a0f8f17ec4b08990791368a84f1bf860'
+        })
+      });
+    } catch(e) { /* silent */ }
+
+    success.classList.add('show');
+    btn.textContent = '✓ Sent!';
+    document.getElementById('lmName').value = '';
+    document.getElementById('lmEmail').value = '';
+    setTimeout(() => { btn.disabled = false; btn.textContent = 'Get Free PDF →'; }, 3000);
+  };
+})();
+</script>
+</body>
+</html>
