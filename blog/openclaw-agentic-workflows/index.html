@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Build Agentic AI Workflows with OpenClaw: A Practical Guide | install-openclaw.net</title>
+  <meta name="description" content="Learn how to build powerful agentic AI workflows with OpenClaw — multi-step tasks, tool chaining, memory-aware agents, and autonomous automation that actually works."/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RKCCVN536P"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-RKCCVN536P');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="canonical" href="https://install-openclaw.net/blog/openclaw-agentic-workflows/"/>
+  <link rel="stylesheet" href="/assets/style.css"/>
+  <meta property="og:title" content="Build Agentic AI Workflows with OpenClaw: A Practical Guide"/>
+  <meta property="og:description" content="Learn how to build powerful agentic AI workflows with OpenClaw — multi-step tasks, tool chaining, memory-aware agents, and autonomous automation that actually works."/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:url" content="https://install-openclaw.net/blog/openclaw-agentic-workflows/"/>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Build Agentic AI Workflows with OpenClaw: A Practical Guide",
+    "description": "Learn how to build powerful agentic AI workflows with OpenClaw — multi-step tasks, tool chaining, memory-aware agents, and autonomous automation that actually works.",
+    "url": "https://install-openclaw.net/blog/openclaw-agentic-workflows/",
+    "datePublished": "2026-06-19",
+    "dateModified": "2026-06-19",
+    "author": {
+      "@type": "Organization",
+      "name": "GetMicroservices"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "GetMicroservices",
+      "url": "https://getmicroservices.com"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://install-openclaw.net/blog/openclaw-agentic-workflows/"
+    }
+  }
+  </script>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="/">
+    <span class="logo-text"><span class="get">Get</span><span class="micro">Micro</span><span class="services">Services</span></span>
+    <span class="tagline">// done-for-you automation agency</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/#install" class="nav-cta">Install OpenClaw →</a></li>
+  </ul>
+</nav>
+
+<div class="article-header">
+  <a class="back-link" href="/blog/">← Back to Blog</a>
+  <div class="post-tag">// agentic ai</div>
+  <div class="post-meta">2026-06-19 · 9 min read</div>
+  <h1>Build Agentic AI Workflows with OpenClaw: A Practical Guide</h1>
+  <p class="lead">Agentic AI isn't just about chat — it's about multi-step reasoning, tool use, and autonomous execution. OpenClaw is built for this from the ground up. Here's how to build workflows that actually work.</p>
+</div>
+
+<div class="article-body">
+  <p>Most AI assistants are reactive: you ask, they answer, done. Agentic AI is different. An agent can plan a sequence of steps, call tools, evaluate results, adjust its approach, and keep going until a goal is achieved — without you holding its hand at every step.</p>
+
+  <p>OpenClaw is designed as an agentic system. It ships with file access, shell execution, web fetching, memory persistence, and a skill system that lets you extend its capabilities. If you've been using it purely for Q&amp;A, you're leaving most of its power on the table. This guide covers how to build real agentic workflows — from simple multi-step tasks to fully autonomous pipelines running on a schedule.</p>
+
+  <h2>What Makes a Workflow "Agentic"?</h2>
+  <p>A basic prompt-response is not agentic. You're the agent — the AI just provides information. True agentic behaviour requires three things:</p>
+
+  <ul>
+    <li><strong>Planning:</strong> The agent breaks a goal into steps and decides what to do next based on intermediate results</li>
+    <li><strong>Tool use:</strong> The agent can take actions in the world — read files, call APIs, run commands, write outputs</li>
+    <li><strong>Feedback loops:</strong> The agent evaluates whether each step worked and adapts accordingly</li>
+  </ul>
+
+  <p>OpenClaw's architecture supports all three. The model reasons over a conversation that includes tool call results, meaning it can read a file, decide what to do based on its contents, execute something, check the output, and continue — all in a single session. This is fundamentally different from a model that only generates text.</p>
+
+  <h2>The OpenClaw Tool Stack</h2>
+  <p>Before building workflows, understand what tools your agent has available. The core toolset in a standard <a href="/blog/install-openclaw-vps/">OpenClaw VPS installation</a> includes:</p>
+
+  <ul>
+    <li><strong>read:</strong> Read any file (text or image)</li>
+    <li><strong>write:</strong> Create or overwrite files</li>
+    <li><strong>edit:</strong> Make precise targeted edits to existing files</li>
+    <li><strong>exec:</strong> Run shell commands (with optional PTY, background execution, timeouts)</li>
+    <li><strong>web_fetch:</strong> Fetch and extract content from any URL</li>
+  </ul>
+
+  <p>Skills extend this further. With the right skills installed, your agent can also read email, check calendars, post to social media, query databases, interact with APIs, and send messages via Telegram or Discord. The <a href="/blog/openclaw-skills-system/">OpenClaw skills system</a> is what turns a capable chat assistant into a genuine automation engine.</p>
+
+  <h2>Building Your First Agentic Workflow</h2>
+  <p>Let's start with a concrete example: a research-and-report workflow. The goal is to have OpenClaw research a topic, write a summary, save it to a file, and notify you when done — all from a single instruction.</p>
+
+  <p>Here's the prompt:</p>
+
+  <pre><code>Research the latest developments in AI agent frameworks (2026).
+Fetch 3-5 recent articles from the web. Summarise the key trends
+in under 500 words. Save to workspace/research/ai-agents-2026.md.
+Then notify me via Telegram: "Research complete: ai-agents-2026.md"</code></pre>
+
+  <p>What happens under the hood:</p>
+  <ol>
+    <li>Agent plans: search → fetch → read → synthesise → write → notify</li>
+    <li>Calls <code>web_fetch</code> multiple times with different URLs</li>
+    <li>Reads and synthesises the content</li>
+    <li>Calls <code>write</code> to save the file</li>
+    <li>Calls the Telegram skill to send a notification</li>
+  </ol>
+
+  <p>You gave it one instruction. It executed five tool calls, made decisions at each step, and delivered a finished artifact. That's agentic.</p>
+
+  <h2>Chaining Tools: The Core Pattern</h2>
+  <p>Most agentic workflows are chains: the output of one tool becomes the input to the next. OpenClaw handles this naturally because every tool result is added to the conversation context, and the model reasons over the full history when deciding what to do next.</p>
+
+  <p>Common chains to build:</p>
+
+  <h3>Fetch → Analyse → Report</h3>
+  <pre><code>Fetch the pricing page at competitor.com. Extract their current
+tier prices and features. Compare against our pricing at /workspace/pricing.md.
+Write a one-page competitive analysis to /workspace/reports/comp-analysis.md.</code></pre>
+
+  <h3>Read → Transform → Write</h3>
+  <pre><code>Read all .csv files in /workspace/data/. Combine them into a single
+summary table (markdown). Write to /workspace/data/combined-summary.md.
+Flag any rows where value > 1000.</code></pre>
+
+  <h3>Monitor → Alert</h3>
+  <pre><code>Check https://status.myservice.com. If status is not "All systems operational",
+send an alert to Telegram: "⚠️ Service issue detected: [status]".
+Otherwise, stay silent.</code></pre>
+
+  <p>The monitor → alert pattern is especially powerful when combined with <a href="/blog/openclaw-cron-jobs/">OpenClaw cron jobs</a> — the agent runs on a schedule and only surfaces information when it matters.</p>
+
+  <h2>Memory-Aware Agentic Workflows</h2>
+  <p>What separates OpenClaw's agent from a stateless script is memory. The <a href="/blog/openclaw-memory-system/">memory system</a> lets your agent accumulate context across sessions. A workflow that runs today can read what happened yesterday, adjust based on past results, and build on its own prior work.</p>
+
+  <p>Here's a practical example — a weekly content planning workflow:</p>
+
+  <pre><code># Run every Monday at 9am via cron
+prompt: |
+  Read memory/content-ideas.md for pending ideas.
+  Read memory/published-posts.md for what's already live.
+  Check web trends for our niche (fetch 3 trend pages).
+  Pick the top 3 ideas that aren't published yet and align with trends.
+  Write a content plan for this week to memory/content-plan-YYYY-WW.md.
+  Send summary to Telegram.</code></pre>
+
+  <p>Because the agent reads its own memory files, each week's plan builds on prior context. It knows what's been published, what didn't work, what topics are over-covered. This is qualitatively different from running a fresh prompt every week.</p>
+
+  <h2>Parallel Execution with Background Tasks</h2>
+  <p>OpenClaw's <code>exec</code> tool supports background execution — commands can be launched and allowed to run while the agent continues other work. This enables genuinely parallel workflows:</p>
+
+  <pre><code>Start a background backup: exec('tar -czf backup.tar.gz /workspace/', background=true)
+While that runs, fetch and summarise today's news.
+Then check if the backup completed successfully.
+If backup is done, move backup.tar.gz to /backups/.
+Send completion report to Telegram.</code></pre>
+
+  <p>The agent launches the backup, does other productive work while waiting, then picks up the thread when needed. For long-running tasks (database exports, file processing, API batches), this makes workflows dramatically faster.</p>
+
+  <h2>Agentic Workflows with n8n Integration</h2>
+  <p>If you've connected <a href="/blog/openclaw-n8n-integration/">OpenClaw to n8n</a>, your agentic workflows can extend into the full n8n ecosystem. OpenClaw can trigger n8n webhooks, and n8n can trigger OpenClaw agents via its HTTP request nodes.</p>
+
+  <p>A practical pattern: n8n watches for new form submissions, triggers an OpenClaw agent to research the submitter and write a personalised outreach draft, then saves it to a CRM. Each step is handled by the right tool — n8n for event triggering and CRM integration, OpenClaw for research and writing.</p>
+
+  <pre><code># n8n webhook triggers OpenClaw with:
+{
+  "task": "research_lead",
+  "name": "Jane Smith",
+  "company": "Acme Corp",
+  "email": "jane@acme.com"
+}
+
+# OpenClaw agent:
+# 1. Fetches acme.com to understand the company
+# 2. Checks LinkedIn (if skill installed) for Jane's profile
+# 3. Writes a personalised email draft to /workspace/outreach/jane-smith.md
+# 4. Calls n8n webhook back with the draft for CRM insertion</code></pre>
+
+  <h2>Error Handling in Agentic Workflows</h2>
+  <p>Agentic workflows fail in interesting ways. A fetched URL might return a 404. A file might not exist. A command might time out. Good agentic prompts account for this:</p>
+
+  <pre><code>Fetch the report at https://example.com/monthly-report.pdf.
+If the fetch fails or returns an error, try the archive at
+https://archive.example.com/report.pdf instead.
+If both fail, write a note to /workspace/errors/report-fetch-2026-06-19.md
+explaining what happened and send me a Telegram alert.</code></pre>
+
+  <p>Explicit fallback instructions dramatically improve reliability. The agent won't get stuck on a failed tool call — it'll route around the problem. You can also instruct the agent to log failures to a file, which lets you review what went wrong after the fact.</p>
+
+  <h2>Structuring Complex Multi-Day Workflows</h2>
+  <p>For workflows that span multiple sessions or days, the key is state files. Rather than trying to pass context between cron runs through conversation history, write state to a JSON file:</p>
+
+  <pre><code>{
+  "workflow": "weekly-report",
+  "stage": "data-collection",
+  "completedSteps": ["fetch-analytics", "fetch-revenue"],
+  "pendingSteps": ["fetch-support-tickets", "write-summary"],
+  "lastUpdated": "2026-06-19T10:00:00Z"
+}</code></pre>
+
+  <p>Each cron run reads the state file, picks up where the last run left off, completes the next step, and updates the state. This is how the OpenClaw blog publishing system works — heartbeat-state.json tracks what's been published, and each run checks the state before doing anything.</p>
+
+  <p>For <a href="/blog/openclaw-use-cases/">complex use cases like these</a>, state files are the glue that makes multi-session agentic workflows reliable.</p>
+
+  <h2>Agentic Workflow Best Practices</h2>
+  <p>After building dozens of OpenClaw workflows, here's what works:</p>
+
+  <ul>
+    <li><strong>Be explicit about success criteria.</strong> "Research the topic" is vague. "Fetch 3 sources, write 300-word summary, save to X, notify me" is not. The agent performs dramatically better with clear deliverables.</li>
+    <li><strong>Use state files for multi-step work.</strong> Don't rely on conversation memory between sessions. Write state to a file the agent can read next time.</li>
+    <li><strong>Build in verification steps.</strong> After writing a file, have the agent read it back and confirm it matches expectations. After running a command, check the exit code.</li>
+    <li><strong>Keep cron prompts focused.</strong> A cron agent that tries to do too many things in one run becomes unreliable. Break complex workflows across multiple cron jobs.</li>
+    <li><strong>Log everything.</strong> Have agents write brief logs to memory files. When something breaks, the log tells you exactly what happened.</li>
+    <li><strong>Restrict permissions where possible.</strong> The cron rules in your config can limit which directories and commands an agent can access. Use this — a restricted agent is a safer agent.</li>
+  </ul>
+
+  <h2>What's Possible: A Complete Agentic Stack</h2>
+  <p>Here's what a fully built-out OpenClaw agentic stack looks like for a small content business:</p>
+
+  <ul>
+    <li><strong>Morning briefing cron (7am):</strong> Reads email, calendar, checks news — sends Telegram summary</li>
+    <li><strong>Content research agent (on demand):</strong> Fetches sources, synthesises briefings, saves to workspace</li>
+    <li><strong>Blog publish cron (Tue/Fri):</strong> Writes, publishes, indexes, and pushes new blog posts automatically</li>
+    <li><strong>Lead research agent (webhook-triggered):</strong> Researches inbound leads, writes personalised drafts</li>
+    <li><strong>Weekly review cron (Sunday):</strong> Reads all memory files, writes summary, updates MEMORY.md</li>
+    <li><strong>Nightly backup cron (11pm):</strong> Archives workspace, verifies integrity, logs completion</li>
+  </ul>
+
+  <p>Each of these is a standalone agentic workflow. Together, they form a system that handles a significant amount of business operations autonomously — no human in the loop for routine execution.</p>
+
+  <h2>Getting Started</h2>
+  <p>If you haven't installed OpenClaw yet, the <a href="/blog/install-openclaw-vps/">VPS setup guide</a> is the fastest path to a working installation. Once you're up and running, start with one simple agentic workflow — the morning briefing cron is a good first target. Get that working, tune the prompt, and build from there.</p>
+
+  <p>The learning curve is in prompt engineering, not configuration. Once you understand what the agent can and can't do in a single session, you'll naturally start designing workflows that play to its strengths: parallelism, tool chaining, and memory-aware execution that improves over time.</p>
+</div>
+
+<div class="article-footer">
+  <p>Want a custom agentic workflow built for your business? <a href="https://getmicroservices.com">GetMicroservices</a> offers done-for-you OpenClaw setup and automation consulting.</p>
+</div>
+
+<script>
+(() => {
+  const CONFIG = {
+    'best-nmn.com': {
+      magnet: 'NMN Beginner\'s Guide',
+      pdfUrl: '/lead-magnets/nmn-beginners-guide.pdf',
+      title: '🧬 Free NMN Beginner\'s Guide',
+      desc: 'Dosage, timing, stacking — everything you need before taking NMN.',
+      webhook: 'https://n8n.getmicroservices.co/webhook/lead-magnet-cf9a4e2b'
+    },
+    'install-openclaw.net': {
+      magnet: 'OpenClaw Quick-Start Cheatsheet',
+      pdfUrl: '/lead-magnets/openclaw-cheatsheet.pdf',
+      title: '⚡ Free OpenClaw Quick-Start Guide',
+      desc: 'Installation commands, config tips, and Telegram setup in one page.',
+      webhook: 'https://n8n.getmicroservices.co/webhook/lead-magnet-cf9a4e2b'
+    },
+    'avlabs.bio': {
+      magnet: 'The Longevity Stack Guide',
+      pdfUrl: '/lead-magnets/avlabs-longevity-stack.pdf',
+      title: '🔬 Free Longevity Stack Guide',
+      desc: 'How to stack NMN + CoQ10 + Vitamin D3 for maximum anti-aging benefit.',
+      webhook: 'https://n8n.getmicroservices.co/webhook/lead-magnet-cf9a4e2b'
+    }
+  };
+
+  const domain = window.location.hostname.replace('www.', '');
+  const cfg = CONFIG[domain] || CONFIG[Object.keys(CONFIG).find(d => domain.endsWith(d))];
+
+  if (!cfg) return;
+
+  const wrap = document.createElement('div');
+  wrap.className = 'leadmagnet-wrap';
+  wrap.innerHTML = `
+    <div class="leadmagnet-card" id="lmCard">
+      <button class="leadmagnet-close" onclick="document.getElementById('lmCard').classList.remove('open')">×</button>
+      <h3>${cfg.title}</h3>
+      <p>${cfg.desc}</p>
+      <input type="text" id="lmName" placeholder="Your first name" required />
+      <input type="email" id="lmEmail" placeholder="Your email address" required />
+      <button id="lmBtn" onclick="lmSubmit()">Get Free PDF →</button>
+      <div class="leadmagnet-success" id="lmSuccess">✓ PDF sent! Check your inbox.</div>
+    </div>
+    <button class="leadmagnet-pill" onclick="document.getElementById('lmCard').classList.toggle('open')">
+      📘 Free Guide
+    </button>
+  `;
+  document.body.appendChild(wrap);
+
+  window.lmSubmit = async function() {
+    const name = document.getElementById('lmName').value.trim();
+    const email = document.getElementById('lmEmail').value.trim();
+    const btn = document.getElementById('lmBtn');
+    const success = document.getElementById('lmSuccess');
+
+    if (!name || !email) { return; }
+    if (!email.includes('@')) { return; }
+
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+
+    try {
+      await fetch(cfg.webhook, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name, email,
+          magnet: cfg.magnet,
+          pdfUrl: cfg.pdfUrl,
+          site: domain,
+          _token: '7f9d43fb7d9ac0b7a0f8f17ec4b08990791368a84f1bf860'
+        })
+      });
+    } catch(e) { /* silent */ }
+
+    success.classList.add('show');
+    btn.textContent = '✓ Sent!';
+    document.getElementById('lmName').value = '';
+    document.getElementById('lmEmail').value = '';
+    setTimeout(() => { btn.disabled = false; btn.textContent = 'Get Free PDF →'; }, 3000);
+  };
+})();
+</script>
+</body>
+</html>
