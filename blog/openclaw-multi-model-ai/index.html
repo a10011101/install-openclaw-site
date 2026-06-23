@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>How OpenClaw Works with Multiple AI Models (GPT-4, Claude, Gemini & More) | install-openclaw.net</title>
+  <meta name="description" content="OpenClaw isn't tied to one AI model. Learn how to switch between GPT-4, Claude, Gemini, Mistral, and local Ollama models — and why multi-model flexibility changes everything."/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RKCCVN536P"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-RKCCVN536P');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="canonical" href="https://install-openclaw.net/blog/openclaw-multi-model-ai/"/>
+  <link rel="stylesheet" href="/assets/style.css"/>
+  <meta property="og:title" content="How OpenClaw Works with Multiple AI Models (GPT-4, Claude, Gemini & More)"/>
+  <meta property="og:description" content="OpenClaw isn't tied to one AI model. Learn how to switch between GPT-4, Claude, Gemini, Mistral, and local Ollama models — and why multi-model flexibility changes everything."/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:url" content="https://install-openclaw.net/blog/openclaw-multi-model-ai/"/>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "How OpenClaw Works with Multiple AI Models (GPT-4, Claude, Gemini & More)",
+    "description": "OpenClaw isn't tied to one AI model. Learn how to switch between GPT-4, Claude, Gemini, Mistral, and local Ollama models — and why multi-model flexibility changes everything.",
+    "url": "https://install-openclaw.net/blog/openclaw-multi-model-ai/",
+    "datePublished": "2026-06-23",
+    "dateModified": "2026-06-23",
+    "author": {
+      "@type": "Organization",
+      "name": "GetMicroservices"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "GetMicroservices",
+      "url": "https://getmicroservices.com"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://install-openclaw.net/blog/openclaw-multi-model-ai/"
+    }
+  }
+  </script>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="/">
+    <span class="logo-text"><span class="get">Get</span><span class="micro">Micro</span><span class="services">Services</span></span>
+    <span class="tagline">// done-for-you automation agency</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/#install" class="nav-cta">Install OpenClaw →</a></li>
+  </ul>
+</nav>
+
+<div class="article-header">
+  <a class="back-link" href="/blog/">← Back to Blog</a>
+  <div class="post-tag">// multi-model ai</div>
+  <div class="post-meta">2026-06-23 · 9 min read</div>
+  <h1>How OpenClaw Works with Multiple AI Models (GPT-4, Claude, Gemini &amp; More)</h1>
+  <p class="article-subtitle">One assistant, every model. Here's how OpenClaw's model-agnostic architecture gives you the flexibility that closed AI products never will.</p>
+</div>
+
+<div class="article-body">
+
+  <p>Most AI assistants make a quiet decision for you: which AI model you get to use. <a href="/blog/openclaw-vs-chatgpt/">ChatGPT</a> gives you OpenAI's models. Copilot gives you Microsoft's. Gemini gives you Google's.</p>
+
+  <p><a href="/blog/what-is-openclaw/">OpenClaw</a> doesn't work that way.</p>
+
+  <p>Because it's self-hosted and open, you configure which model powers it. You can change that at any time. You can run different models for different tasks. And if a better model releases tomorrow, you're not waiting for someone else to flip a switch — you just update a config line.</p>
+
+  <p>This guide explains how OpenClaw's multi-model system works, which models are supported out of the box, and how to choose the right one for your use case.</p>
+
+  <h2>Why Model Flexibility Matters</h2>
+
+  <p>AI models differ in ways that actually matter to daily users:</p>
+
+  <ul>
+    <li><strong>Cost per token</strong> — Claude Haiku is far cheaper than GPT-4o for simple tasks</li>
+    <li><strong>Context window</strong> — Gemini 1.5 Pro handles 1M tokens; great for long documents</li>
+    <li><strong>Coding quality</strong> — Claude 3.5 Sonnet and DeepSeek consistently outperform on code</li>
+    <li><strong>Privacy</strong> — Local Ollama models never send your data anywhere</li>
+    <li><strong>Speed</strong> — Smaller models like Mistral 7B respond faster for quick lookups</li>
+  </ul>
+
+  <p>When you're locked into one provider's model, you're always making a compromise. OpenClaw lets you stop compromising.</p>
+
+  <h2>How OpenClaw Routes Model Requests</h2>
+
+  <p>OpenClaw uses a model string in its config — typically following the <code>provider/model-name</code> format. When you send a message, OpenClaw calls the configured provider's API and returns the response.</p>
+
+  <p>The core architecture looks like this:</p>
+
+  <pre><code># In your OpenClaw config
+model: anthropic/claude-sonnet-4-6
+# or
+model: openai/gpt-4o
+# or
+model: google/gemini-1.5-pro
+# or (local via Ollama)
+model: ollama/llama3.1</code></pre>
+
+  <p>Switching models is a config change and a restart. That's it. Your memory, your skills, your personality files — they all stay the same. The model is just the inference engine underneath.</p>
+
+  <h2>Supported Model Providers</h2>
+
+  <h3>OpenAI (GPT-4o, GPT-4 Turbo, GPT-4o Mini)</h3>
+
+  <p>OpenAI's models are the most widely known and well-tested. GPT-4o is OpenClaw's best general-purpose choice for most users — strong reasoning, good coding, reliable instruction-following.</p>
+
+  <pre><code>model: openai/gpt-4o</code></pre>
+
+  <p>For cost-conscious setups, GPT-4o Mini handles most conversational tasks at a fraction of the price. Good for high-volume automations where you're watching your API spend.</p>
+
+  <h3>Anthropic (Claude 3.5 Sonnet, Claude 3 Haiku)</h3>
+
+  <p>Claude models tend to excel at long-context tasks, code review, and writing. Claude 3.5 Sonnet is arguably the best all-round model for agentic work — it follows complex multi-step instructions particularly well, which matters for OpenClaw's automation features.</p>
+
+  <pre><code>model: anthropic/claude-sonnet-4-6</code></pre>
+
+  <p>Claude Haiku is the budget pick: blazing fast, very cheap, solid for simple tasks and quick answers.</p>
+
+  <h3>Google Gemini (1.5 Pro, 1.5 Flash)</h3>
+
+  <p>Gemini's standout feature is context length — up to 1 million tokens in Gemini 1.5 Pro. If you're feeding OpenClaw large documents, entire codebases, or long conversation histories, Gemini handles it without truncating.</p>
+
+  <pre><code>model: google/gemini-1.5-pro</code></pre>
+
+  <p>Gemini 1.5 Flash is Google's speed-optimised variant — faster and cheaper, with a still-generous 1M context window.</p>
+
+  <h3>Mistral (Mistral Large, Mistral 7B)</h3>
+
+  <p>Mistral models are known for efficiency. Mistral Large punches above its weight for reasoning tasks; Mistral 7B is compact enough to run locally on decent hardware.</p>
+
+  <pre><code>model: mistral/mistral-large-latest</code></pre>
+
+  <h3>Local Models via Ollama</h3>
+
+  <p>This is where OpenClaw diverges most sharply from cloud-only assistants. If you've set up Ollama on your server, you can point OpenClaw at any locally-running model — Llama 3.1, Phi-3, Gemma 2, Qwen 2.5, or anything else in the Ollama library.</p>
+
+  <pre><code>model: ollama/llama3.1
+# Make sure Ollama is running at localhost:11434</code></pre>
+
+  <p>Zero API costs. Zero data leaving your machine. Ideal for sensitive personal data or if you want complete air-gap privacy.</p>
+
+  <p>For a deeper dive into running local models, see our guide on <a href="/blog/run-local-ai/">running your own local AI with OpenClaw and Ollama</a>.</p>
+
+  <h3>OpenRouter (Access 100+ Models in One Place)</h3>
+
+  <p>OpenRouter is a meta-provider that gives you a single API key with access to most major models — OpenAI, Anthropic, Google, Mistral, Meta, and many others. It's a convenient option if you want to experiment without managing multiple API keys.</p>
+
+  <pre><code>model: openrouter/anthropic/claude-3.5-sonnet</code></pre>
+
+  <p>OpenRouter also has a free tier with limited access to several models — useful for testing OpenClaw on a budget before committing to paid APIs.</p>
+
+  <h2>Using Different Models for Different Tasks</h2>
+
+  <p>OpenClaw's cron job system lets you specify a model per scheduled job. This is powerful: you might want your cheap daily-summary cron to use Gemini Flash, while your deep research tasks use Claude Sonnet.</p>
+
+  <pre><code># In your cron config
+- name: morning-summary
+  model: google/gemini-flash-1.5   # cheap and fast
+  schedule: 0 8 * * *
+
+- name: weekly-research-brief
+  model: anthropic/claude-sonnet-4-6   # better reasoning
+  schedule: 0 9 * * 1</code></pre>
+
+  <p>This kind of per-task model routing is something closed AI products simply can't offer. For more on building these kinds of automated schedules, see the guide on <a href="/blog/openclaw-cron-jobs/">OpenClaw cron jobs</a>.</p>
+
+  <h2>Model Performance: Quick Comparison</h2>
+
+  <table class="comparison-table">
+    <thead>
+      <tr>
+        <th>Model</th>
+        <th>Best For</th>
+        <th>Context</th>
+        <th>Cost</th>
+        <th>Privacy</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>openai/gpt-4o</code></td>
+        <td>General use, tools</td>
+        <td>128K</td>
+        <td>$$</td>
+        <td>Cloud</td>
+      </tr>
+      <tr>
+        <td><code>anthropic/claude-sonnet</code></td>
+        <td>Coding, long tasks</td>
+        <td>200K</td>
+        <td>$$</td>
+        <td>Cloud</td>
+      </tr>
+      <tr>
+        <td><code>google/gemini-1.5-pro</code></td>
+        <td>Big documents</td>
+        <td>1M</td>
+        <td>$$</td>
+        <td>Cloud</td>
+      </tr>
+      <tr>
+        <td><code>anthropic/claude-haiku</code></td>
+        <td>Quick answers</td>
+        <td>200K</td>
+        <td>$</td>
+        <td>Cloud</td>
+      </tr>
+      <tr>
+        <td><code>openai/gpt-4o-mini</code></td>
+        <td>High-volume tasks</td>
+        <td>128K</td>
+        <td>$</td>
+        <td>Cloud</td>
+      </tr>
+      <tr>
+        <td><code>ollama/llama3.1</code></td>
+        <td>Full privacy</td>
+        <td>8K–128K</td>
+        <td>Free</td>
+        <td>Local ✓</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Switching Models: Step-by-Step</h2>
+
+  <p>Here's the full process for changing your OpenClaw model:</p>
+
+  <ol>
+    <li><strong>Get your API key</strong> for the provider you want (Anthropic, OpenAI, Google AI Studio, etc.)</li>
+    <li><strong>Add the key</strong> to your OpenClaw secrets or environment config:
+      <pre><code># e.g. for Anthropic
+ANTHROPIC_API_KEY=sk-ant-xxxx</code></pre>
+    </li>
+    <li><strong>Update your model string</strong> in the OpenClaw gateway config:
+      <pre><code>model: anthropic/claude-sonnet-4-6</code></pre>
+    </li>
+    <li><strong>Restart the gateway</strong>:
+      <pre><code>openclaw gateway restart</code></pre>
+    </li>
+    <li><strong>Test it</strong> — send a message and confirm the new model is responding</li>
+  </ol>
+
+  <p>Your memory files, SOUL.md, skills, and all customisations survive a model switch intact. The model is stateless — your state lives in files, not the model.</p>
+
+  <h2>Which Model Should You Start With?</h2>
+
+  <p>If you're new to OpenClaw and want a single recommendation: <strong>start with Claude 3.5 Sonnet</strong>. It has the best balance of capability, context length, and instruction-following for OpenClaw's agentic patterns. Anthropic's API is straightforward to set up and the free tier covers initial testing.</p>
+
+  <p>Once you're comfortable, experiment. Try GPT-4o for comparison. Add a cheap model for your routine crons. If privacy is a concern, test an Ollama setup on the side.</p>
+
+  <p>The whole point of OpenClaw's architecture is that the model isn't a lock-in decision — it's a tunable parameter. Use that freedom.</p>
+
+  <h2>What Doesn't Change Between Models</h2>
+
+  <p>One concern people raise: "If I switch models, does my assistant lose its personality?"</p>
+
+  <p>No — because in OpenClaw, personality, memory, and behaviour are defined in files (<code>SOUL.md</code>, <code>USER.md</code>, <code>MEMORY.md</code>), not baked into the model. Every model reads those files at the start of each session.</p>
+
+  <p>A well-written SOUL.md will produce a consistent persona whether you're running Claude, GPT-4o, or a local Llama model. The model changes; the assistant's character and memory don't. For a deeper look at how this system works, see the post on <a href="/blog/openclaw-memory-system/">OpenClaw's memory system</a>.</p>
+
+  <h2>Summary</h2>
+
+  <ul>
+    <li>OpenClaw is model-agnostic — change providers with a single config line</li>
+    <li>Supported: OpenAI, Anthropic, Google Gemini, Mistral, Ollama (local), OpenRouter</li>
+    <li>Different cron jobs can use different models for cost optimisation</li>
+    <li>Memory and personality survive model switches — they live in files, not the model</li>
+    <li>For privacy: Ollama lets you run entirely locally at zero API cost</li>
+  </ul>
+
+  <div class="cta-box">
+    <div class="cta-label">// get started</div>
+    <h3>Ready to Run OpenClaw with Your Preferred Model?</h3>
+    <p>Install OpenClaw on your <a href="/blog/install-openclaw-vps/">VPS</a> in minutes and connect it to any AI model you choose. No lock-in, full control.</p>
+    <a href="/#install" class="cta-button">Install OpenClaw Free →</a>
+  </div>
+
+</div>
+
+<footer>
+  <a class="footer-logo" href="/">Get<span>Micro</span>Services</a>
+  <p>© 2026 GetMicroservices. All rights reserved.</p>
+  <div class="footer-links">
+    <a href="/blog/">Blog</a>
+    <a href="/privacy-policy.html">Privacy</a>
+    <a href="/terms-of-service.html">Terms</a>
+    <a href="https://getmicroservices.com" target="_blank" rel="noopener">GetMicroservices.com</a>
+  </div>
+</footer>
+
+<script src="/lead-magnets/inline-lead-magnet.js" defer></script>
+</body>
+</html>
