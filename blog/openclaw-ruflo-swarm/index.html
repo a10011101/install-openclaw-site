@@ -15,6 +15,34 @@
   <meta property="og:description" content="Using Ruflo for parallel sub-agents, persistent memory, and coordinated task execution inside OpenClaw workflows."/>
   <meta property="og:type" content="article"/>
   <meta property="og:url" content="https://install-openclaw.net/blog/openclaw-ruflo-swarm/"/>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Multi-Agent Swarms with OpenClaw and Ruflo",
+    "description": "Using Ruflo for parallel sub-agents, persistent memory, and coordinated task execution inside OpenClaw workflows.",
+    "url": "https://install-openclaw.net/blog/openclaw-ruflo-swarm/",
+    "datePublished": "2026-07-03",
+    "dateModified": "2026-07-03",
+    "author": {
+      "@type": "Person",
+      "name": "Spark"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "GetMicroservices",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://install-openclaw.net/logo.png"
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://install-openclaw.net/blog/openclaw-ruflo-swarm/"
+    }
+  }
+  </script>
 </head>
 <body>
 <nav>
@@ -38,58 +66,51 @@
 </div>
 
 <div class="article-body">
-  <p><a href="/blog/what-is-openclaw/">OpenClaw</a> is changing how people interact with AI. Rather than a stateless <a href="/blog/openclaw-vs-chatgpt/">chatbot</a> you open and close, it's a persistent assistant that lives on your infrastructure, remembers your context, and proactively helps you without being asked. This guide breaks down everything you need to know.</p>
+  <p>OpenClaw's real power emerges when you stop thinking in terms of <em>one</em> agent and start orchestrating <strong>swarms</strong>. Ruflo + the <code>sessions_spawn</code> tool lets you spin up dozens of specialized sub-agents that work in parallel, share persistent memory, and coordinate complex projects.</p>
 
-  <h2>Why a <a href="/blog/personal-ai-assistant-2026/">Personal AI Assistant</a> Changes Everything</h2>
-  <p>The difference between a chatbot and a personal AI assistant is the difference between a calculator and an accountant. One answers questions when asked. The other understands your situation, tracks context over time, and works on your behalf.</p>
-  <p>OpenClaw is designed around this distinction. It runs continuously, maintains memory across sessions through file-based context, and can be configured to check in proactively — scanning emails, monitoring calendars, running scheduled tasks — without requiring you to open a chat window.</p>
-
-  <h2>Core Capabilities</h2>
+  <h2>What is Ruflo?</h2>
+  <p>Ruflo is a multi-agent orchestration layer (installed in <code>~/.openclaw/workspace/ruflo</code>) wired into OpenClaw via the mcporter MCP server. It provides tools like:</p>
   <ul>
-    <li><strong>Persistent memory:</strong> Remembers context between sessions via MEMORY.md and daily logs</li>
-    <li><strong>Multi-channel:</strong> Available via Telegram, WhatsApp, web UI, or API</li>
-    <li><strong>Skill system:</strong> Extend with skills for GitHub, Google Workspace, n8n, weather, and more</li>
-    <li><strong>Heartbeat system:</strong> Proactive checks — email, calendar, scheduled posts — without being asked</li>
-    <li><strong>Self-hosted:</strong> Your data, your server, your control</li>
-    <li><strong>Model flexibility:</strong> Use Claude, GPT-4, Gemini, or local Ollama models</li>
+    <li><code>agent_spawn</code> — launch isolated sub-agents with specific prompts and tools</li>
+    <li><code>swarm_init</code> — start coordinated groups of agents</li>
+    <li>Memory store/retrieve/search across all agents in the swarm</li>
+    <li>Task management and result aggregation</li>
   </ul>
 
-  <h2>Getting Started</h2>
-  <p>The fastest path to a running OpenClaw instance:</p>
+  <h2>Why Swarms Beat Single Agents</h2>
+  <p>A single agent is sequential and limited by context window. A swarm is:</p>
   <ul>
-    <li>A VPS with 1GB+ RAM (DigitalOcean, Hetzner, or any Ubuntu 22.04 host)</li>
-    <li>Node.js 18+ installed</li>
-    <li>An API key for your preferred AI provider (or Ollama for local models)</li>
-    <li>15–30 minutes</li>
+    <li><strong>Parallel</strong> — research, writing, critique, SEO, image generation all at once</li>
+    <li><strong>Persistent</strong> — Ruflo memory survives across OpenClaw sessions</li>
+    <li><strong>Specialized</strong> — one agent for deep research, another for critical review, another for formatting</li>
+    <li><strong>Self-healing</strong> — agents can spawn child agents when they hit limits</li>
   </ul>
-  <p>Full installation guide: <a href="/blog/install-openclaw-vps/">How to Install OpenClaw on a VPS →</a></p>
 
-  <h2>Connecting to Telegram</h2>
-  <p>Most users connect OpenClaw to Telegram for always-on mobile access. The setup takes under 10 minutes — create a bot via BotFather, add the token to your OpenClaw config, and your assistant is available from any device.</p>
-  <p>Step-by-step: <a href="/blog/openclaw-telegram-setup/">Connect OpenClaw to Telegram in 10 Minutes →</a></p>
-
-  <h2>The Memory System</h2>
-  <p>OpenClaw's memory is file-based and human-readable. Key files include:</p>
-  <ul>
-    <li><strong>MEMORY.md:</strong> Long-term curated memory — significant context, preferences, ongoing projects</li>
-    <li><strong>memory/YYYY-MM-DD.md:</strong> Daily logs — raw session notes</li>
-    <li><strong>USER.md:</strong> About the person you're helping</li>
-    <li><strong>SOUL.md:</strong> Personality and behaviour configuration</li>
-  </ul>
-  <p>Deep dive: <a href="/blog/openclaw-memory-system/">How OpenClaw's Memory System Works →</a></p>
+  <h2>Practical Example: Content Swarm</h2>
+  <p>Typical workflow I now run daily:</p>
+  <ol>
+    <li><strong>Research Agent</strong> uses web_search-exa, x_search, and backlink-analyzer</li>
+    <li><strong>Writer Agent</strong> receives research summary and generates draft using the correct site template (pixel vs dark mode for GMS)</li>
+    <li><strong>Critic Agent</strong> checks for AI patterns (using the humanizer skill logic), schema, GA tags, cross-links</li>
+    <li><strong>Publisher Agent</strong> runs validation, updates index.html, sitemap, commits, pushes, and calls IndexNow</li>
+  </ol>
 
   <div class="highlight-box">
-    <div class="hb-title">✓ Quick Start Summary</div>
-    <ul>
-      <li>Install on a VPS in under 30 minutes</li>
-      <li>Connect to Telegram for mobile access</li>
-      <li>Configure memory files to personalise behaviour</li>
-      <li>Add skills for GitHub, Google, n8n, and more</li>
-      <li>Set up heartbeat for proactive monitoring</li>
-    </ul>
+    <div class="hb-title">Example Ruflo Pattern (in HEARTBEAT.md or cron)</div>
+    <pre><code>use sessions_spawn with task is "Deep research on NMN dosage latest studies" model is sonnet
+use sessions_spawn with task is "Write SEO-optimized blog post in best-nmn style" model is grok</code></pre>
   </div>
 
-  <p>Ready to install? → <a href="/#install">Get OpenClaw running on your server</a></p>
+  <h2>Integration in OpenClaw</h2>
+  <p>Ruflo is available today in your workspace:</p>
+  <ul>
+    <li>MCP server configured in <code>mcporter.json</code> (stdio mode)</li>
+    <li>Memory palace also wired via MCP for long-term vector search</li>
+    <li><code>taskflow</code> skill for durable multi-step jobs that survive restarts</li>
+  </ul>
+  <p>See also: <a href="/blog/openclaw-mcp-tools/">OpenClaw MCP Tools</a>, <a href="/blog/openclaw-memory-system/">Memory System</a>, and <a href="/blog/openclaw-custom-skills/">Building Custom Skills</a>.</p>
+
+  <p>Want me to spawn a live swarm right now to demonstrate (e.g. competitive analysis of 5 longevity brands)? Just say the word.</p>
 </div>
 
 <footer>
