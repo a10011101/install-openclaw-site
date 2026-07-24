@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Data Sovereignty and Self-Hosted AI: Why OpenClaw Keeps Your Data Yours | install-openclaw.net</title>
+  <meta name="description" content="When you use a cloud AI assistant, your data leaves your machine. OpenClaw changes that. Here's what data sovereignty means in practice, and why it matters in 2026."/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RKCCVN536P"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-RKCCVN536P');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="canonical" href="https://install-openclaw.net/blog/openclaw-data-sovereignty/"/>
+  <link rel="stylesheet" href="/assets/style.css"/>
+  <meta property="og:title" content="Data Sovereignty and Self-Hosted AI: Why OpenClaw Keeps Your Data Yours"/>
+  <meta property="og:description" content="When you use a cloud AI assistant, your data leaves your machine. OpenClaw changes that. Here's what data sovereignty means in practice, and why it matters in 2026."/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:url" content="https://install-openclaw.net/blog/openclaw-data-sovereignty/"/>
+  <meta property="og:image" content="https://install-openclaw.net/og-image.png"/>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Data Sovereignty and Self-Hosted AI: Why OpenClaw Keeps Your Data Yours",
+    "description": "When you use a cloud AI assistant, your data leaves your machine. OpenClaw changes that. Here's what data sovereignty means in practice, and why it matters in 2026.",
+    "url": "https://install-openclaw.net/blog/openclaw-data-sovereignty/",
+    "datePublished": "2026-07-24",
+    "dateModified": "2026-07-24",
+    "author": {
+      "@type": "Organization",
+      "name": "GetMicroservices"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "GetMicroservices",
+      "url": "https://getmicroservices.com"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://install-openclaw.net/blog/openclaw-data-sovereignty/"
+    }
+  }
+  </script>
+  <style>
+    nav:not(.toc) {
+      background: var(--surface);
+      border-bottom: var(--pixel) solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="/" style="text-decoration:none;display:flex;flex-direction:column;">
+    <span style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:400;letter-spacing:-0.01em;line-height:1;color:#1a1a1a;">Get<span style="color:#b5006a;">Micro</span><span style="color:#e9c46a;">Services</span></span>
+    <div style="font-family:'Fira Code',monospace;font-size:0.65rem;color:#6b6560;letter-spacing:0.06em;margin-top:3px;">// done-for-you automation agency</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/#install" class="nav-cta">Install OpenClaw →</a></li>
+  </ul>
+</nav>
+
+<div class="article-header">
+  <a class="back-link" href="/blog/">← Back to Blog</a>
+  <div class="post-tag">// privacy &amp; data</div>
+  <div class="post-meta">2026-07-24 · 8 min read</div>
+  <h1>Data Sovereignty and Self-Hosted AI: Why OpenClaw Keeps Your Data Yours</h1>
+  <p class="article-subtitle">Every message you send to a cloud AI assistant travels to someone else's server. OpenClaw is built around the opposite principle: your data stays on your infrastructure, under your control, always.</p>
+</div>
+
+<div class="article-body">
+
+  <p>There is a question most people do not ask when they start using an AI assistant: where does my data actually go?</p>
+
+  <p>With ChatGPT, your conversations go to OpenAI's servers in the United States. With Claude, they go to Anthropic. With Gemini, to Google. The companies say they protect your data. But you have no control over it -- no way to verify, audit, or delete it with certainty. The data leaves your machine the moment you press send.</p>
+
+  <p><a href="/blog/what-is-openclaw/">OpenClaw</a> is built on a fundamentally different premise. When you run it on your own server, your data never leaves your infrastructure unless you explicitly configure it to. That is data sovereignty: not a feature, but an architectural property.</p>
+
+  <p>This post explains what data sovereignty means in practice, who it matters to, and how OpenClaw implements it.</p>
+
+  <h2>What Data Sovereignty Actually Means</h2>
+
+  <p>Data sovereignty is simple to define: your data is stored where you control it, governed by rules you set, accessible only to parties you authorise.</p>
+
+  <p>In practice, most cloud AI tools violate this by design. They need your data on their infrastructure to run inference. That is not a flaw -- it is how they work. But it creates real consequences:</p>
+
+  <ul>
+    <li><strong>Your conversations can be used for training</strong> unless you opt out -- and opt-out mechanisms change over time</li>
+    <li><strong>Data residency is out of your control</strong> -- relevant for GDPR, HIPAA, and sector-specific compliance</li>
+    <li><strong>Breaches at the provider affect you</strong> even if your own systems are secure</li>
+    <li><strong>Account termination means losing context</strong> -- your assistant's memory disappears if the service shuts down or bans you</li>
+    <li><strong>Terms of service can change</strong> -- what is private today may not be under next year's policy</li>
+  </ul>
+
+  <p>For personal use, these risks might feel abstract. For professional use -- client work, legal matters, business strategy, sensitive communications -- they become concrete and important.</p>
+
+  <h2>How OpenClaw Handles Data</h2>
+
+  <p>When you <a href="/blog/install-openclaw-vps/">install OpenClaw on a VPS</a>, here is what happens to your data:</p>
+
+  <h3>Memory Files Stay on Your Server</h3>
+
+  <p>OpenClaw's memory system stores everything in plain text files on your machine: <code>MEMORY.md</code>, <code>USER.md</code>, <code>SOUL.md</code>, and daily logs in a <code>memory/</code> folder. There is no cloud sync, no proprietary database, no third-party storage. The files are yours, readable by you, editable by you, deletable by you.</p>
+
+  <pre><code>/workspace/
+  MEMORY.md        # long-term memory
+  USER.md          # about the user
+  SOUL.md          # personality and behaviour
+  memory/
+    2026-07-24.md  # today's session log
+    2026-07-23.md  # yesterday's log</code></pre>
+
+  <p>This design means you can inspect exactly what the assistant knows about you. No opacity. See the full breakdown in the guide on <a href="/blog/openclaw-memory-system/">how OpenClaw's memory system works</a>.</p>
+
+  <h3>The AI Model Is the Only External Call</h3>
+
+  <p>When you use OpenClaw with a cloud model (Claude, GPT-4, Gemini), the conversation context does travel to that model's API. This is unavoidable if you want cloud inference. But you control exactly what gets sent, and you can limit it.</p>
+
+  <p>You also have an option that cloud-only assistants cannot offer: <strong>switch to a local model</strong>. With <a href="/blog/local-ai-assistant-ollama/">Ollama</a>, you run models like Llama 3.1 or Mistral on your own hardware. Zero API calls. Zero data leaving your machine. Full air-gap capability.</p>
+
+  <pre><code># Local model config in OpenClaw
+model: ollama/llama3.1
+# Nothing leaves your server</code></pre>
+
+  <p>For most users, a hybrid approach makes sense: use cloud models for most tasks, and a local model for sessions involving sensitive data -- financial details, client information, legal drafts.</p>
+
+  <h3>No Telemetry, No Analytics Pipeline</h3>
+
+  <p>OpenClaw does not phone home. There is no usage analytics sent to a central server, no crash reporting that includes your conversation data, no licence verification that transmits session content. The code is open -- you can verify this yourself.</p>
+
+  <h2>Who Needs Data Sovereignty?</h2>
+
+  <p>The honest answer: more people than realise it.</p>
+
+  <h3>Freelancers and Consultants</h3>
+
+  <p>Client confidentiality matters. If you are using an AI assistant to draft proposals, analyse client data, or brainstorm strategy, sending that content to a third-party cloud service may violate your client agreements. Running OpenClaw means those conversations stay on your infrastructure -- not OpenAI's or Anthropic's.</p>
+
+  <h3>Legal and Financial Professionals</h3>
+
+  <p>Privileged communications, financial records, and client data carry regulatory requirements that cloud AI services may not satisfy. A self-hosted assistant that keeps data in-jurisdiction is a meaningful step toward compliant AI usage.</p>
+
+  <h3>Developers Working on Proprietary Code</h3>
+
+  <p>Sending proprietary code to a cloud AI is a policy violation in many organisations. With OpenClaw running locally and connected to a local model via Ollama, you get coding assistance without shipping your IP to a third party.</p>
+
+  <h3>Anyone Who Values Privacy</h3>
+
+  <p>You do not need to be a compliance officer to care about where your conversations go. If you would not hand your journal to a stranger to read, you might not want your AI assistant conversations stored indefinitely on someone else's server.</p>
+
+  <h2>Data Sovereignty Under GDPR</h2>
+
+  <p>For users in the EU, the GDPR creates specific obligations around personal data. When you use a cloud AI, you are typically a data subject whose information is processed by the provider under their terms. The provider becomes a data processor. You have limited practical control over data minimisation, retention, or geographic restrictions.</p>
+
+  <p>With a self-hosted OpenClaw instance:</p>
+
+  <ul>
+    <li><strong>Data residency</strong> -- deploy your VPS in the EU and data stays in-jurisdiction</li>
+    <li><strong>Retention control</strong> -- delete memory files whenever you choose; no "contact us to delete" loops</li>
+    <li><strong>Processing transparency</strong> -- you can read the code; the system prompt is visible, the memory is readable</li>
+    <li><strong>No third-party processors</strong> -- if you use a local model, no personal data leaves your server at all</li>
+  </ul>
+
+  <p>This does not make OpenClaw a legal compliance solution out of the box. But it gives you the building blocks that cloud AI services structurally cannot.</p>
+
+  <h2>Practical Steps to Maximise Privacy with OpenClaw</h2>
+
+  <p>If data sovereignty is a priority, here is the recommended setup:</p>
+
+  <ol>
+    <li><strong>Choose a VPS in your jurisdiction</strong> -- Hetzner (EU), DigitalOcean (various regions), or your own hardware. For a setup guide, see <a href="/blog/install-openclaw-vps/">installing OpenClaw on a VPS</a>.</li>
+    <li><strong>Install Ollama alongside OpenClaw</strong> -- run a capable local model for sensitive sessions. Llama 3.1 70B or Mistral perform well on a machine with 32GB+ RAM.</li>
+    <li><strong>Limit what you put in MEMORY.md</strong> -- the assistant only knows what you tell it. Be intentional about what you store in long-term memory files.</li>
+    <li><strong>Use separate workspace folders per client</strong> -- OpenClaw's file-based architecture means you can keep client contexts completely isolated.</li>
+    <li><strong>Audit your API calls periodically</strong> -- review which models are handling which conversations. Your VPS logs tell you what left the server and when.</li>
+  </ol>
+
+  <h2>The Trade-offs Are Real</h2>
+
+  <p>Data sovereignty with a self-hosted assistant is not free. The trade-offs are worth naming honestly:</p>
+
+  <ul>
+    <li><strong>Setup takes time</strong> -- deploying a VPS, installing OpenClaw, configuring models. It is not a two-click install. The <a href="/blog/install-openclaw-vps/">VPS setup guide</a> covers it in detail, but expect 30-60 minutes for your first deployment.</li>
+    <li><strong>You manage the infrastructure</strong> -- updates, backups, uptime. A cloud service handles this for you; self-hosted does not.</li>
+    <li><strong>Local models are less capable</strong> -- at current hardware, a local Llama 3.1 8B is not as powerful as GPT-4o. The 70B version is closer, but requires significant RAM.</li>
+    <li><strong><a href="/blog/openclaw-cost-per-month/">Cost is not zero</a></strong> -- a VPS costs ~$5-20/month. For many users this is cheaper than ChatGPT Plus, but it is not free.</li>
+  </ul>
+
+  <p>For most people in 2026, the sweet spot is a cloud VPS running OpenClaw with a hybrid model setup: local Ollama for sensitive tasks, a cloud API for everything else. You get meaningful data control without sacrificing capability for day-to-day work.</p>
+
+  <h2>OpenClaw vs Cloud AI: A Data Flow Comparison</h2>
+
+  <table class="comparison-table">
+    <thead>
+      <tr>
+        <th>Data Type</th>
+        <th>Cloud AI (ChatGPT etc.)</th>
+        <th>OpenClaw + Cloud Model</th>
+        <th>OpenClaw + Local Model</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Conversation history</td>
+        <td>Provider's servers</td>
+        <td>Your VPS only</td>
+        <td>Your VPS only</td>
+      </tr>
+      <tr>
+        <td>Memory / context</td>
+        <td>Provider's database</td>
+        <td>Your VPS files</td>
+        <td>Your VPS files</td>
+      </tr>
+      <tr>
+        <td>Current message</td>
+        <td>Provider's API</td>
+        <td>Model API (Claude, GPT etc.)</td>
+        <td>Your machine only</td>
+      </tr>
+      <tr>
+        <td>Retention control</td>
+        <td>Provider's policy</td>
+        <td>Full (you own the files)</td>
+        <td>Full (nothing external)</td>
+      </tr>
+      <tr>
+        <td>Data residency</td>
+        <td>US (typically)</td>
+        <td>Your VPS region</td>
+        <td>Your machine/server</td>
+      </tr>
+      <tr>
+        <td>GDPR compliance pathway</td>
+        <td>Limited</td>
+        <td>Strong</td>
+        <td>Complete</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Summary</h2>
+
+  <ul>
+    <li>Cloud AI assistants store your conversations and memory on their infrastructure by design</li>
+    <li>OpenClaw keeps all memory and context in files on your own server</li>
+    <li>With Ollama, no data leaves your machine at all -- full local inference</li>
+    <li>A hybrid setup (local model for sensitive tasks, cloud API for general use) balances privacy and capability</li>
+    <li>Self-hosted gives you real control over retention, residency, and deletion that cloud services cannot match</li>
+    <li>Trade-offs exist: setup time, infrastructure management, local model capability</li>
+    <li>For freelancers, developers, legal and financial professionals, the sovereignty argument is practical -- not just ideological</li>
+  </ul>
+
+  <div class="cta-box">
+    <div class="cta-label">// take back control</div>
+    <h3>Run Your AI Assistant On Your Own Infrastructure</h3>
+    <p>OpenClaw installs on any VPS in under an hour. Your data stays on your server. Your context is yours forever. Start with our <a href="/blog/install-openclaw-vps/">full installation guide</a>.</p>
+    <a href="/#install" class="cta-button">Install OpenClaw Free →</a>
+  </div>
+
+</div>
+
+<footer>
+  <a class="footer-logo" href="/">Get<span>Micro</span>Services</a>
+  <p>© 2026 GetMicroservices. All rights reserved.</p>
+  <div class="footer-links">
+    <a href="/blog/">Blog</a>
+    <a href="/privacy-policy.html">Privacy</a>
+    <a href="/terms-of-service.html">Terms</a>
+    <a href="https://getmicroservices.com" target="_blank" rel="noopener">GetMicroservices.com</a>
+  </div>
+</footer>
+
+<script src="/lead-magnets/inline-lead-magnet.js" defer></script>
+</body>
+</html>
