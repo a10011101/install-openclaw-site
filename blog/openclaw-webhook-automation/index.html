@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Using Webhooks with OpenClaw: Trigger AI Workflows from Any App | install-openclaw.net</title>
+  <meta name="description" content="Learn how to trigger OpenClaw AI workflows using webhooks. Connect Shopify, GitHub, Stripe, and any app to your self-hosted AI assistant without writing complex code."/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RKCCVN536P"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-RKCCVN536P');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="canonical" href="https://install-openclaw.net/blog/openclaw-webhook-automation/"/>
+  <link rel="stylesheet" href="/assets/style.css"/>
+  <meta property="og:title" content="Using Webhooks with OpenClaw: Trigger AI Workflows from Any App"/>
+  <meta property="og:description" content="Learn how to trigger OpenClaw AI workflows using webhooks. Connect Shopify, GitHub, Stripe, and any app to your self-hosted AI assistant without writing complex code."/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:url" content="https://install-openclaw.net/blog/openclaw-webhook-automation/"/>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Using Webhooks with OpenClaw: Trigger AI Workflows from Any App",
+    "description": "Learn how to trigger OpenClaw AI workflows using webhooks. Connect Shopify, GitHub, Stripe, and any app to your self-hosted AI assistant without writing complex code.",
+    "url": "https://install-openclaw.net/blog/openclaw-webhook-automation/",
+    "datePublished": "2026-07-28",
+    "dateModified": "2026-07-28",
+    "author": {
+      "@type": "Organization",
+      "name": "GetMicroservices"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "GetMicroservices",
+      "url": "https://getmicroservices.com"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://install-openclaw.net/blog/openclaw-webhook-automation/"
+    }
+  }
+  </script>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="/">
+    <span class="logo-text"><span class="get">Get</span><span class="micro">Micro</span><span class="services">Services</span></span>
+    <span class="tagline">// done-for-you automation agency</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/#install" class="nav-cta">Install OpenClaw →</a></li>
+  </ul>
+</nav>
+
+<div class="article-header">
+  <a class="back-link" href="/blog/">← Back to Blog</a>
+  <div class="post-tag">// webhook automation</div>
+  <div class="post-meta">2026-07-28 · 9 min read</div>
+  <h1>Using Webhooks with OpenClaw: Trigger AI Workflows from Any App</h1>
+  <p class="article-subtitle">Your AI assistant shouldn't just wait to be asked. With webhooks, OpenClaw can react to real-world events — new orders, GitHub pushes, form submissions, and more — automatically.</p>
+</div>
+
+<div class="article-body">
+
+  <p>Most people think of an AI assistant as something you talk to. You ask, it answers. Useful, but passive.</p>
+
+  <p>Webhooks change that dynamic entirely. Instead of waiting for a question, <a href="/blog/what-is-openclaw/">OpenClaw</a> can receive a signal from an external app and immediately kick off an AI-powered workflow. A new customer places an order: OpenClaw writes the welcome email. A GitHub issue gets opened: OpenClaw drafts the triage note. A Stripe payment fails: OpenClaw prepares the recovery message.</p>
+
+  <p>This guide explains exactly how webhook-triggered automation works with OpenClaw, what you need to set it up, and real-world examples you can adapt for your own stack.</p>
+
+  <h2>What Is a Webhook (and Why It Matters for AI)</h2>
+
+  <p>A webhook is a URL on your server that external services can send a POST request to when something happens. It is the opposite of polling: instead of your system repeatedly asking "did anything change?", the external app tells you immediately when it does.</p>
+
+  <p>For AI automation, webhooks are a game-changer because they eliminate the scheduling problem. You don't need to run a cron job every minute hoping to catch a new event. You receive the event the moment it fires, with all its data, and you act on it.</p>
+
+  <p>OpenClaw sits naturally in this flow. It has an HTTP gateway, it can run <a href="/blog/openclaw-agentic-workflows/">agentic workflows</a>, and it has access to your files, APIs, and memory. Pointing a webhook at OpenClaw turns your AI assistant into a reactive automation engine.</p>
+
+  <h2>How OpenClaw Receives Webhooks</h2>
+
+  <p>OpenClaw's gateway exposes an HTTP endpoint that can accept inbound requests. When a webhook fires at that endpoint, OpenClaw parses the payload, runs the appropriate workflow, and optionally returns a response or takes a follow-up action.</p>
+
+  <p>The basic flow looks like this:</p>
+
+  <pre><code>External App (e.g. Shopify)
+    → POST https://your-server.com:PORT/webhook/shopify-order
+    → OpenClaw gateway receives payload
+    → Runs defined skill/script with payload data
+    → AI generates response or action
+    → (optional) Sends result to Slack, email, Telegram, etc.</code></pre>
+
+  <p>Your OpenClaw installation runs on a VPS with a public IP. If you followed the <a href="/blog/install-openclaw-vps/">standard VPS install</a>, the gateway is already running and accessible. You just need to expose the right port (or proxy through nginx) and configure the webhook handler.</p>
+
+  <h2>Setting Up a Webhook Endpoint in OpenClaw</h2>
+
+  <p>The simplest approach is to create a small Node.js handler that OpenClaw's skill system can invoke. Here's the typical structure:</p>
+
+  <h3>Step 1: Create the Webhook Handler Script</h3>
+
+  <p>In your OpenClaw workspace, create a script that listens for inbound POST requests:</p>
+
+  <pre><code># /root/.openclaw/workspace/skills/webhooks/shopify-handler.js
+
+const http = require('http');
+
+const PORT = 4040;
+
+const server = http.createServer(async (req, res) => {
+  if (req.method === 'POST' && req.url === '/webhook/shopify-order') {
+    let body = '';
+    req.on('data', chunk => body += chunk);
+    req.on('end', async () => {
+      const order = JSON.parse(body);
+      // Pass data to OpenClaw workflow
+      await triggerOpenClawWorkflow('new-order', order);
+      res.writeHead(200);
+      res.end('OK');
+    });
+  } else {
+    res.writeHead(404);
+    res.end('Not found');
+  }
+});
+
+server.listen(PORT, () => {
+  console.log(`Webhook listener running on port ${PORT}`);
+});</code></pre>
+
+  <h3>Step 2: Write the OpenClaw Cron/Skill That Processes the Event</h3>
+
+  <p>Create a skill that reads the event data and instructs OpenClaw what to do with it. For a new order, you might want to draft a personalised welcome email:</p>
+
+  <pre><code># In your skill or cron config:
+
+name: shopify-order-welcome
+trigger: webhook
+data_source: /tmp/openclaw-webhook-queue/order-{id}.json
+prompt: |
+  A new order has arrived. Customer: {customer_name}, product: {product},
+  total: {total}. Write a warm, personalised welcome email (3-4 sentences,
+  no em dashes) confirming the order and setting expectations for delivery.
+  Output plain text only.
+action: send_email_to_customer</code></pre>
+
+  <p>The key insight is that the webhook delivers the data, and OpenClaw's AI layer decides what to do with it. The two pieces are deliberately separate so you can swap out the logic without touching the webhook plumbing.</p>
+
+  <h3>Step 3: Secure the Endpoint</h3>
+
+  <p>Unsecured webhook endpoints are a real risk. Anyone who discovers the URL could send fake payloads. Most services (Shopify, GitHub, Stripe) sign their webhook payloads with an HMAC signature. Always verify it:</p>
+
+  <pre><code>const crypto = require('crypto');
+
+function verifyShopifyWebhook(body, signature, secret) {
+  const hmac = crypto
+    .createHmac('sha256', secret)
+    .update(body, 'utf8')
+    .digest('base64');
+  return hmac === signature;
+}
+
+// In your handler:
+const sig = req.headers['x-shopify-hmac-sha256'];
+const isValid = verifyShopifyWebhook(rawBody, sig, process.env.SHOPIFY_WEBHOOK_SECRET);
+if (!isValid) { res.writeHead(401); res.end('Unauthorised'); return; }</code></pre>
+
+  <p>Add your webhook secrets to the OpenClaw environment config so they're available to all scripts without being hard-coded.</p>
+
+  <h2>Real-World Webhook Automation Examples</h2>
+
+  <h3>GitHub: AI-Assisted Issue Triage</h3>
+
+  <p>Every time a GitHub issue is opened on your repository, a webhook fires. OpenClaw receives the issue title and body, then uses its AI layer to classify the issue (bug, feature request, question), suggest a label, and draft an initial response for you to review.</p>
+
+  <pre><code># Webhook URL configured in GitHub repo settings:
+https://your-server.com:4040/webhook/github-issue
+
+# OpenClaw workflow:
+# 1. Parse issue title + body
+# 2. AI classifies type and severity
+# 3. AI drafts first-response comment
+# 4. Posts draft to your Telegram for review
+# 5. On approval, posts to GitHub via API</code></pre>
+
+  <p>This fits naturally with <a href="/blog/openclaw-telegram-setup/">OpenClaw's Telegram integration</a> — your AI flags issues that need attention and gives you a one-tap approve/reject before taking action.</p>
+
+  <h3>Stripe: Failed Payment Recovery</h3>
+
+  <p>Stripe fires a webhook when a payment fails. OpenClaw receives the event, looks up the customer context (from its memory or a database query), and drafts a personalised recovery email that's warm without being pushy.</p>
+
+  <pre><code>Stripe webhook event: payment_intent.payment_failed
+  → customer_id, amount, failure_reason
+
+OpenClaw prompt:
+  "Payment of {amount} failed for {customer_name} due to {reason}.
+   Write a 3-sentence recovery email. Empathetic tone. No discounts.
+   Include a link to update payment details."</code></pre>
+
+  <p>The advantage over a standard email template: the message sounds like a human wrote it, because in a sense one did — just an AI one running on your server.</p>
+
+  <h3>Typeform / Tally: Lead Qualification</h3>
+
+  <p>When a potential client submits an enquiry form, a webhook hits OpenClaw with the form data. OpenClaw scores the lead based on criteria you've defined (budget, timeline, project type), drafts a tailored response, and logs the lead to a file for your CRM.</p>
+
+  <pre><code># Webhook from Tally:
+{ "name": "...", "email": "...", "budget": "£5k-10k",
+  "project": "automation setup", "timeline": "this month" }
+
+# OpenClaw qualification prompt:
+# "Score this lead 1-10 based on: budget > £2k = +3, timeline < 1 month = +2,
+#  project type = automation = +2. Output score + 2-sentence intro reply."</code></pre>
+
+  <p>This kind of instant-response qualification is exactly what <a href="/blog/openclaw-agentic-workflows/">agentic workflows</a> are built for. The AI acts as your first filter, so you only spend time on the conversations that matter.</p>
+
+  <h3>RSS / Content Monitoring: Competitive Intelligence</h3>
+
+  <p>Set up an RSS-to-webhook bridge (many free tools exist for this) so that whenever a competitor publishes a new blog post, OpenClaw gets pinged. It fetches the URL, summarises the content, and posts the summary to your Telegram or Slack.</p>
+
+  <pre><code>RSS feed change detected → webhook fires with new article URL
+
+OpenClaw workflow:
+  1. Fetch article content
+  2. Summarise in 3 bullet points
+  3. Identify any keywords or angles you're not covering
+  4. Post to #competitor-intel Slack channel</code></pre>
+
+  <p>Running competitive monitoring on autopilot like this is one of the more underrated uses of a self-hosted AI assistant.</p>
+
+  <h2>Using n8n as a Webhook Middleware Layer</h2>
+
+  <p>If you're already using n8n, you get a powerful webhook management layer for free. n8n can receive webhooks from hundreds of apps, transform the data, and then hit OpenClaw's endpoint with a clean, normalised payload.</p>
+
+  <pre><code>Shopify → n8n (webhook trigger)
+  → n8n normalises payload
+  → HTTP node POSTs to OpenClaw
+  → OpenClaw processes and returns result
+  → n8n sends result to Slack / email / CRM</code></pre>
+
+  <p>This is covered in more detail in the <a href="/blog/openclaw-n8n-integration/">OpenClaw and n8n integration guide</a>. The short version: n8n handles the messy connectors, OpenClaw handles the AI reasoning, and you keep both concerns cleanly separated.</p>
+
+  <h2>Webhook Reliability: What to Get Right</h2>
+
+  <p>Webhooks fail. Network issues, server restarts, and payload errors all happen. A production webhook system needs a few safeguards:</p>
+
+  <ul>
+    <li><strong>Queue incoming events</strong> — write payloads to a queue file before processing, so a crash mid-workflow doesn't lose data</li>
+    <li><strong>Return 200 quickly</strong> — acknowledge the webhook immediately, then process asynchronously. Most services retry if they don't get a fast response</li>
+    <li><strong>Idempotency checks</strong> — store processed event IDs so duplicate deliveries don't trigger duplicate actions</li>
+    <li><strong>Error logging</strong> — log every inbound payload and its processing result to a file OpenClaw can review</li>
+    <li><strong>Retry logic</strong> — if a downstream action fails (email send, API call), retry with exponential backoff</li>
+  </ul>
+
+  <p>A simple queue implementation using flat files works well for OpenClaw's self-hosted context:</p>
+
+  <pre><code># On webhook receipt:
+fs.writeFileSync(`/tmp/webhook-queue/${Date.now()}-${eventId}.json`,
+  JSON.stringify(payload));
+
+# Background processor (cron every minute):
+# Read all files in /tmp/webhook-queue/
+# Process each, move to /tmp/webhook-processed/ on success</code></pre>
+
+  <p>This pattern is resilient enough for most small-to-medium workloads without requiring a full message broker like RabbitMQ or Redis.</p>
+
+  <h2>Combining Webhooks with OpenClaw's Memory System</h2>
+
+  <p>One thing that separates OpenClaw from a simple webhook-to-AI pipe is its <a href="/blog/openclaw-memory-system/">persistent memory system</a>. When a Stripe webhook fires about a customer, OpenClaw can look up everything it knows about that customer from memory files — past interactions, preferences, support history — and factor that context into its response.</p>
+
+  <p>This means webhook-triggered responses get smarter over time. The first email to a new customer is based on the order data alone. The fifth email, after several interactions, is shaped by everything the system has learned.</p>
+
+  <p>That's not something you get from a generic automation tool with a template engine. It's the difference between a workflow and an assistant.</p>
+
+  <h2>Summary</h2>
+
+  <ul>
+    <li>Webhooks let OpenClaw react to real-world events without polling or scheduling</li>
+    <li>Set up a webhook handler script in your OpenClaw workspace to receive POST requests</li>
+    <li>Always verify webhook signatures — Shopify, GitHub, and Stripe all support HMAC signing</li>
+    <li>Use n8n as middleware to normalise payloads from complex apps before they reach OpenClaw</li>
+    <li>Queue payloads before processing for reliability; acknowledge webhooks immediately</li>
+    <li>OpenClaw's memory system gives webhook-triggered AI responses long-term context awareness</li>
+  </ul>
+
+  <div class="cta-box">
+    <div class="cta-label">// get started</div>
+    <h3>Ready to Make Your AI Assistant Event-Driven?</h3>
+    <p>Install OpenClaw on your <a href="/blog/install-openclaw-vps/">VPS</a> and start connecting it to the apps you already use. Webhooks, cron jobs, Telegram — it's all there out of the box.</p>
+    <a href="/#install" class="cta-button">Install OpenClaw Free →</a>
+  </div>
+
+</div>
+
+<footer>
+  <a class="footer-logo" href="/">Get<span>Micro</span>Services</a>
+  <p>© 2026 GetMicroservices. All rights reserved.</p>
+  <div class="footer-links">
+    <a href="/blog/">Blog</a>
+    <a href="/privacy-policy.html">Privacy</a>
+    <a href="/terms-of-service.html">Terms</a>
+    <a href="https://getmicroservices.com" target="_blank" rel="noopener">GetMicroservices.com</a>
+  </div>
+</footer>
+
+<script src="/lead-magnets/inline-lead-magnet.js" defer></script>
+</body>
+</html>
