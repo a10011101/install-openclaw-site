@@ -84,7 +84,16 @@
   }
   </script>
 
-  <!-- Structured Data: FAQ -->
+  <!-- Structured Data: WebSite + FAQ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "install-openclaw.net",
+    "url": "https://install-openclaw.net",
+    "description": "Resource for installing, configuring, and using OpenClaw -- the self-hosted AI assistant platform. Tutorials, setup guides, use cases, and comparisons."
+  }
+  </script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -92,58 +101,50 @@
     "mainEntity": [
       {
         "@type": "Question",
-        "name": "What exactly is OpenClaw?",
+        "name": "What is OpenClaw?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "OpenClaw is an open-source AI assistant platform that you self-host. Think of it as your own private AI — like ChatGPT, but running on your machine, connected to your tools (Telegram, email, calendar, Shopify, etc.), with no data leaving your infrastructure without your say-so."
+          "text": "OpenClaw is a self-hosted AI assistant platform that connects large language models (Claude, GPT-4, Grok, local Ollama models) to real tools: Telegram, Discord, WhatsApp, email, calendar, web search, file system, cron scheduling, and MCP servers. It runs on any Linux VPS and gives users a persistent, private AI agent with memory."
         }
       },
       {
         "@type": "Question",
-        "name": "Do I need a Mac to use OpenClaw?",
+        "name": "Is OpenClaw free?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "No. OpenClaw runs on Mac, Linux, and Windows (via WSL). We can also deploy it on a VPS so it's always on, even when your laptop is closed. We'll recommend the best option during the intake call."
+          "text": "Yes. OpenClaw is open-source and free to use. The only cost is your VPS hosting, which starts at around $4.99 per month on Hostinger. You also need API keys for the AI model provider of your choice (Claude, GPT-4, etc.), which are billed by usage."
         }
       },
       {
         "@type": "Question",
-        "name": "What AI model does OpenClaw use?",
+        "name": "How do I install OpenClaw?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "OpenClaw works with any major AI provider — Claude (Anthropic), GPT-4o (OpenAI), Gemini, or local models via Ollama. You bring your own API key. The model cost is separate from our setup fee."
+          "text": "OpenClaw installs in under 5 minutes on Ubuntu 22.04 with a single command. You need a Linux VPS (Hostinger from $4.99/month is recommended), then run the one-line installer. Full step-by-step guide is at install-openclaw.net/install-openclaw-vps/"
         }
       },
       {
         "@type": "Question",
-        "name": "Is my data private with OpenClaw?",
+        "name": "OpenClaw vs Claude -- what is the difference?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes. OpenClaw runs on your own machine or server. Your conversations, files, and integrations stay where you put them. The only external calls are to the AI model provider you choose."
+          "text": "Claude is an AI model made by Anthropic. OpenClaw is a self-hosted platform that uses Claude (or other models) as its brain. OpenClaw adds persistent memory, tool integrations (Telegram, email, calendar, file system), cron scheduling, and a Skills system on top of the AI model. You run OpenClaw on your own VPS; it calls Claude via API."
         }
       },
       {
         "@type": "Question",
-        "name": "What if something breaks after setup?",
+        "name": "What is OpenClaw browser relay?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Every plan includes at least 30 days of support. If something breaks within that window, we'll fix it. Ongoing support retainers are available after that."
+          "text": "OpenClaw browser relay is a feature that lets your AI agent control a real browser running on your local machine or a remote server. This enables web browsing, form filling, screenshot capture, and interaction with sites that require a real browser session -- all triggered from Telegram or other messaging channels."
         }
       },
       {
         "@type": "Question",
-        "name": "How is payment handled?",
+        "name": "Hermes vs OpenClaw -- which is better?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "We invoice via Stripe. Payment is due before work begins. We'll send a link when you book."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Can you set up OpenClaw for a team?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes — that's the Business plan. We configure multi-user setups, connect shared tools (Slack, CRM, Shopify), and build automations your whole team benefits from."
+          "text": "Hermes and OpenClaw are both self-hosted AI assistant platforms. OpenClaw focuses on deep tool integrations (Telegram, Discord, WhatsApp, cron scheduling, MCP servers, Skills system) and is optimised for power users who want a persistent always-on AI agent. Hermes is lighter and simpler. OpenClaw is generally better for users who want extensive automation and multi-channel connectivity."
         }
       }
     ]
