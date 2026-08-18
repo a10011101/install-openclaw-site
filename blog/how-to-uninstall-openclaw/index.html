@@ -38,60 +38,70 @@
 </div>
 
 <div class="article-body">
-  <p><a href="/blog/what-is-openclaw/">OpenClaw</a> is changing how people interact with AI. Rather than a stateless <a href="/blog/openclaw-vs-chatgpt/">chatbot</a> you open and close, it's a persistent assistant that lives on your infrastructure, remembers your context, and proactively helps you without being asked. This guide breaks down everything you need to know.</p>
+  <p>Sometimes you need to remove an assistant cleanly, whether you are switching to a different setup, moving servers, or just starting fresh. OpenClaw leaves files in a few predictable locations. This guide covers all of them so you do not leave orphaned processes, lingering configs, or an active Telegram bot behind.</p>
 
-  <h2>Why a <a href="/blog/personal-ai-assistant-2026/">Personal AI Assistant</a> Changes Everything</h2>
-  <p>The difference between a chatbot and a personal AI assistant is the difference between a calculator and an accountant. One answers questions when asked. The other understands your situation, tracks context over time, and works on your behalf.</p>
-  <p>OpenClaw is designed around this distinction. It runs continuously, maintains memory across sessions through file-based context, and can be configured to check in proactively — scanning emails, monitoring calendars, running scheduled tasks — without requiring you to open a chat window.</p>
+  <h2>1. Stop the OpenClaw Gateway</h2>
+  <p>Before removing any files, shut down the running process:</p>
+  <pre><code>openclaw gateway stop</code></pre>
+  <p>If you set up OpenClaw as a systemd service:</p>
+  <pre><code>systemctl stop openclaw
+systemctl disable openclaw</code></pre>
+  <p>Confirm nothing is still running:</p>
+  <pre><code>pgrep -a node | grep openclaw</code></pre>
 
-  <h2>Core Capabilities</h2>
+  <h2>2. Disconnect Your Telegram Bot</h2>
+  <p>If you connected OpenClaw to Telegram via BotFather, the bot token will keep accepting messages until you delete the bot or revoke the token. To stop it receiving messages without fully deleting the bot, send <code>/mybots</code> to BotFather, select your bot, and choose Revoke Token. Alternatively, delete the bot entirely from the same menu.</p>
+  <p>This step matters if you are moving to a new server. A stale token pointing at a dead server will silently drop every message the bot receives.</p>
+
+  <h2>3. Remove the OpenClaw Package</h2>
+  <p>OpenClaw is installed as a global npm package:</p>
+  <pre><code>npm uninstall -g openclaw</code></pre>
+  <p>Verify it is gone:</p>
+  <pre><code>which openclaw  # should return nothing</code></pre>
+
+  <h2>4. Delete Config and Workspace Files</h2>
+  <p>OpenClaw stores its config and workspace in your home directory. The main locations:</p>
   <ul>
-    <li><strong>Persistent memory:</strong> Remembers context between sessions via MEMORY.md and daily logs</li>
-    <li><strong>Multi-channel:</strong> Available via Telegram, WhatsApp, web UI, or API</li>
-    <li><strong>Skill system:</strong> Extend with skills for GitHub, Google Workspace, n8n, weather, and more</li>
-    <li><strong>Heartbeat system:</strong> Proactive checks — email, calendar, scheduled posts — without being asked</li>
-    <li><strong>Self-hosted:</strong> Your data, your server, your control</li>
-    <li><strong>Model flexibility:</strong> Use Claude, GPT-4, Gemini, or local Ollama models</li>
+    <li><code>~/.openclaw/</code>  -  Gateway config, secrets, session data, skills, plugin data</li>
+    <li><code>~/.openclaw/workspace/</code>  -  Your workspace: MEMORY.md, daily notes, repos, scripts</li>
   </ul>
+  <p><strong>Back up your workspace first</strong> if you want to keep MEMORY.md, your keyword maps, publishing scripts, or any project files:</p>
+  <pre><code>cp -r ~/.openclaw/workspace ~/openclaw-workspace-backup</code></pre>
+  <p>Then remove everything:</p>
+  <pre><code>rm -rf ~/.openclaw</code></pre>
+  <p>If you installed the systemd unit file manually, remove that too:</p>
+  <pre><code>rm -f /etc/systemd/system/openclaw.service
+systemctl daemon-reload</code></pre>
 
-  <h2>Getting Started</h2>
-  <p>The fastest path to a running OpenClaw instance:</p>
-  <ul>
-    <li>A VPS with 1GB+ RAM (DigitalOcean, Hetzner, or any Ubuntu 22.04 host)</li>
-    <li>Node.js 18+ installed</li>
-    <li>An API key for your preferred AI provider (or Ollama for local models)</li>
-    <li>15–30 minutes</li>
-  </ul>
-  <p>Full installation guide: <a href="/blog/install-openclaw-vps/">How to Install OpenClaw on a VPS →</a></p>
+  <h2>5. Remove Node.js Dependencies (Optional)</h2>
+  <p>If you installed Node.js specifically for OpenClaw and do not need it for anything else:</p>
+  <pre><code># Check what else uses node first
+which node && node --version
 
-  <h2>Connecting to Telegram</h2>
-  <p>Most users connect OpenClaw to Telegram for always-on mobile access. The setup takes under 10 minutes — create a bot via BotFather, add the token to your OpenClaw config, and your assistant is available from any device.</p>
-  <p>Step-by-step: <a href="/blog/openclaw-telegram-setup/">Connect OpenClaw to Telegram in 10 Minutes →</a></p>
+# If safe to remove (Ubuntu/Debian)
+apt remove nodejs npm
+apt autoremove</code></pre>
 
-  <h2>The Memory System</h2>
-  <p>OpenClaw's memory is file-based and human-readable. Key files include:</p>
-  <ul>
-    <li><strong>MEMORY.md:</strong> Long-term curated memory — significant context, preferences, ongoing projects</li>
-    <li><strong>memory/YYYY-MM-DD.md:</strong> Daily logs — raw session notes</li>
-    <li><strong>USER.md:</strong> About the person you're helping</li>
-    <li><strong>SOUL.md:</strong> Personality and behaviour configuration</li>
-  </ul>
-  <p>Deep dive: <a href="/blog/openclaw-memory-system/">How OpenClaw's Memory System Works →</a></p>
+  <h2>6. Check for Cron Jobs</h2>
+  <p>If you set up any OpenClaw-related cron jobs (heartbeat schedules, blog publish scripts), remove them:</p>
+  <pre><code>crontab -l  # review active crons
+crontab -e  # remove any openclaw entries</code></pre>
+
+  <h2>Reinstalling Later</h2>
+  <p>If you want to come back to OpenClaw on a fresh basis, the full install process takes under 30 minutes. See the <a href="/blog/install-openclaw-vps/">VPS install guide</a>, or if you want to understand what you are getting first, start with <a href="/blog/what-is-openclaw/">What Is OpenClaw</a>. The <a href="/blog/self-hosted-vs-chatgpt/">self-hosted vs ChatGPT comparison</a> is also worth reading if you are evaluating whether to come back at all.</p>
 
   <div class="highlight-box">
-    <div class="hb-title">✓ Quick Start Summary</div>
+    <div class="hb-title">✓ Uninstall Checklist</div>
     <ul>
-      <li>Install on a VPS in under 30 minutes</li>
-      <li>Connect to Telegram for mobile access</li>
-      <li>Configure memory files to personalise behaviour</li>
-      <li>Add skills for GitHub, Google, n8n, and more</li>
-      <li>Set up heartbeat for proactive monitoring</li>
+      <li>Gateway stopped (and systemd service disabled if applicable)</li>
+      <li>Telegram bot token revoked or bot deleted</li>
+      <li>npm package removed: <code>npm uninstall -g openclaw</code></li>
+      <li>~/.openclaw/ directory deleted (backup first if needed)</li>
+      <li>Systemd unit file removed if created</li>
+      <li>Cron jobs cleared</li>
     </ul>
   </div>
-
-  <p>Ready to install? → <a href="/#install">Get OpenClaw running on your server</a></p>
 </div>
-
 <footer>
   <p>// install-openclaw.net · <a href="/blog/">Blog</a> · <a href="/#install">Install</a> · <a href="https://getmicroservices.com" target="_blank">GetMicroservices</a></p>
 </footer>
