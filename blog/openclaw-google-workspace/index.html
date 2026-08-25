@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OpenClaw as Your AI Assistant for Google Workspace: Gmail, Calendar & Drive | install-openclaw.net</title>
+  <meta name="description" content="Connect OpenClaw to Google Workspace and automate Gmail triage, calendar scheduling, and Drive document workflows. A practical self-hosted AI assistant Google Workspace integration guide."/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RKCCVN536P"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-RKCCVN536P');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="canonical" href="https://install-openclaw.net/blog/openclaw-google-workspace/"/>
+  <link rel="stylesheet" href="/assets/style.css"/>
+  <meta property="og:title" content="OpenClaw as Your AI Assistant for Google Workspace: Gmail, Calendar & Drive"/>
+  <meta property="og:description" content="Connect OpenClaw to Google Workspace and automate Gmail triage, calendar scheduling, and Drive document workflows."/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:url" content="https://install-openclaw.net/blog/openclaw-google-workspace/"/>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "OpenClaw as Your AI Assistant for Google Workspace: Gmail, Calendar & Drive",
+    "description": "Connect OpenClaw to Google Workspace and automate Gmail triage, calendar scheduling, and Drive document workflows. A practical self-hosted AI assistant Google Workspace integration guide.",
+    "url": "https://install-openclaw.net/blog/openclaw-google-workspace/",
+    "datePublished": "2026-08-25",
+    "dateModified": "2026-08-25",
+    "author": {
+      "@type": "Organization",
+      "name": "GetMicroservices"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "GetMicroservices",
+      "url": "https://getmicroservices.com"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://install-openclaw.net/blog/openclaw-google-workspace/"
+    }
+  }
+  </script>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="/">
+    <span class="logo-text"><span class="get">Get</span><span class="micro">Micro</span><span class="services">Services</span></span>
+    <span class="tagline">// done-for-you automation agency</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/#install" class="nav-cta">Install OpenClaw →</a></li>
+  </ul>
+</nav>
+
+<div class="article-header">
+  <a class="back-link" href="/blog/">← Back to Blog</a>
+  <div class="post-tag">// google workspace integration</div>
+  <div class="post-meta">2026-08-25 · 10 min read</div>
+  <h1>OpenClaw as Your AI Assistant for Google Workspace: Gmail, Calendar and Drive</h1>
+  <p class="article-subtitle">Most people use Google Workspace without any real automation. Here is how to connect OpenClaw to Gmail, Calendar and Drive and turn repetitive tasks into scheduled background jobs.</p>
+</div>
+
+<div class="article-body">
+
+  <p>If you spend your mornings triaging email, scheduling meetings, and hunting for documents, you are doing work that an AI assistant should be doing for you. The problem is that most AI tools treat Google Workspace as read-only — they can answer questions about your calendar, but they cannot act on it.</p>
+
+  <p><a href="/blog/what-is-openclaw/">OpenClaw</a> is different. Because it runs on your own server and connects to external services via MCP tools, webhooks, and <a href="/blog/openclaw-agentic-workflows/">agentic workflows</a>, it can actually read your Gmail, create calendar events, summarise Drive documents, and take follow-up actions — all without you lifting a finger.</p>
+
+  <p>This guide walks through exactly how to set that up.</p>
+
+  <nav class="toc">
+    <div class="toc-label">// contents</div>
+    <ol>
+      <li><a href="#why-openclaw">Why OpenClaw for Google Workspace?</a></li>
+      <li><a href="#gmail-automation">Automating Gmail triage</a></li>
+      <li><a href="#calendar-automation">Calendar scheduling automation</a></li>
+      <li><a href="#drive-integration">Google Drive document workflows</a></li>
+      <li><a href="#cron-scheduling">Running it all on a schedule</a></li>
+      <li><a href="#setup-steps">Setup: step by step</a></li>
+      <li><a href="#privacy">Privacy and data control</a></li>
+    </ol>
+  </nav>
+
+  <h2 id="why-openclaw">Why Use OpenClaw for Google Workspace Automation?</h2>
+
+  <p>Google's own AI features — Gemini in Gmail, Duet AI in Docs — are convenient, but they have real limitations:</p>
+
+  <ul>
+    <li><strong>They are reactive.</strong> You have to open Gmail and ask. OpenClaw acts proactively, on a schedule you define.</li>
+    <li><strong>They cannot cross boundaries.</strong> Gemini in Gmail does not know what is on your Google Calendar or in a Notion doc. OpenClaw can pull from all of them in a single workflow.</li>
+    <li><strong>Your data stays in Google's AI pipeline.</strong> With a <a href="/blog/openclaw-data-sovereignty/">self-hosted AI assistant</a>, your email contents never leave your controlled environment.</li>
+    <li><strong>You cannot script them.</strong> OpenClaw's <a href="/blog/openclaw-cron-jobs/">cron jobs</a> let you automate actions on exact schedules with custom logic.</li>
+  </ul>
+
+  <p>The result: OpenClaw becomes a background assistant that keeps your Google Workspace organised without you needing to babysit it.</p>
+
+  <h2 id="gmail-automation">Automating Gmail Triage with OpenClaw</h2>
+
+  <p>Email triage is the highest-leverage place to start. The goal is simple: every morning, OpenClaw reads your unread email, categorises it, surfaces the urgent items, and drafts replies for the routine ones.</p>
+
+  <h3>How it works</h3>
+
+  <p>OpenClaw connects to Gmail via the Gmail API (or via an n8n workflow acting as a bridge). Each morning, a cron job triggers it to:</p>
+
+  <ol>
+    <li>Fetch unread messages from the last 24 hours</li>
+    <li>Categorise them: urgent, informational, newsletters, requires reply</li>
+    <li>Draft replies for the "requires reply" category using your tone and preferences from <code>SOUL.md</code></li>
+    <li>Send you a Telegram summary with the urgent items highlighted</li>
+  </ol>
+
+  <p>Here is what the cron definition looks like in OpenClaw:</p>
+
+  <pre><code># Morning Gmail triage — runs at 07:30 daily
+- name: gmail-morning-triage
+  model: anthropic/claude-haiku   # cheap + fast for inbox scanning
+  schedule: 30 7 * * 1-5
+  prompt: |
+    Read unread Gmail from the last 24h.
+    Categorise: urgent / reply-needed / informational / newsletter.
+    For reply-needed: draft a short reply in my tone.
+    Send me a Telegram summary. Flag anything that needs a decision today.</code></pre>
+
+  <p>The key is the Gmail MCP tool or webhook integration. If you are using <a href="/blog/openclaw-n8n-integration/">OpenClaw with n8n</a>, you can build a Gmail trigger in n8n that forwards new emails as structured JSON to an OpenClaw webhook endpoint — no direct API credentials needed in OpenClaw itself.</p>
+
+  <h3>Practical example</h3>
+
+  <p>A freelance consultant using this setup described their morning flow: "OpenClaw sends me a Telegram message at 7:35am. It says: 3 newsletters archived, 2 client emails flagged urgent with draft replies waiting, 1 invoice in my drafts folder. I review the drafts in 5 minutes and hit send. My inbox is clear before I have coffee."</p>
+
+  <p>That is the goal — not eliminating human judgment, but removing the cognitive overhead of sorting and drafting from scratch.</p>
+
+  <h2 id="calendar-automation">Calendar Scheduling Automation</h2>
+
+  <p>Calendar management is the second biggest time sink for knowledge workers. OpenClaw can handle the mechanical parts: finding open slots, creating events, and sending prep briefs before meetings.</p>
+
+  <h3>Pre-meeting briefing</h3>
+
+  <p>One of the most immediately useful automations: 30 minutes before any meeting, OpenClaw checks your calendar, identifies the event, pulls the attendee details, and sends you a prep note via Telegram:</p>
+
+  <pre><code># Pre-meeting brief — runs every 30 minutes, checks for upcoming meetings
+- name: pre-meeting-prep
+  schedule: */30 8-18 * * 1-5
+  prompt: |
+    Check Google Calendar for any meeting starting in the next 30 minutes.
+    If one exists: summarise who is attending, what the last email thread with
+    them said, and suggest 3 talking points based on past interactions.
+    Send to Telegram.</code></pre>
+
+  <p>This connects OpenClaw's Gmail and Calendar access into a single workflow — the kind of cross-service coordination that Google's own tools do not do automatically.</p>
+
+  <h3>Scheduling new meetings</h3>
+
+  <p>When someone emails asking to schedule a call, OpenClaw can check your calendar for open slots and reply with availability — or create a booking link using Calendly or a self-hosted scheduling tool. The workflow looks like this:</p>
+
+  <ol>
+    <li>Gmail trigger detects a "schedule a meeting" request</li>
+    <li>OpenClaw reads your Calendar for free slots in the next 7 days</li>
+    <li>Drafts a reply with 3 time options in the recipient's timezone</li>
+    <li>Optionally creates a hold event pending confirmation</li>
+  </ol>
+
+  <p>This is an area where <a href="/blog/openclaw-webhook-automation/">OpenClaw's webhook automation</a> shines — you can chain Gmail reads, Calendar API calls, and reply generation into a single triggered workflow.</p>
+
+  <h3>End-of-week calendar review</h3>
+
+  <p>Every Friday afternoon, OpenClaw can generate a brief summary of the week's meetings, identify recurring topics, and flag any outstanding follow-ups that were promised in calls but not yet emailed. It is like having a PA who reviews the week's meeting notes and makes sure nothing falls through the cracks.</p>
+
+  <h2 id="drive-integration">Google Drive Document Workflows</h2>
+
+  <p>Drive integration is slightly more setup than Gmail or Calendar, but the payoff is significant — especially for teams or solo operators who manage large document libraries.</p>
+
+  <h3>Document summarisation on demand</h3>
+
+  <p>The simplest Drive integration: you drop a link to a Google Doc into your Telegram chat with OpenClaw, and it fetches the document, summarises it in 3 bullet points, and suggests next actions. No switching apps, no copying text.</p>
+
+  <pre><code># Example Telegram message to OpenClaw
+"Summarise this and tell me if I need to take action:
+https://docs.google.com/document/d/1xK9.../edit"
+
+# OpenClaw response (30 seconds later)
+"Here's the summary:
+• Client wants revised scope by Friday
+• Budget unchanged at £12k
+• New stakeholder: Sarah (cc'd in email thread from Tuesday)
+
+Suggested action: Update the project brief today. I can draft a
+scope revision if you want — just say 'go ahead'."</code></pre>
+
+  <h3>Automated document creation</h3>
+
+  <p>OpenClaw can create Google Docs automatically using the Drive API. Useful patterns include:</p>
+
+  <ul>
+    <li><strong>Weekly report drafts</strong> — every Monday morning, create a new "Week of [date]" report doc in your Drive with the standard template filled out from last week's data</li>
+    <li><strong>Meeting notes skeleton</strong> — create a doc for each calendar meeting with attendee list and agenda pre-populated</li>
+    <li><strong>Project folders</strong> — when a new project starts (triggered by a Notion or CRM update), auto-create the standard folder structure in Drive</li>
+  </ul>
+
+  <h3>Keeping Docs organised</h3>
+
+  <p>One underused automation: a weekly Drive audit. OpenClaw scans for documents not accessed in 90+ days, drafts a list of candidates for archiving, and asks you to confirm before moving anything. Zero manual hunting through old folders.</p>
+
+  <h2 id="cron-scheduling">Running It All on a Schedule</h2>
+
+  <p>The real power of OpenClaw's Google Workspace integration is that it all runs automatically, on cron schedules, without you triggering it manually.</p>
+
+  <p>A typical schedule for a knowledge worker might look like this:</p>
+
+  <table class="comparison-table">
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>Task</th>
+        <th>Service</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>07:30 Mon-Fri</td>
+        <td>Gmail triage + Telegram summary</td>
+        <td>Gmail</td>
+      </tr>
+      <tr>
+        <td>Every 30 min, 08:00-18:00</td>
+        <td>Pre-meeting prep brief</td>
+        <td>Calendar</td>
+      </tr>
+      <tr>
+        <td>12:00 daily</td>
+        <td>Midday inbox check (urgent only)</td>
+        <td>Gmail</td>
+      </tr>
+      <tr>
+        <td>17:00 Mon-Fri</td>
+        <td>End-of-day summary + next day agenda</td>
+        <td>Calendar + Gmail</td>
+      </tr>
+      <tr>
+        <td>17:30 Friday</td>
+        <td>Weekly review + follow-up list</td>
+        <td>Calendar + Gmail</td>
+      </tr>
+      <tr>
+        <td>Sunday 20:00</td>
+        <td>Week-ahead prep doc created in Drive</td>
+        <td>Drive</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Each of these runs silently on your VPS, with output delivered to your Telegram. You review, decide, and act — the mechanical parts happen without you. For more on building this kind of schedule, see the guide on <a href="/blog/openclaw-cron-heartbeat/">OpenClaw cron and heartbeat patterns</a>.</p>
+
+  <h2 id="setup-steps">Setup: Step by Step</h2>
+
+  <p>Here is the practical path to getting OpenClaw connected to Google Workspace:</p>
+
+  <h3>Step 1: Set up Google API credentials</h3>
+
+  <p>Go to <a href="https://console.cloud.google.com" target="_blank" rel="noopener">Google Cloud Console</a> and create a project. Enable the Gmail API, Google Calendar API, and Google Drive API. Create an OAuth 2.0 client (Desktop app type) and download the credentials JSON.</p>
+
+  <pre><code># Authenticate and store the OAuth token
+python3 google_auth.py --credentials credentials.json \
+  --scopes gmail.readonly calendar.events drive.file</code></pre>
+
+  <h3>Step 2: Bridge to OpenClaw via n8n or MCP</h3>
+
+  <p>If you have <a href="/blog/openclaw-n8n-integration/">n8n connected to OpenClaw</a>, the easiest approach is to use n8n's built-in Google nodes as the API layer. n8n handles OAuth token refresh automatically, and exposes webhooks that OpenClaw calls to trigger reads and writes.</p>
+
+  <p>Alternatively, the <a href="/blog/openclaw-mcp-tools/">OpenClaw MCP tools system</a> supports custom tool definitions — you can wrap the Google API calls in a skill file and make them available to OpenClaw as first-class tools.</p>
+
+  <h3>Step 3: Write your workflow prompts</h3>
+
+  <p>Define what you want OpenClaw to do in clear, specific language. Include your preferences in <code>USER.md</code>:</p>
+
+  <pre><code># In USER.md
+## Email preferences
+- Flag anything from clients as urgent
+- Newsletter senders: archive without summary
+- Invoices: save to a "to-pay" running list
+- Tone for replies: professional but warm, max 3 paragraphs
+
+## Calendar preferences
+- I need 15 min between meetings
+- Do not schedule before 9am or after 6pm
+- Always flag external calls (non-@mycompany.com attendees)</code></pre>
+
+  <h3>Step 4: Test with dry runs</h3>
+
+  <p>Before enabling automated actions, run everything in read-only mode first. Have OpenClaw summarise and draft, but not send or create. Review a week's worth of output. Once you trust the quality, flip the switch on actions.</p>
+
+  <h3>Step 5: Add to cron schedule</h3>
+
+  <p>Add your Gmail, Calendar, and Drive jobs to your OpenClaw cron config and deploy. Monitor the Telegram output for the first few days and adjust prompt language based on what comes out. The prompts are just text — iterate quickly.</p>
+
+  <h2 id="privacy">Privacy and Data Control</h2>
+
+  <p>A question worth addressing directly: if OpenClaw reads your Gmail, where does that content go?</p>
+
+  <p>The answer depends on your model choice. If you are using a cloud model (Claude, GPT-4, Gemini), your email contents pass through that provider's API in the same way that using ChatGPT with a pasted email would. The key difference from using Google's Gemini in Gmail is that <em>your OpenClaw instance controls what gets sent and when</em> — you are not opted into ambient data collection.</p>
+
+  <p>If full privacy is a priority, use a local model via Ollama. Your email content never leaves your server. The trade-off is capability — local models are not as strong at nuanced email triage as Claude or GPT-4. For most use cases, a hybrid approach works well: use a local model for the inbox scan and categorisation, and only send urgent/complex items to a cloud model for drafting.</p>
+
+  <p>For a deeper look at the privacy architecture, see the post on <a href="/blog/openclaw-data-sovereignty/">OpenClaw and data sovereignty</a>.</p>
+
+  <h2>What You Get</h2>
+
+  <p>After setting this up, your Google Workspace stops being a place you manage and becomes a system that manages itself (with your oversight). The shift is significant:</p>
+
+  <ul>
+    <li>Your inbox is triaged before you sit down at your desk</li>
+    <li>You walk into every meeting with a prep brief already on your phone</li>
+    <li>Documents get summarised the moment someone shares a link</li>
+    <li>Nothing slips through because a cron job checks for outstanding follow-ups automatically</li>
+  </ul>
+
+  <p>None of this requires you to be technical beyond the initial setup. Once it is running, you interact with it through plain English in Telegram, and it acts on Google Workspace on your behalf.</p>
+
+  <p>That is what a real AI assistant for Google Workspace looks like — not a sidebar chatbot, but a background agent that keeps your digital life in order.</p>
+
+  <div class="cta-box">
+    <div class="cta-label">// get started</div>
+    <h3>Ready to Automate Your Google Workspace?</h3>
+    <p>Install OpenClaw on a VPS in minutes and connect it to Gmail, Calendar and Drive. The <a href="/blog/install-openclaw-vps/">installation guide</a> gets you set up from scratch.</p>
+    <a href="/#install" class="cta-button">Install OpenClaw Free →</a>
+  </div>
+
+</div>
+
+<footer>
+  <a class="footer-logo" href="/">Get<span>Micro</span>Services</a>
+  <p>© 2026 GetMicroservices. All rights reserved.</p>
+  <div class="footer-links">
+    <a href="/blog/">Blog</a>
+    <a href="/privacy-policy.html">Privacy</a>
+    <a href="/terms-of-service.html">Terms</a>
+    <a href="https://getmicroservices.com" target="_blank" rel="noopener">GetMicroservices.com</a>
+  </div>
+</footer>
+
+<script src="/lead-magnets/inline-lead-magnet.js" defer></script>
+</body>
+</html>
