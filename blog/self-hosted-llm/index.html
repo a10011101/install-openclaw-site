@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Self-Hosted LLM: How to Run Your Own Private AI Model in 2026 | install-openclaw.net</title>
+  <meta name="description" content="Learn how to run a self-hosted LLM using Ollama, which models to choose, hardware requirements, and how OpenClaw connects to your local AI for a fully private setup."/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RKCCVN536P"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-RKCCVN536P');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="canonical" href="https://install-openclaw.net/blog/self-hosted-llm/"/>
+  <link rel="stylesheet" href="/assets/style.css"/>
+  <meta property="og:title" content="Self-Hosted LLM: How to Run Your Own Private AI Model in 2026"/>
+  <meta property="og:description" content="Learn how to run a self-hosted LLM using Ollama, which models to choose, hardware requirements, and how OpenClaw connects to your local AI for a fully private setup."/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:url" content="https://install-openclaw.net/blog/self-hosted-llm/"/>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Self-Hosted LLM: How to Run Your Own Private AI Model in 2026",
+    "description": "Learn how to run a self-hosted LLM using Ollama, which models to choose, hardware requirements, and how OpenClaw connects to your local AI for a fully private setup.",
+    "url": "https://install-openclaw.net/blog/self-hosted-llm/",
+    "datePublished": "2026-08-28",
+    "dateModified": "2026-08-28",
+    "author": {
+      "@type": "Organization",
+      "name": "GetMicroservices"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "GetMicroservices",
+      "url": "https://getmicroservices.com"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://install-openclaw.net/blog/self-hosted-llm/"
+    }
+  }
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f5f3ee; --surface: #ffffff; --border: #d9d4c7;
+      --text: #1a1a1a; --muted: #6b6560; --accent: #b5006a;
+      --accent-hover: #8c0052; --blue: #0066cc; --blue-hover: #0052a3;
+      --code: #fdf6ec; --pixel: 3px;
+      --gold: #b8860b;
+    }
+    body {
+      padding-top: 64px; background: var(--bg); color: var(--text);
+      font-family: 'Space Grotesk', sans-serif; line-height: 1.7;
+    }
+    nav:not(.toc) {
+      background: var(--surface); border-bottom: var(--pixel) solid var(--border);
+      padding: 0 2rem; display: flex; align-items: center; justify-content: space-between;
+      height: 64px; position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    }
+    .nav-logo {
+      display: flex; flex-direction: column; align-items: flex-start;
+      text-decoration: none; line-height: 1.15;
+    }
+    .logo-text {
+      font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.05rem;
+    }
+    .logo-text .get { color: var(--text); }
+    .logo-text .micro { color: var(--accent); }
+    .logo-text .services { color: var(--gold); }
+    .tagline { font-family: 'Fira Code', monospace; font-size: 0.65rem; color: var(--muted); }
+    .nav-links { display: flex; gap: 8px; list-style: none; }
+    .nav-links a {
+      font-size: 0.82rem; color: #fff; text-decoration: none; font-weight: 600;
+      padding: 6px 12px; background: var(--blue); transition: background 0.15s;
+    }
+    .nav-links a:hover { background: var(--blue-hover); }
+    .nav-cta {
+      background: var(--accent) !important; color: #fff !important;
+      border: var(--pixel) solid var(--text); font-weight: 700 !important;
+    }
+    .nav-cta:hover { background: var(--accent-hover) !important; }
+    .article-header {
+      max-width: 780px; margin: 0 auto; padding: 3rem 2rem 2rem;
+    }
+    .back-link {
+      font-family: 'Fira Code', monospace; font-size: 0.8rem;
+      color: var(--accent); text-decoration: none; display: inline-block; margin-bottom: 1.25rem;
+    }
+    .back-link:hover { text-decoration: underline; }
+    .post-tag {
+      font-family: 'Fira Code', monospace; font-size: 0.75rem;
+      color: var(--accent); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.5rem;
+    }
+    .post-meta {
+      font-family: 'Fira Code', monospace; font-size: 0.78rem;
+      color: var(--muted); margin-bottom: 1rem;
+    }
+    .article-header h1 {
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem); font-weight: 700; line-height: 1.25; margin-bottom: 0.9rem;
+    }
+    .article-subtitle { color: var(--muted); font-size: 1.05rem; line-height: 1.6; }
+    .article-body {
+      max-width: 780px; margin: 0 auto; padding: 2rem 2rem 5rem;
+    }
+    .article-body p { margin-bottom: 1.25rem; }
+    .article-body h2 {
+      font-size: 1.5rem; font-weight: 700; margin: 2.5rem 0 0.9rem;
+      border-left: 4px solid var(--accent); padding-left: 0.75rem;
+    }
+    .article-body h3 {
+      font-size: 1.2rem; font-weight: 700; margin: 2rem 0 0.75rem;
+      color: var(--text);
+    }
+    .article-body ul, .article-body ol {
+      margin: 0 0 1.25rem 1.5rem;
+    }
+    .article-body li { margin-bottom: 0.4rem; }
+    .article-body a { color: var(--accent); text-decoration: underline; }
+    .article-body a:hover { color: var(--accent-hover); }
+    .article-body pre {
+      background: var(--code); border: var(--pixel) solid var(--border);
+      padding: 1.1rem 1.25rem; overflow-x: auto; margin-bottom: 1.25rem;
+    }
+    .article-body code {
+      font-family: 'Fira Code', monospace; font-size: 0.88rem; color: #1a1a1a;
+    }
+    .article-body p code, .article-body li code {
+      background: var(--code); padding: 0.15rem 0.4rem;
+      border: 1px solid var(--border); font-size: 0.85rem;
+    }
+    .comparison-table {
+      width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; font-size: 0.9rem;
+    }
+    .comparison-table th {
+      background: var(--text); color: #fff; padding: 0.6rem 0.8rem; text-align: left;
+      font-family: 'Fira Code', monospace; font-size: 0.8rem;
+    }
+    .comparison-table td { padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--border); }
+    .comparison-table tr:nth-child(even) { background: var(--code); }
+    .cta-box {
+      background: var(--surface); border: var(--pixel) solid var(--border);
+      box-shadow: 5px 5px 0 var(--border); padding: 2rem 2.25rem; margin-top: 3rem;
+    }
+    .cta-label {
+      font-family: 'Fira Code', monospace; font-size: 0.75rem;
+      color: var(--accent); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.5rem;
+    }
+    .cta-box h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .cta-box p { color: var(--muted); margin-bottom: 1.25rem; }
+    .cta-button {
+      display: inline-block; background: var(--accent); color: #fff !important;
+      padding: 0.65rem 1.5rem; font-weight: 700; text-decoration: none !important;
+      border: var(--pixel) solid var(--text); font-size: 0.95rem;
+      transition: background 0.15s;
+    }
+    .cta-button:hover { background: var(--accent-hover) !important; }
+    footer {
+      background: var(--text); color: #fff; text-align: center;
+      padding: 2.5rem 2rem; font-size: 0.88rem;
+    }
+    .footer-logo {
+      font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.15rem;
+      color: #fff; text-decoration: none; display: block; margin-bottom: 0.5rem;
+    }
+    .footer-logo span { color: var(--accent); }
+    footer p { color: #aaa; margin-bottom: 0.75rem; }
+    .footer-links { display: flex; gap: 1.25rem; justify-content: center; flex-wrap: wrap; }
+    .footer-links a { color: #aaa; text-decoration: none; font-size: 0.85rem; }
+    .footer-links a:hover { color: #fff; }
+  </style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="/">
+    <span class="logo-text"><span class="get">Get</span><span class="micro">Micro</span><span class="services">Services</span></span>
+    <span class="tagline">// done-for-you automation agency</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/#install" class="nav-cta">Install OpenClaw →</a></li>
+  </ul>
+</nav>
+
+<div class="article-header">
+  <a class="back-link" href="/blog/">← Back to Blog</a>
+  <div class="post-tag">// self-hosted ai</div>
+  <div class="post-meta">2026-08-28 · 10 min read</div>
+  <h1>Self-Hosted LLM: How to Run Your Own Private AI Model in 2026</h1>
+  <p class="article-subtitle">You do not need to send your data to OpenAI or Anthropic. A self-hosted LLM runs on your own hardware, stays private, and costs nothing in API fees. Here is the complete setup guide.</p>
+</div>
+
+<div class="article-body">
+
+  <p>The mainstream AI tools all have one thing in common: your data goes through someone else's servers. Every message you send to ChatGPT, Claude, or Gemini is processed on infrastructure you do not control, stored under terms you may not have read, and potentially used to improve models you will pay to use again.</p>
+
+  <p>A self-hosted LLM changes that equation completely. You run the model. Your hardware. Your data. No API bills, no usage logs, no third-party terms of service between your thoughts and your AI.</p>
+
+  <p>In 2026, self-hosting a capable language model is genuinely accessible. You do not need a data center or a PhD. This guide covers what you need, how to set it up with <a href="https://ollama.com" target="_blank" rel="noopener">Ollama</a>, which models to pick, and how to wire it into <a href="/blog/what-is-openclaw/">OpenClaw</a> so your self-hosted LLM has memory, automations, and a full personal assistant interface.</p>
+
+  <h2>What Is a Self-Hosted LLM?</h2>
+
+  <p>A large language model (LLM) is the AI engine behind tools like ChatGPT. When you use a cloud service, that model runs on the provider's servers and you access it via API. A self-hosted LLM is the same kind of model, but downloaded and run locally on hardware you control: a personal computer, a home server, a VPS, or a dedicated machine.</p>
+
+  <p>The key distinction is inference location. Self-hosted means the model weights live on your disk and run on your CPU or GPU. No request leaves your machine unless you specifically ask it to.</p>
+
+  <h2>Why Self-Host an LLM?</h2>
+
+  <p>There are four reasons people move to self-hosted setups:</p>
+
+  <ul>
+    <li><strong>Privacy.</strong> Sensitive work, client data, personal journals, legal documents. None of it should transit third-party servers. A local LLM guarantees it does not.</li>
+    <li><strong>Cost.</strong> GPT-4o at $5 per million tokens adds up fast for heavy users. A self-hosted model has zero per-token cost. Hardware is a one-time or sunk expense.</li>
+    <li><strong>Offline access.</strong> Planes, remote areas, internet outages. A local model works without a connection.</li>
+    <li><strong>Control.</strong> You choose the model version. You are not subject to sudden price hikes, rate limits, or capability changes made by the provider.</li>
+  </ul>
+
+  <p>The trade-off is hardware. A capable self-hosted LLM needs RAM and ideally a GPU. But smaller models run surprisingly well on consumer hardware, as you will see below.</p>
+
+  <h2>Hardware: What You Actually Need</h2>
+
+  <p>The most common question about self-hosted LLMs is whether your hardware is good enough. The answer depends on which model you want to run.</p>
+
+  <table class="comparison-table">
+    <thead>
+      <tr>
+        <th>Model Size</th>
+        <th>Example Models</th>
+        <th>Min RAM (CPU)</th>
+        <th>GPU VRAM (fast)</th>
+        <th>Quality</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>3B params</td>
+        <td>Phi-3 Mini, Qwen2.5-3B</td>
+        <td>4 GB</td>
+        <td>4 GB</td>
+        <td>Good for simple tasks</td>
+      </tr>
+      <tr>
+        <td>7B params</td>
+        <td>Llama 3.1 8B, Mistral 7B</td>
+        <td>8 GB</td>
+        <td>6 GB</td>
+        <td>Solid everyday use</td>
+      </tr>
+      <tr>
+        <td>14B params</td>
+        <td>Qwen2.5-14B, Phi-4</td>
+        <td>16 GB</td>
+        <td>12 GB</td>
+        <td>Strong reasoning</td>
+      </tr>
+      <tr>
+        <td>32B params</td>
+        <td>Qwen2.5-32B, DeepSeek-R1</td>
+        <td>32 GB</td>
+        <td>24 GB</td>
+        <td>Near-frontier quality</td>
+      </tr>
+      <tr>
+        <td>70B params</td>
+        <td>Llama 3.3 70B</td>
+        <td>64 GB</td>
+        <td>48 GB</td>
+        <td>Frontier-class</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>CPU inference works without a GPU, but it is slow. A 7B model running on CPU-only will respond at a conversational pace but not instantly. For comfortable use, 16 GB of system RAM with a modest GPU (RTX 3060 or better) gives you a 14B model at reasonable speed. An Apple Silicon Mac Mini with 24 GB unified memory is a popular self-hosted LLM server because the GPU and CPU share that memory pool.</p>
+
+  <h2>Setting Up Ollama: The Standard Self-Hosted LLM Server</h2>
+
+  <p>Ollama is the de facto tool for running local LLMs. It handles model downloading, quantization, serving, and provides an OpenAI-compatible API endpoint that most AI tools (including OpenClaw) can connect to out of the box.</p>
+
+  <h3>Install Ollama</h3>
+
+  <p>On Linux or macOS, one command handles the install:</p>
+
+  <pre><code>curl -fsSL https://ollama.com/install.sh | sh</code></pre>
+
+  <p>On Windows, download the installer from <code>ollama.com</code>. After installation, Ollama runs as a background service on port 11434.</p>
+
+  <h3>Pull a Model</h3>
+
+  <p>Download a model with the <code>ollama pull</code> command. For a solid starting point:</p>
+
+  <pre><code># A fast 8B model, good general-purpose
+ollama pull llama3.1
+
+# A coding-focused model from Alibaba
+ollama pull qwen2.5-coder:7b
+
+# A reasoning model with chain-of-thought
+ollama pull deepseek-r1:7b</code></pre>
+
+  <p>Ollama automatically downloads the right quantized version for your hardware. Models are stored in <code>~/.ollama/models</code> and reused across sessions.</p>
+
+  <h3>Test It Works</h3>
+
+  <pre><code>ollama run llama3.1
+# Type a message and press Enter to chat directly in the terminal</code></pre>
+
+  <p>To verify the local LLM server API is running:</p>
+
+  <pre><code>curl http://localhost:11434/api/generate \
+  -d '{"model":"llama3.1","prompt":"Hello","stream":false}'</code></pre>
+
+  <p>If you get a JSON response with a text field, your self-hosted LLM is running.</p>
+
+  <h2>Best Local LLM Models to Run in 2026</h2>
+
+  <p>The open-source LLM landscape moves fast. These are the top picks across different use cases:</p>
+
+  <h3>General Use: Llama 3.3 70B</h3>
+  <p>Meta's flagship open model. Best overall quality if your hardware can handle it. Needs 64 GB RAM for CPU inference or a high-VRAM GPU. If you have the hardware, nothing open-source beats it for general tasks.</p>
+
+  <h3>Best Balance: Qwen2.5-14B</h3>
+  <p>Alibaba's Qwen2.5 series punches well above its weight. The 14B model is outstanding for its size. It handles long context (up to 128K tokens), follows instructions well, and runs on 16 GB RAM. The best self-hosted LLM for most people who cannot run 70B.</p>
+
+  <h3>Coding: Qwen2.5-Coder 7B or 32B</h3>
+  <p>Specifically trained for code. Outperforms Llama at coding tasks despite smaller size. The 7B version runs on nearly any machine with 8 GB RAM.</p>
+
+  <h3>Reasoning: DeepSeek-R1</h3>
+  <p>A distilled reasoning model. Produces structured chain-of-thought before answering. Available in sizes from 1.5B to 70B. The 7B version is excellent for problem-solving tasks on modest hardware.</p>
+
+  <h3>Speed: Phi-3 Mini or Gemma 2 2B</h3>
+  <p>When you need fast responses and have limited hardware (4 GB RAM), these small models are surprisingly capable for simple queries, quick lookups, and low-latency automations.</p>
+
+  <h2>Connecting Your Self-Hosted LLM to OpenClaw</h2>
+
+  <p>Running a local model in the terminal is useful. Connecting it to <a href="/blog/what-is-openclaw/">OpenClaw</a> makes it a full personal AI assistant with memory, skills, automations, Telegram integration, and scheduled tasks.</p>
+
+  <p>Because Ollama exposes an OpenAI-compatible API, OpenClaw connects to it directly. No adapter needed.</p>
+
+  <p>In your OpenClaw gateway config, set the model string to your Ollama model:</p>
+
+  <pre><code>model: ollama/llama3.1
+# or
+model: ollama/qwen2.5:14b
+# or
+model: ollama/deepseek-r1:7b</code></pre>
+
+  <p>Make sure the base URL points to your Ollama instance:</p>
+
+  <pre><code>OPENAI_BASE_URL=http://localhost:11434/v1
+OPENAI_API_KEY=ollama   # Ollama ignores this value but it must be set</code></pre>
+
+  <p>Then restart the gateway:</p>
+
+  <pre><code>openclaw gateway restart</code></pre>
+
+  <p>OpenClaw will now route all inference to your self-hosted LLM. Every conversation, memory read, skill execution, and cron job runs through your local model. No data leaves your machine. See the full guide on <a href="/blog/run-local-ai/">running a local AI with OpenClaw and Ollama</a> for step-by-step details.</p>
+
+  <h2>Running Your Self-Hosted LLM on a VPS</h2>
+
+  <p>If you want a self-hosted LLM that is always on without leaving a personal computer running, a VPS is the answer. A cloud server running Ollama gives you 24/7 availability, remote access, and no local hardware noise or heat.</p>
+
+  <p>For a 7B model, you need at least 8 GB of RAM (16 GB recommended). For a 14B model, 32 GB. Most VPS providers offer these specs. See the guide on <a href="/blog/install-openclaw-vps/">installing OpenClaw on a VPS</a> for the full walkthrough, which covers running Ollama alongside OpenClaw on the same server.</p>
+
+  <p>The advantage of a VPS self-hosted LLM setup: your AI assistant is running remotely, you interact with it through Telegram or a web interface, and your local machine stays clean. The self-hosted part refers to the server ownership, not physical proximity.</p>
+
+  <h2>Private LLM vs Cloud LLM: A Quick Comparison</h2>
+
+  <table class="comparison-table">
+    <thead>
+      <tr>
+        <th>Factor</th>
+        <th>Self-Hosted LLM</th>
+        <th>Cloud LLM (OpenAI, Anthropic)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Data privacy</td>
+        <td>Complete. Nothing leaves your server.</td>
+        <td>Data goes to provider's servers.</td>
+      </tr>
+      <tr>
+        <td>Cost</td>
+        <td>One-time hardware or VPS monthly fee.</td>
+        <td>Per-token billing. Scales with usage.</td>
+      </tr>
+      <tr>
+        <td>Model quality</td>
+        <td>Behind frontier, closing fast.</td>
+        <td>Best available models.</td>
+      </tr>
+      <tr>
+        <td>Offline use</td>
+        <td>Yes.</td>
+        <td>No.</td>
+      </tr>
+      <tr>
+        <td>Setup effort</td>
+        <td>Moderate (one-time).</td>
+        <td>Minimal (just an API key).</td>
+      </tr>
+      <tr>
+        <td>Customization</td>
+        <td>Full. Fine-tune if needed.</td>
+        <td>Limited to provider options.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Many OpenClaw users run a hybrid setup: a self-hosted LLM for routine tasks and private data, and a cloud model (Claude or GPT-4o) for complex reasoning that needs frontier-class capability. OpenClaw supports switching models per cron job, so you can automate this routing. See the <a href="/blog/openclaw-multi-model-ai/">multi-model AI guide</a> for how that works.</p>
+
+  <h2>Common Self-Hosted LLM Issues and Fixes</h2>
+
+  <h3>Model is slow</h3>
+  <p>CPU inference is inherently slower than GPU. Try a smaller model first (7B instead of 14B). If you have a GPU, confirm Ollama is using it with <code>ollama ps</code> which shows the current model and which layers are on GPU.</p>
+
+  <h3>Out of memory errors</h3>
+  <p>The model is too large for your available RAM or VRAM. Pull a smaller version: <code>ollama pull qwen2.5:7b</code> instead of <code>qwen2.5:14b</code>. Ollama's quantized models (Q4 format) use roughly half the memory of full precision.</p>
+
+  <h3>OpenClaw is not connecting to Ollama</h3>
+  <p>Verify Ollama is running: <code>curl http://localhost:11434</code> should return a response. Check that your <code>OPENAI_BASE_URL</code> matches where Ollama is listening. If OpenClaw runs on a different server from Ollama, replace <code>localhost</code> with the Ollama server's IP.</p>
+
+  <h2>Summary</h2>
+
+  <ul>
+    <li>A self-hosted LLM runs on your own hardware with no third-party API calls or data sharing</li>
+    <li>Ollama is the easiest way to run local LLMs: one install, then <code>ollama pull</code> any model</li>
+    <li>7B models run on 8 GB RAM; 14B models need 16 GB; 70B needs 64 GB or high-VRAM GPU</li>
+    <li>Top picks for 2026: Qwen2.5-14B (general), Qwen2.5-Coder (coding), DeepSeek-R1 (reasoning)</li>
+    <li>OpenClaw connects to Ollama with a single model config line and OpenAI-compatible base URL</li>
+    <li>VPS hosting gives you 24/7 uptime for a self-hosted LLM without leaving personal hardware running</li>
+  </ul>
+
+  <div class="cta-box">
+    <div class="cta-label">// get started</div>
+    <h3>Run OpenClaw with Your Own Private LLM</h3>
+    <p>Install OpenClaw on a VPS or home server, connect it to Ollama, and get a full personal AI assistant with memory and automation. Your data never leaves your infrastructure.</p>
+    <a href="/#install" class="cta-button">Install OpenClaw Free →</a>
+  </div>
+
+</div>
+
+<footer>
+  <a class="footer-logo" href="/">Get<span>Micro</span>Services</a>
+  <p>© 2026 GetMicroservices. All rights reserved.</p>
+  <div class="footer-links">
+    <a href="/blog/">Blog</a>
+    <a href="/privacy-policy.html">Privacy</a>
+    <a href="/terms-of-service.html">Terms</a>
+    <a href="https://getmicroservices.com" target="_blank" rel="noopener">GetMicroservices.com</a>
+  </div>
+</footer>
+
+<script src="/lead-magnets/inline-lead-magnet.js" defer></script>
+</body>
+</html>
