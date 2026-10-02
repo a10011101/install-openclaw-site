@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Private LLM: Run a Private AI Language Model on Your Own Server | install-openclaw.net</title>
+  <meta name="description" content="Learn how to run a private LLM on your own server or VPS. Keep your data away from cloud APIs, cut costs, and get full control over your AI with OpenClaw and Ollama."/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RKCCVN536P"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-RKCCVN536P');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="canonical" href="https://install-openclaw.net/blog/private-llm/"/>
+  <link rel="stylesheet" href="/assets/style.css"/>
+  <meta property="og:title" content="Private LLM: Run a Private AI Language Model on Your Own Server"/>
+  <meta property="og:description" content="Learn how to run a private LLM on your own server or VPS. Keep your data away from cloud APIs, cut costs, and get full control over your AI with OpenClaw and Ollama."/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:url" content="https://install-openclaw.net/blog/private-llm/"/>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Private LLM: Run a Private AI Language Model on Your Own Server",
+    "description": "Learn how to run a private LLM on your own server or VPS. Keep your data away from cloud APIs, cut costs, and get full control over your AI with OpenClaw and Ollama.",
+    "url": "https://install-openclaw.net/blog/private-llm/",
+    "datePublished": "2026-10-02",
+    "dateModified": "2026-10-02",
+    "author": {
+      "@type": "Organization",
+      "name": "GetMicroservices"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "GetMicroservices",
+      "url": "https://getmicroservices.com"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://install-openclaw.net/blog/private-llm/"
+    }
+  }
+  </script>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="/">
+    <span class="logo-text"><span class="get">Get</span><span class="micro">Micro</span><span class="services">Services</span></span>
+    <span class="tagline">// done-for-you automation agency</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/#install" class="nav-cta">Install OpenClaw &rarr;</a></li>
+  </ul>
+</nav>
+
+<div class="article-header">
+  <a class="back-link" href="/blog/">&larr; Back to Blog</a>
+  <div class="post-tag">// private llm</div>
+  <div class="post-meta">2026-10-02 &middot; 8 min read</div>
+  <h1>Private LLM: How to Run a Private AI Language Model on Your Own Server</h1>
+  <p class="article-subtitle">Cloud AI sends your data to someone else's computer. A private LLM keeps everything local, on hardware you control, with zero monthly tokens leaking to a third party.</p>
+</div>
+
+<div class="article-body">
+
+  <p>Every time you send a message to ChatGPT, Claude, or Gemini, that text travels to a data center you have no visibility into. For most casual questions, that trade-off is fine. For anything involving business data, personal notes, client information, or financial details, it is not.</p>
+
+  <p>A <strong>private LLM</strong> solves the problem by running the language model entirely on your own machine or server. Nothing leaves your infrastructure. No API logs, no training data contributions, no third-party retention policies to audit.</p>
+
+  <p>This guide covers what a private LLM actually is, how to set one up, which models work best, and how <a href="/blog/what-is-openclaw/">OpenClaw</a> turns a local private LLM into a fully capable AI assistant you can use every day.</p>
+
+  <h2>What Is a Private LLM?</h2>
+
+  <p>A private LLM is a large language model that runs inference locally on your own hardware. Instead of making an API call to OpenAI or Anthropic, your application talks to a model process running on your server, laptop, or VPS.</p>
+
+  <p>The key properties of a genuinely private LLM setup:</p>
+
+  <ul>
+    <li><strong>No data leaves the host</strong> -- prompts, responses, and context stay on your machine</li>
+    <li><strong>No per-token billing</strong> -- you pay for hardware or a VPS, not for each query</li>
+    <li><strong>No rate limits</strong> -- inference is only limited by your compute</li>
+    <li><strong>Full model control</strong> -- you choose the weights, the version, the system prompt</li>
+  </ul>
+
+  <p>This is different from "private mode" on a cloud AI product, which typically just disables training data use. Your data still transits their network. A self hosted private LLM never does.</p>
+
+  <h2>How to Run LLM Privately: The Stack</h2>
+
+  <p>The most practical route to a private LLM setup in 2026 is <strong>Ollama</strong>. It is a free, open-source tool that manages model downloads, serves a local HTTP API on port 11434, and works on Linux, macOS, and Windows.</p>
+
+  <h3>Step 1: Install Ollama</h3>
+
+  <pre><code>curl -fsSL https://ollama.com/install.sh | sh</code></pre>
+
+  <p>That single command installs Ollama and the system service. It starts automatically on boot.</p>
+
+  <h3>Step 2: Pull a Model</h3>
+
+  <pre><code># Lightweight and capable -- good starting point
+ollama pull llama3.1
+
+# Smaller footprint for low-RAM servers
+ollama pull phi3
+
+# Strong coding ability
+ollama pull qwen2.5-coder</code></pre>
+
+  <p>Models are stored locally in <code>~/.ollama/models</code>. Once downloaded, they run entirely offline.</p>
+
+  <h3>Step 3: Test It</h3>
+
+  <pre><code>ollama run llama3.1 "Explain what a private LLM is in one paragraph"</code></pre>
+
+  <p>If you see a response, your local private LLM is working. The model ran entirely on your hardware.</p>
+
+  <h2>Hardware Requirements for a Private LLM Server</h2>
+
+  <p>You do not need a GPU-powered workstation to run a private AI LLM. Modern quantized models run acceptably on CPU-only hardware:</p>
+
+  <table class="comparison-table">
+    <thead>
+      <tr>
+        <th>Model Size</th>
+        <th>Minimum RAM</th>
+        <th>CPU Inference Speed</th>
+        <th>Example Models</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>3B parameters</td>
+        <td>4 GB</td>
+        <td>Fast</td>
+        <td>Phi-3 Mini, Gemma 2 2B</td>
+      </tr>
+      <tr>
+        <td>7B parameters</td>
+        <td>8 GB</td>
+        <td>Moderate</td>
+        <td>Llama 3.1 8B, Mistral 7B</td>
+      </tr>
+      <tr>
+        <td>13B parameters</td>
+        <td>16 GB</td>
+        <td>Slow on CPU</td>
+        <td>Llama 3.1 13B, CodeLlama 13B</td>
+      </tr>
+      <tr>
+        <td>70B parameters</td>
+        <td>48 GB+</td>
+        <td>GPU recommended</td>
+        <td>Llama 3.1 70B, Qwen2.5 72B</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>A 4-8 GB VPS is enough for a 7B model. <a href="/blog/hostinger-vps-for-openclaw/">Hostinger VPS plans</a> in that range cost roughly $7-12 per month, making a private LLM server accessible without significant hardware investment.</p>
+
+  <h2>Which Models Work Best for a Private LLM Setup</h2>
+
+  <p>Not all open-weight models are equal. These are the strongest choices for a local private LLM in 2026:</p>
+
+  <h3>Llama 3.1 8B</h3>
+  <p>Meta's flagship open model. Excellent general capability, strong instruction following, and a 128K context window. The 8B version runs comfortably on an 8 GB server and outperforms older 13B models. This is the recommended starting point for most private AI LLM deployments.</p>
+
+  <h3>Phi-3 Mini (3.8B)</h3>
+  <p>Microsoft's surprisingly capable small model. Fits on 4 GB RAM, responds fast, and handles everyday tasks well. Good choice if your server is tight on resources or you want low-latency responses for a chatbot.</p>
+
+  <h3>Qwen 2.5 Coder</h3>
+  <p>Alibaba's coding-focused model. If your private LLM server is mainly for writing and reviewing code, Qwen 2.5 Coder consistently outperforms Llama on programming tasks.</p>
+
+  <h3>Mistral 7B</h3>
+  <p>One of the earliest high-quality open models, still competitive. Particularly efficient at following structured outputs and JSON instructions, which makes it useful for automation workflows.</p>
+
+  <h2>Connecting OpenClaw to Your Local Private LLM</h2>
+
+  <p><a href="/blog/what-is-openclaw/">OpenClaw</a> is an open-source AI assistant platform designed to run on a self hosted private LLM or connect to cloud models. Pointing it at your local Ollama instance takes one config line:</p>
+
+  <pre><code># In your OpenClaw gateway config
+model: ollama/llama3.1</code></pre>
+
+  <p>With that change, every message you send through OpenClaw goes to your local model. No tokens reach Anthropic, OpenAI, or any other cloud provider.</p>
+
+  <p>OpenClaw adds the layer that raw Ollama lacks: persistent memory, scheduled tasks, Telegram and Discord integration, custom skills, and <a href="/blog/openclaw-agentic-workflows/">agentic workflows</a>. The combination gives you a complete AI assistant that is both private and genuinely useful.</p>
+
+  <p>For the full installation walkthrough, see the guide on <a href="/blog/install-openclaw-vps/">installing OpenClaw on a VPS</a>.</p>
+
+  <h2>Private LLM vs Cloud API: When to Use Each</h2>
+
+  <p>A private LLM is not always the right answer. Here is a straightforward comparison:</p>
+
+  <p><strong>Choose a private LLM when:</strong></p>
+  <ul>
+    <li>Your prompts contain client data, financial records, or personal health information</li>
+    <li>You send high query volumes where API costs would be significant</li>
+    <li>You operate in a regulated industry with data residency requirements</li>
+    <li>You want zero dependency on external service availability</li>
+  </ul>
+
+  <p><strong>Stick with cloud APIs when:</strong></p>
+  <ul>
+    <li>You need the absolute best reasoning quality (frontier models still lead open weights)</li>
+    <li>Your server has limited RAM and latency matters</li>
+    <li>You are processing tasks that only run occasionally</li>
+    <li>You rely on multimodal features like image analysis</li>
+  </ul>
+
+  <p>OpenClaw handles both: set it to a local Ollama model for private work and switch to a cloud model for tasks where you want maximum capability. The <a href="/blog/openclaw-multi-model-ai/">multi-model guide</a> explains how to route different jobs to different models.</p>
+
+  <h2>Security Considerations for a Private LLM Server</h2>
+
+  <p>Running Ollama on a VPS exposes port 11434 by default. That port should not be public. Bind Ollama to localhost only:</p>
+
+  <pre><code># In /etc/systemd/system/ollama.service
+Environment="OLLAMA_HOST=127.0.0.1"</code></pre>
+
+  <p>Then reload and restart:</p>
+
+  <pre><code>sudo systemctl daemon-reload
+sudo systemctl restart ollama</code></pre>
+
+  <p>OpenClaw running on the same server communicates over localhost, so it still reaches the model. Nothing outside the server can.</p>
+
+  <p>For additional hardening, configure a firewall to block the port externally and use SSH tunnels if you need remote access to the Ollama API for development.</p>
+
+  <h2>Getting Started: Your Private LLM Checklist</h2>
+
+  <ol>
+    <li>Provision a VPS with at least 8 GB RAM (16 GB recommended for comfortable headroom)</li>
+    <li>Install Ollama with the one-line script</li>
+    <li>Pull Llama 3.1 8B or Phi-3 Mini as your first model</li>
+    <li>Bind Ollama to localhost for security</li>
+    <li><a href="/blog/install-openclaw-vps/">Install OpenClaw</a> on the same server</li>
+    <li>Set <code>model: ollama/llama3.1</code> in your OpenClaw config</li>
+    <li>Connect OpenClaw to Telegram or Discord for daily use</li>
+  </ol>
+
+  <p>Total setup time is around 30 minutes. Monthly cost is the VPS fee only, no API charges.</p>
+
+  <h2>Summary</h2>
+
+  <ul>
+    <li>A private LLM runs inference on your own hardware -- no data leaves your server</li>
+    <li>Ollama is the simplest way to run LLM privately on Linux or a VPS</li>
+    <li>7B models like Llama 3.1 8B work well on an 8 GB server; smaller models fit 4 GB</li>
+    <li>OpenClaw connects to Ollama with a single config line and adds memory, automations, and multi-channel access</li>
+    <li>Bind Ollama to localhost and keep port 11434 off the public internet</li>
+  </ul>
+
+  <div class="cta-box">
+    <div class="cta-label">// get started</div>
+    <h3>Ready to Run Your Own Private LLM?</h3>
+    <p>Install OpenClaw on your <a href="/blog/install-openclaw-vps/">VPS</a> and connect it to a local private LLM in under 30 minutes. Full control, zero cloud dependency.</p>
+    <a href="/#install" class="cta-button">Install OpenClaw Free &rarr;</a>
+  </div>
+
+</div>
+
+<footer>
+  <a class="footer-logo" href="/">Get<span>Micro</span>Services</a>
+  <p>&copy; 2026 GetMicroservices. All rights reserved.</p>
+  <div class="footer-links">
+    <a href="/blog/">Blog</a>
+    <a href="/privacy-policy.html">Privacy</a>
+    <a href="/terms-of-service.html">Terms</a>
+    <a href="https://getmicroservices.com" target="_blank" rel="noopener">GetMicroservices.com</a>
+  </div>
+</footer>
+
+<script src="/lead-magnets/inline-lead-magnet.js" defer></script>
+</body>
+</html>
