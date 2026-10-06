@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ollama LLM: Run AI Models Locally in Minutes (2026 Guide) | install-openclaw.net</title>
+  <meta name="description" content="Ollama LLM lets you run powerful AI models on your own hardware with a single command. Learn how to install Ollama, pick the best models, and connect it to OpenClaw for a fully private AI setup."/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RKCCVN536P"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-RKCCVN536P');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="canonical" href="https://install-openclaw.net/blog/ollama-llm/"/>
+  <link rel="stylesheet" href="/assets/style.css"/>
+  <meta property="og:title" content="Ollama LLM: Run AI Models Locally in Minutes (2026 Guide)"/>
+  <meta property="og:description" content="Ollama LLM lets you run powerful AI models on your own hardware with a single command. Learn how to install Ollama, pick the best models, and connect it to OpenClaw for a fully private AI setup."/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:url" content="https://install-openclaw.net/blog/ollama-llm/"/>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Ollama LLM: Run AI Models Locally in Minutes (2026 Guide)",
+    "description": "Ollama LLM lets you run powerful AI models on your own hardware with a single command. Learn how to install Ollama, pick the best models, and connect it to OpenClaw for a fully private AI setup.",
+    "url": "https://install-openclaw.net/blog/ollama-llm/",
+    "datePublished": "2026-10-06",
+    "dateModified": "2026-10-06",
+    "author": {
+      "@type": "Organization",
+      "name": "GetMicroservices"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "GetMicroservices",
+      "url": "https://getmicroservices.com"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://install-openclaw.net/blog/ollama-llm/"
+    }
+  }
+  </script>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="/">
+    <span class="logo-text"><span class="get">Get</span><span class="micro">Micro</span><span class="services">Services</span></span>
+    <span class="tagline">// done-for-you automation agency</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/#install" class="nav-cta">Install OpenClaw</a></li>
+  </ul>
+</nav>
+
+<div class="article-header">
+  <a class="back-link" href="/blog/">Back to Blog</a>
+  <div class="post-tag">// local ai</div>
+  <div class="post-meta">2026-10-06 · 8 min read</div>
+  <h1>Ollama LLM: Run AI Models Locally in Minutes (2026 Guide)</h1>
+  <p class="article-subtitle">Ollama makes running large language models on your own hardware as simple as a single terminal command. Here is everything you need to know, including how to pair it with OpenClaw for a fully private AI assistant.</p>
+</div>
+
+<div class="article-body">
+
+  <p>Running an LLM locally used to mean compiling code from GitHub, wrestling with CUDA drivers, and hoping your GPU had enough VRAM. That era is over. <strong>Ollama LLM</strong> changed the experience entirely.</p>
+
+  <p>With Ollama, you pull a model the same way you pull a Docker image: one command, and it runs. No configuration files. No Python environment headaches. No API keys. And crucially, no data leaving your machine.</p>
+
+  <p>This guide covers what Ollama is, how to install it, which models to run, and how to connect it to <a href="/blog/what-is-openclaw/">OpenClaw</a> for a fully self-hosted personal AI assistant.</p>
+
+  <nav class="toc">
+    <div class="toc-label">// contents</div>
+    <ol>
+      <li><a href="#what-is-ollama">What Is Ollama?</a></li>
+      <li><a href="#install-ollama">How to Install Ollama</a></li>
+      <li><a href="#best-ollama-models">Best Ollama Models in 2026</a></li>
+      <li><a href="#run-llm-locally">Running an LLM Locally: Step by Step</a></li>
+      <li><a href="#ollama-api">Using the Ollama API</a></li>
+      <li><a href="#ollama-openclaw">Connecting Ollama to OpenClaw</a></li>
+      <li><a href="#ollama-vs-lmstudio">Ollama vs LM Studio</a></li>
+      <li><a href="#hardware">Hardware Requirements</a></li>
+    </ol>
+  </nav>
+
+  <h2 id="what-is-ollama">What Is Ollama?</h2>
+
+  <p>Ollama is an open-source tool that lets you download and run large language models on your local machine or server. It handles model storage, quantisation, and serving, wrapping everything in a clean CLI and a local REST API.</p>
+
+  <p>You interact with it in two ways: directly via the terminal for quick queries, or through the API at <code>localhost:11434</code> for programmatic use. Any application that can call an OpenAI-compatible API can talk to Ollama with a one-line config change.</p>
+
+  <p>Ollama supports macOS, Linux, and Windows. It works with NVIDIA and AMD GPUs, and falls back gracefully to CPU if no GPU is present (though speed will be slower).</p>
+
+  <h2 id="install-ollama">How to Install Ollama</h2>
+
+  <p>Installation is a single command on Linux and macOS:</p>
+
+  <pre><code>curl -fsSL https://ollama.com/install.sh | sh</code></pre>
+
+  <p>That installs the Ollama binary and starts the service automatically. On macOS, there is also a desktop app available from <code>ollama.com</code> if you prefer a GUI launcher.</p>
+
+  <p>On Windows, download the installer from the Ollama website. It sets up both the service and a system tray icon.</p>
+
+  <p>After installation, verify it is running:</p>
+
+  <pre><code>ollama list</code></pre>
+
+  <p>You should see an empty table, since no models have been downloaded yet. Now you are ready to pull one.</p>
+
+  <h2 id="best-ollama-models">Best Ollama Models in 2026</h2>
+
+  <p>The Ollama model library has grown significantly. Here are the models worth knowing, grouped by use case.</p>
+
+  <h3>Best General-Purpose Model: Llama 3.1 8B</h3>
+
+  <pre><code>ollama pull llama3.1</code></pre>
+
+  <p>Meta's Llama 3.1 at the 8B parameter size is the sweet spot for most users. It runs on a machine with 8 GB RAM, gives sharp results for chat, summarisation, and simple coding tasks, and responds quickly even on CPU. The 70B variant is dramatically stronger but requires a serious GPU or a lot of patience.</p>
+
+  <h3>Best Coding Model: Qwen2.5-Coder</h3>
+
+  <pre><code>ollama pull qwen2.5-coder:7b</code></pre>
+
+  <p>Alibaba's Qwen2.5-Coder line is the current local benchmark winner for code generation. The 7B model beats many larger models on coding benchmarks and fits comfortably in 8 GB VRAM. If you are using OpenClaw for code review, automation scripting, or building tools, this is the model to run locally.</p>
+
+  <h3>Best Small Model: Phi-4 Mini</h3>
+
+  <pre><code>ollama pull phi4-mini</code></pre>
+
+  <p>Microsoft's Phi-4 Mini is a 3.8B model that punches well above its weight. It runs on almost any modern laptop, responds fast even on CPU, and handles instruction-following tasks surprisingly well. Good for low-powered VPS instances where you want local inference without renting a GPU node.</p>
+
+  <h3>Best for Long Context: Gemma 3</h3>
+
+  <pre><code>ollama pull gemma3:12b</code></pre>
+
+  <p>Google's Gemma 3 at 12B supports a 128K context window in Ollama. If you need to feed it long documents, entire codebases, or extended conversation histories without truncation, this is the local option to reach for.</p>
+
+  <h3>Best Multilingual Model: Qwen2.5</h3>
+
+  <pre><code>ollama pull qwen2.5:7b</code></pre>
+
+  <p>The general Qwen2.5 line supports over 29 languages with strong quality. If you work in a non-English language or need your AI assistant to handle multilingual conversations, Qwen2.5 is the local pick.</p>
+
+  <h2 id="run-llm-locally">Running an LLM Locally: Step by Step</h2>
+
+  <p>Once Ollama is installed, running a model locally takes two commands:</p>
+
+  <pre><code># 1. Download the model (one-time)
+ollama pull llama3.1
+
+# 2. Start a chat session
+ollama run llama3.1</code></pre>
+
+  <p>The first command downloads the model file, which ranges from about 4 GB for a 7B model to 40 GB or more for larger variants. After that, <code>ollama run</code> launches an interactive chat right in your terminal.</p>
+
+  <p>To run a quick one-off query without an interactive session:</p>
+
+  <pre><code>ollama run llama3.1 "What is a vector database and when should I use one?"</code></pre>
+
+  <p>Models are stored locally, so subsequent runs start instantly after the first download. No internet connection required after the initial pull.</p>
+
+  <h2 id="ollama-api">Using the Ollama API</h2>
+
+  <p>For programmatic use, Ollama exposes a REST API at <code>http://localhost:11434</code>. It follows the OpenAI chat completions format, which means most OpenAI-compatible tools work with Ollama by just changing the base URL.</p>
+
+  <p>A basic API call looks like this:</p>
+
+  <pre><code>curl http://localhost:11434/v1/chat/completions   -H "Content-Type: application/json"   -d '{
+    "model": "llama3.1",
+    "messages": [
+      {"role": "user", "content": "Summarise the concept of RAG in two sentences."}
+    ]
+  }'</code></pre>
+
+  <p>The response comes back in the same format as OpenAI's API. Any client library with an OpenAI-compatible mode, including LangChain, LlamaIndex, and most agent frameworks, can point at <code>localhost:11434</code> with no other changes.</p>
+
+  <p>To make Ollama accessible from other machines on your network or from a remote server, start it with the host flag:</p>
+
+  <pre><code>OLLAMA_HOST=0.0.0.0 ollama serve</code></pre>
+
+  <p>Then reference it by IP from other devices. This is how you expose a local GPU machine's Ollama instance to other applications running on the same network or VPS.</p>
+
+  <h2 id="ollama-openclaw">Connecting Ollama to OpenClaw</h2>
+
+  <p>OpenClaw's model-agnostic architecture means you can swap in any Ollama model with a single config change. This is covered in depth in the <a href="/blog/run-local-ai/">local AI with OpenClaw guide</a>, but here is the short version.</p>
+
+  <p>In your OpenClaw gateway config, set the model to the Ollama format:</p>
+
+  <pre><code>model: ollama/llama3.1</code></pre>
+
+  <p>If Ollama is running on the same machine as OpenClaw, nothing else changes. The gateway calls <code>localhost:11434</code> automatically. If Ollama is on a different machine, set the base URL:</p>
+
+  <pre><code>model: ollama/llama3.1
+ollama_base_url: http://192.168.1.50:11434</code></pre>
+
+  <p>Once connected, OpenClaw runs entirely on your infrastructure. Your SOUL.md, MEMORY.md, skills, and cron jobs all work identically. The only difference is that inference happens on your hardware rather than a cloud provider's servers.</p>
+
+  <p>This setup is particularly powerful for privacy-sensitive use cases: handling personal documents, automating access to private systems, or running an AI assistant without any third-party data processing. The <a href="/blog/openclaw-data-sovereignty/">data sovereignty guide</a> goes deeper on what this means in practice.</p>
+
+  <p>For users who want the best of both worlds, you can route routine low-stakes cron jobs through a cheap cloud model and reserve Ollama for tasks involving private data. OpenClaw's per-job model configuration makes this straightforward. See the <a href="/blog/openclaw-multi-model-ai/">multi-model setup guide</a> for how to configure it.</p>
+
+  <h2 id="ollama-vs-lmstudio">Ollama vs LM Studio</h2>
+
+  <p>Both Ollama and LM Studio are popular options for running LLMs locally. The difference comes down to interface and use case.</p>
+
+  <p>LM Studio is primarily a desktop GUI application. It is excellent for exploring models visually and has a built-in chat interface that feels polished. If you want a graphical model browser and are running on a personal laptop, LM Studio is worth trying.</p>
+
+  <p>Ollama is better for server use and programmatic access. Its CLI and API-first design makes it the right choice when you want to integrate local inference into another application, run it headlessly on a VPS, or call it from automation tools like OpenClaw or n8n. It is also simpler to keep running as a background service.</p>
+
+  <p>For OpenClaw users, Ollama is almost always the right choice. It is designed to be called programmatically, it runs as a service, and it handles all the model lifecycle management so OpenClaw does not have to.</p>
+
+  <h2 id="hardware">Hardware Requirements</h2>
+
+  <p>The minimum hardware depends on the model size you want to run:</p>
+
+  <ul>
+    <li><strong>3B models (Phi-4 Mini, Llama 3.2 3B):</strong> 4 GB RAM, any modern CPU. Will run on a basic VPS.</li>
+    <li><strong>7B models (Llama 3.1 8B, Qwen2.5 7B):</strong> 8 GB RAM. CPU inference is slow but works. A 6 GB VRAM GPU makes it fast.</li>
+    <li><strong>13B models (Gemma 3 12B):</strong> 16 GB RAM or 12 GB VRAM GPU for reasonable speed.</li>
+    <li><strong>70B models (Llama 3.3 70B):</strong> 32 GB RAM minimum, or a dedicated GPU server. For most users, this size is better accessed via API.</li>
+  </ul>
+
+  <p>GPU inference is roughly 5 to 10 times faster than CPU for most models. An RTX 3080 with 10 GB VRAM can run 7B models at 40 to 60 tokens per second, which feels close to real-time in conversation. CPU inference on a modern laptop gets around 5 to 10 tokens per second for the same models, which is usable for non-interactive tasks.</p>
+
+  <p>If you do not have a GPU but want fast local inference, cloud GPU rentals from RunPod or Vast.ai cost around $0.20 to $0.40 per hour for a machine that runs 7B models quickly. For occasional use, this can be cheaper than API costs at volume.</p>
+
+  <p>For running OpenClaw with a local Ollama instance on a VPS without a GPU, the 3B model class is the practical limit for real-time conversation. For batch processing or non-interactive automations where latency does not matter, 7B models on CPU work fine.</p>
+
+  <h2>The Bottom Line</h2>
+
+  <p>Ollama has removed most of the friction from running LLMs locally. The installation is trivial, the model library is broad, and the API is immediately compatible with the wider AI tooling ecosystem.</p>
+
+  <p>For OpenClaw users, Ollama is the recommended path to a fully private setup. You get persistent memory, custom skills, Telegram and Discord integration, and scheduled automation, all running on models that never touch a third-party server.</p>
+
+  <p>The combination of OpenClaw plus Ollama is the self-hosted AI stack that was theoretical two years ago. Today it is an afternoon's setup on a spare machine or cheap VPS.</p>
+
+  <div class="cta-box">
+    <div class="cta-label">// get started</div>
+    <h3>Ready to Run Your Own Private AI Assistant?</h3>
+    <p>Install OpenClaw on your <a href="/blog/install-openclaw-vps/">VPS</a>, connect it to Ollama, and have a fully private AI assistant running on your own hardware today.</p>
+    <a href="/#install" class="cta-button">Install OpenClaw Free</a>
+  </div>
+
+</div>
+
+<footer>
+  <a class="footer-logo" href="/">Get<span>Micro</span>Services</a>
+  <p>2026 GetMicroservices. All rights reserved.</p>
+  <div class="footer-links">
+    <a href="/blog/">Blog</a>
+    <a href="/privacy-policy.html">Privacy</a>
+    <a href="/terms-of-service.html">Terms</a>
+    <a href="https://getmicroservices.com" target="_blank" rel="noopener">GetMicroservices.com</a>
+  </div>
+</footer>
+
+<script src="/lead-magnets/inline-lead-magnet.js" defer></script>
+</body>
+</html>
