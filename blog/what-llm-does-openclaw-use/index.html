@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>What LLM Does OpenClaw Use? Default Model and How to Change It | install-openclaw.net</title>
+  <meta name="description" content="What LLM does OpenClaw use? There is no single built-in model. See the OpenClaw default model for a fresh OpenAI setup, how to check yours, and how to switch it."/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RKCCVN536P"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-RKCCVN536P');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="canonical" href="https://install-openclaw.net/blog/what-llm-does-openclaw-use/"/>
+  <link rel="stylesheet" href="/assets/style.css"/>
+  <meta property="og:title" content="What LLM Does OpenClaw Use? Default Model and How to Change It"/>
+  <meta property="og:description" content="What LLM does OpenClaw use? There is no single built-in model. See the OpenClaw default model for a fresh OpenAI setup, how to check yours, and how to switch it."/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:url" content="https://install-openclaw.net/blog/what-llm-does-openclaw-use/"/>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "What LLM Does OpenClaw Use? Default Model and How to Change It",
+    "description": "What LLM does OpenClaw use? There is no single built-in model. See the OpenClaw default model for a fresh OpenAI setup, how to check yours, and how to switch it.",
+    "url": "https://install-openclaw.net/blog/what-llm-does-openclaw-use/",
+    "datePublished": "2026-10-16",
+    "dateModified": "2026-10-16",
+    "author": {
+      "@type": "Organization",
+      "name": "GetMicroservices"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "GetMicroservices",
+      "url": "https://getmicroservices.com"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://install-openclaw.net/blog/what-llm-does-openclaw-use/"
+    }
+  }
+  </script>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="/">
+    <span class="logo-text"><span class="get">Get</span><span class="micro">Micro</span><span class="services">Services</span></span>
+    <span class="tagline">// done-for-you automation agency</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/#install" class="nav-cta">Install OpenClaw →</a></li>
+  </ul>
+</nav>
+
+<div class="article-header">
+  <a class="back-link" href="/blog/">← Back to Blog</a>
+  <div class="post-tag">// models</div>
+  <div class="post-meta">2026-10-16 · 7 min read</div>
+  <h1>What LLM Does OpenClaw Use?</h1>
+  <p class="lead">OpenClaw does not ship with one locked language model. The LLM that answers your chats is a setting, written as provider/model, and you can change it without reinstalling.</p>
+</div>
+
+<div class="article-body">
+
+  <p>Most assistants hide this choice. ChatGPT is OpenAI. The Claude app is Anthropic. Gemini is Google. <a href="/blog/what-is-openclaw/">OpenClaw</a> is a self-hosted assistant, so the model is yours to pick during setup and yours to swap later. If a friend says "OpenClaw uses GPT" or "OpenClaw uses Claude," they are describing their config, not a product default that applies to every install.</p>
+
+  <p>Below is where the model is stored, what a fresh OpenAI sign-in selects, and the commands that change it.</p>
+
+  <h2>What Model Does OpenClaw Use by Default?</h2>
+
+  <p>There is no universal OpenClaw LLM. Until you connect a provider, there is nothing to call. The primary model lives at <code>agents.defaults.model.primary</code> in <code>~/.openclaw/openclaw.json</code>. You can also set <code>agents.defaults.model</code> as a plain string. Either way the value looks like <code>openai/gpt-6-astra</code> or <code>anthropic/claude-opus-5-5</code>: provider, a slash, then the model id.</p>
+
+  <p><code>openclaw onboard</code> writes that field after you pick a provider. Hosted options include OpenAI, Anthropic, Google, xAI, and OpenRouter. Local runtimes include Ollama, LM Studio, llama.cpp, and vLLM. Adding a key does not change the primary by itself. Credentials and the selected model are separate steps.</p>
+
+  <p>One path does have a catalog default. On OpenClaw 2026.9, a fresh OpenAI API-key setup, or a fresh ChatGPT/Codex OAuth setup, selects <code>openai/gpt-6-astra</code> when no primary is set yet. The same ref is the fresh default for the native Codex harness. If the account cannot use that generation, set <code>openai/gpt-5.5</code> yourself. OpenClaw does not silently downgrade, and signing in again keeps an explicit primary you already chose.</p>
+
+  <p>That OpenAI default does not apply to other providers. An Anthropic, Google, xAI, or Ollama install stays on whatever you set. A current Anthropic example is <code>anthropic/claude-opus-5-5</code>. If a key does not expose the model you expected, run <code>openclaw models list --provider openai</code> (or the provider you actually use).</p>
+
+  <h2>How to See Your Current OpenClaw LLM</h2>
+
+  <p>On the machine that runs the Gateway:</p>
+
+  <pre><code>openclaw models status
+openclaw models list</code></pre>
+
+  <p><code>openclaw models status</code> prints the resolved default, the fallback list, and whether those routes look usable. It does not show a per-chat override. <code>openclaw models list</code> is the catalog. Add <code>--provider openai</code> or <code>--provider ollama</code> to narrow it. In chat, <code>/model status</code> shows this session. A pin is why a config edit can look like it did nothing: the old session model stays until you clear it.</p>
+
+  <h2>How to Change the OpenClaw Default Model</h2>
+
+  <p>For a permanent change, set one field:</p>
+
+  <pre><code>openclaw models set openai/gpt-6-astra
+openclaw models set anthropic/claude-opus-5-5</code></pre>
+
+  <p><code>openclaw models set</code> updates the model config and leaves the rest of the file alone. You can also run <code>openclaw configure --section model</code>, or edit <code>agents.defaults.model</code> directly. Prefer a small edit. Replacing the whole config is how people wipe channels, skills, and auth by accident.</p>
+
+  <p>Chat commands are scoped, which matters if you only want to test:</p>
+
+  <ul>
+    <li><code>/model openai/gpt-5.5 -s</code> changes this session only.</li>
+    <li><code>/model openai/gpt-5.5 -a</code> (owner or admin) updates this session and the agent default.</li>
+    <li><code>/model openai/gpt-5.5 -g</code> updates this session and the global default.</li>
+    <li>A bare <code>/model</code> name, with no flag, stays in the current session unless you changed model selection scope.</li>
+  </ul>
+
+  <p>Changing <code>agents.defaults.model.primary</code> does not unpin sessions that already picked a model. Those pins stay until you clear them with <code>/model default</code>. New chats, and sessions that were never pinned, pick up the new primary on the next run. You do not restart the Gateway for a normal model switch.</p>
+
+  <p>If the reply is "Model ... is not allowed," <code>agents.defaults.modelPolicy.allow</code> is a non-empty allowlist. Add the exact ref, add a provider wildcard such as <code>openai/*</code>, or empty the list. The model picker and <code>/model</code> both obey that list.</p>
+
+  <p>The <a href="/blog/openclaw-multi-model-ai/">multi-model guide</a> covers aliases, per-agent models, and running more than one provider side by side. This page stays on the question of which model is actually selected.</p>
+
+  <h2>Which LLM Does OpenClaw Use for Side Jobs?</h2>
+
+  <p>The primary model is the one you talk to. Other slots exist so a short internal call, or a dead route, does not have to use that same model.</p>
+
+  <p>Fallbacks live in <code>agents.defaults.model.fallbacks</code> and are tried in order when the primary route fails. A model you picked with <code>/model</code> is strict: if that exact ref is down, the run fails instead of hopping to another model. Configured defaults and cron jobs still use the fallback list unless the job sets its own.</p>
+
+  <p><code>agents.defaults.utilityModel</code> is optional. It covers short internal work such as session titles. Leave it unset and OpenClaw uses the provider's small-model default when one exists: <code>gpt-5.6-luna</code> on OpenAI, <code>claude-haiku-4-5</code> on Anthropic. Otherwise it uses the primary. <code>agents.defaults.imageModel</code> matters only when the primary cannot accept images. Skip it for normal text chat.</p>
+
+  <h2>Use a Local Model Instead of a Hosted LLM</h2>
+
+  <p>You do not have to point OpenClaw at a hosted API. Ollama is the shortest local path. Install it, pull a model, then set the tag OpenClaw actually lists:</p>
+
+  <pre><code>ollama pull gemma4
+openclaw models list --provider ollama
+openclaw models set ollama/gemma4</code></pre>
+
+  <p>Use the exact tag from the list. A display name is not enough once an allowlist is on. The same pattern works for LM Studio, llama.cpp, and vLLM once that provider is configured. Prompts stay on hardware you control, which is the point of a <a href="/blog/local-ai-assistant-ollama/">local assistant</a>. Smaller quantized models are weaker at tool use, so if the agent can run commands, prefer a larger local model or keep tools on a stronger hosted primary.</p>
+
+  <h2>What to Pick in Practice</h2>
+
+  <p>Use the strongest model you can afford for the main agent, especially if it has tools and reads untrusted input. Put a cheaper model on fallbacks, or on a second agent that only handles routine chat. On a brand-new OpenAI setup with nothing set, current OpenClaw selects <code>openai/gpt-6-astra</code>. For private inference, point the primary at an <code>ollama/</code> tag and accept the hardware limit. Leave the utility model unset unless side calls are getting expensive.</p>
+
+  <p>A hosted primary bills per token. A local primary bills as electricity and a VPS. The <a href="/blog/openclaw-cost-per-month/">monthly cost breakdown</a> compares those paths before you lock a model in.</p>
+
+  <p>If OpenClaw is not installed yet, start with the <a href="/blog/install-openclaw-vps/">VPS install guide</a>, connect one provider, then run <code>openclaw models status</code> before you change anything else. You will know exactly which LLM is answering.</p>
+
+  <h2>Summary</h2>
+
+  <ul>
+    <li>OpenClaw has no single built-in LLM. The model is your primary setting, stored as <code>provider/model</code>.</li>
+    <li>Check it with <code>openclaw models status</code>. List options with <code>openclaw models list</code>.</li>
+    <li>A fresh OpenAI sign-in with no primary selects <code>openai/gpt-6-astra</code> on OpenClaw 2026.9. Other providers do not inherit that default.</li>
+    <li>Change it with <code>openclaw models set provider/model</code>. Use <code>/model ... -s</code> to test in one chat.</li>
+    <li>Existing session pins stay until you run <code>/model default</code>.</li>
+    <li>Fallbacks, a utility model, and Ollama are optional. They replace the primary only if you point the primary at them.</li>
+  </ul>
+
+  <div class="cta-box">
+    <div class="cta-label">// get started</div>
+    <h3>See Which Model Your OpenClaw Install Is Using</h3>
+    <p>Install OpenClaw, connect one provider, and run <code>openclaw models status</code>. Switch later with a single <code>openclaw models set</code> command.</p>
+    <a href="/#install" class="cta-button">Install OpenClaw Free →</a>
+  </div>
+
+</div>
+
+<footer>
+  <a class="footer-logo" href="/">Get<span>Micro</span>Services</a>
+  <p>© 2026 GetMicroservices. All rights reserved.</p>
+  <div class="footer-links">
+    <a href="/blog/">Blog</a>
+    <a href="/privacy-policy.html">Privacy</a>
+    <a href="/terms-of-service.html">Terms</a>
+    <a href="https://getmicroservices.com" target="_blank" rel="noopener">GetMicroservices.com</a>
+  </div>
+</footer>
+
+<script src="/lead-magnets/inline-lead-magnet.js" defer></script>
+</body>
+</html>
