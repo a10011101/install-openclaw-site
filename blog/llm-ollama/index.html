@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ollama Local LLM: How an LLM Ollama Setup Works with OpenClaw | install-openclaw.net</title>
+  <meta name="description" content="An Ollama local LLM stays on your hardware. See what an LLM Ollama setup is, which Ollama LLM models to pull, and how OpenClaw calls the tag."/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RKCCVN536P"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-RKCCVN536P');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="canonical" href="https://install-openclaw.net/blog/llm-ollama/"/>
+  <link rel="stylesheet" href="/assets/style.css"/>
+  <meta property="og:title" content="Ollama Local LLM: How an LLM Ollama Setup Works with OpenClaw"/>
+  <meta property="og:description" content="An Ollama local LLM stays on your hardware. See what an LLM Ollama setup is, which Ollama LLM models to pull, and how OpenClaw calls the tag."/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:url" content="https://install-openclaw.net/blog/llm-ollama/"/>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Ollama Local LLM: How an LLM Ollama Setup Works with OpenClaw",
+    "description": "An Ollama local LLM stays on your hardware. See what an LLM Ollama setup is, which Ollama LLM models to pull, and how OpenClaw calls the tag.",
+    "url": "https://install-openclaw.net/blog/llm-ollama/",
+    "datePublished": "2026-10-20",
+    "dateModified": "2026-10-20",
+    "author": {
+      "@type": "Organization",
+      "name": "GetMicroservices"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "GetMicroservices",
+      "url": "https://getmicroservices.com"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://install-openclaw.net/blog/llm-ollama/"
+    }
+  }
+  </script>
+  <style>
+    nav.toc{position:static;top:auto;left:auto;right:auto;height:auto;display:block;background:#fff;border:1px solid #e0ddd4;border-left:3px solid #b5006a;padding:16px 20px;margin:8px 0 28px;z-index:1;}
+    nav.toc ol{margin:8px 0 0 18px;}
+    nav.toc li{margin:4px 0;color:#6b6560;}
+    nav.toc a{color:#b5006a;text-decoration:none;}
+    .toc-label{font-family:'Fira Code',monospace;font-size:0.75rem;color:#b5006a;}
+    .cta-box{background:#fff;border:1px solid #e0ddd4;border-left:3px solid #b5006a;padding:24px;margin:36px 0 8px;}
+    .cta-label{font-family:'Fira Code',monospace;font-size:0.78rem;color:#b5006a;margin-bottom:8px;}
+    .cta-box h3{font-size:1.15rem;margin-bottom:8px;}
+    .cta-button{display:inline-block;margin-top:12px;background:#b5006a;color:#fff;text-decoration:none;font-weight:700;padding:10px 16px;}
+  </style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="/">
+    <span class="logo-text"><span class="get">Get</span><span class="micro">Micro</span><span class="services">Services</span></span>
+    <span class="tagline">// done-for-you automation agency</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/#install" class="nav-cta">Install OpenClaw</a></li>
+  </ul>
+</nav>
+
+<div class="article-header">
+  <a class="back-link" href="/blog/">Back to Blog</a>
+  <div class="post-tag">// local ai</div>
+  <div class="post-meta">2026-10-20 · 8 min read</div>
+  <h1>Ollama Local LLM: How an LLM Ollama Setup Works with OpenClaw</h1>
+  <p class="lead">An Ollama local LLM is a model that runs on your hardware, served by Ollama, and called by OpenClaw as a single tag. Here is how to pick that tag and when a hosted model is still the better primary.</p>
+</div>
+
+<div class="article-body">
+
+  <p>An <strong>Ollama local LLM</strong> is a language model that stays on a machine you control. Ollama downloads the weights, loads them, and answers on a local API, usually port 11434. People also search the same idea as <strong>LLM Ollama</strong>. The word order flips. The setup does not. You pick a model tag, Ollama serves it, and nothing in the prompt has to leave the box.</p>
+
+  <p><a href="/blog/what-is-openclaw/">OpenClaw</a> sits one layer above that runtime. It is the assistant: memory, skills, chat channels, and scheduled jobs. It does not bake a model into the install. The model is a setting, written as <code>provider/model</code>. When the provider is <code>ollama</code>, the second half is a tag that already shows up in <code>ollama list</code>.</p>
+
+  <p>This page is about that pairing. If Ollama is not installed yet, use the <a href="/blog/ollama-llm/">Ollama LLM install guide</a> first, then come back here to choose a tag and point OpenClaw at it.</p>
+
+  <nav class="toc">
+    <div class="toc-label">// contents</div>
+    <ol>
+      <li><a href="#what-is-an-ollama-llm">What Is an Ollama LLM?</a></li>
+      <li><a href="#ollama-llm-models">Ollama LLM Models That Fit a Normal Machine</a></li>
+      <li><a href="#llm-ollama-openclaw">How OpenClaw Calls an LLM Ollama Setup</a></li>
+      <li><a href="#open-source-vs-hosted">An Ollama Open Source LLM vs a Hosted Model</a></li>
+      <li><a href="#when-to-skip">When to Skip an Ollama Local LLM</a></li>
+    </ol>
+  </nav>
+
+  <h2 id="what-is-an-ollama-llm">What Is an Ollama LLM?</h2>
+
+  <p>An Ollama LLM is not a model family named Ollama. Ollama is the runtime. The LLM is the weight file: Llama, Qwen, Gemma, Mistral, Phi, DeepSeek, and the rest of the public library. Ollama downloads that file, applies the quantisation the tag asks for, and serves chat requests.</p>
+
+  <p>You can talk to the process two ways. <code>ollama run &lt;tag&gt;</code> is a chat in the terminal. The HTTP API is what other software uses. OpenClaw uses the API. It does not open a terminal for every message you send in Telegram or Discord.</p>
+
+  <p>That split is the useful answer to "what is an Ollama LLM". Ollama is not the brain. It is the process that loads a brain and answers requests. Change the tag and the brain changes. Memory, channels, and cron jobs stay put.</p>
+
+  <h2 id="ollama-llm-models">Ollama LLM Models That Fit a Normal Machine</h2>
+
+  <p><strong>Ollama LLM models</strong> are tags, not slogans. <code>qwen2.5:7b</code> and <code>qwen2.5:14b</code> are different downloads. The number is the parameter size. A bigger number is usually better at multi-step instructions, and it is always heavier on RAM.</p>
+
+  <ul>
+    <li><strong>7B to 8B.</strong> Llama 3.1 8B, Qwen2.5 7B, and Mistral 7B fit in about 8 GB of RAM or VRAM. They handle chat, summaries, and light tool use.</li>
+    <li><strong>14B.</strong> Qwen2.5 14B is a clear step up for a longer instruction. Plan on 16 GB.</li>
+    <li><strong>32B and above.</strong> A workstation choice. A 70B tag needs a dedicated GPU. On a small VPS, stay at 7B to 8B and keep hard jobs on a hosted model.</li>
+  </ul>
+
+  <p>Check what is already on disk before you pull another file:</p>
+
+  <pre><code>ollama list</code></pre>
+
+  <p>Pull one tag you will actually set in OpenClaw. Three extra downloads do not make the assistant smarter. They fill the disk. For a wider comparison of which local model to pick, see the <a href="/blog/best-local-llm/">best local LLM</a> guide and the <a href="/blog/ollama-open-source-llm/">Ollama open source LLM</a> notes.</p>
+
+  <h2 id="llm-ollama-openclaw">How OpenClaw Calls an LLM Ollama Setup</h2>
+
+  <p>OpenClaw addresses the model as <code>ollama/&lt;tag&gt;</code>. The tag must match <code>ollama list</code>, including a size suffix if the name has one. <code>ollama/llama3.1</code> and <code>ollama/llama3.1:8b</code> are not the same string. Once an allowlist is set, a near miss is rejected instead of quietly falling back.</p>
+
+  <p>On the machine that runs the Gateway:</p>
+
+  <pre><code>ollama pull qwen2.5:7b
+openclaw models list --provider ollama
+openclaw models set ollama/qwen2.5:7b</code></pre>
+
+  <p><code>openclaw models set</code> writes the primary model and leaves the rest of the config alone. The usual surprise is a session pin. A chat that already chose a model keeps it until you run <code>/model default</code>. New chats pick up the new primary on the next message. <code>openclaw models status</code> shows the resolved default.</p>
+
+  <p>Ollama has to be reachable from the Gateway, usually at <code>http://127.0.0.1:11434</code>. If OpenClaw is on a VPS and Ollama is on your laptop, localhost on the VPS is a different machine. Run both on the same host, or point OpenClaw at the host that is actually serving the model. The <a href="/blog/ollama-llm/">install guide</a> shows that base URL line. Do not publish port 11434 on a public interface. The local API has no login by default.</p>
+
+  <p>The wider question of which provider is selected, including hosted defaults, is in <a href="/blog/what-llm-does-openclaw-use/">what LLM OpenClaw uses</a>.</p>
+
+  <h2 id="open-source-vs-hosted">An Ollama Open Source LLM vs a Hosted Model</h2>
+
+  <p>An <strong>Ollama open source LLM</strong> is a weight file you can run without sending the prompt to OpenAI, Anthropic, or Google. The privacy gain is real. Prompts stay on the box. There is no per-token invoice from a model vendor.</p>
+
+  <p>It is not an automatic upgrade in quality. Hosted frontier models are still better at long tool chains. A local 8B model will drop instructions that a larger hosted model follows. If the agent can run shell commands, a weak local primary is the risky choice, not the safe one. Keep tools on a hosted primary and use the local model for private chat and drafts.</p>
+
+  <p>Cost runs the other direction. A hosted primary bills per token. A local primary bills as electricity and the machine. The <a href="/blog/openclaw-cost-per-month/">monthly cost breakdown</a> compares those paths. A <a href="/blog/private-llm/">private LLM</a> on a small VPS is the middle path: always on, no vendor log of your prompts. Pair it with the <a href="/blog/local-ai-assistant-ollama/">local AI assistant setup</a> if you want Telegram on that same model.</p>
+
+  <h2 id="when-to-skip">When to Skip an Ollama Local LLM</h2>
+
+  <p>Skip a local model if the machine has under 8 GB of free RAM, if you need image input and the tag is text only, or if a long cron job must not stall. A CPU-only 14B model can take long enough that a scheduled run looks frozen. For those jobs, a small hosted model is the more reliable worker.</p>
+
+  <p>Also skip it if you expected "Ollama" to be a single model you just turn on. There is no Ollama model. There is a library. Until you pick a tag, you have not picked an LLM.</p>
+
+  <h2>What to Do Next</h2>
+
+  <p>Pull one tag that fits the RAM and set that exact tag in OpenClaw. Confirm with <code>openclaw models status</code>. If the line starts with <code>ollama/</code>, the assistant is on a local model. If OpenClaw is not on a server yet, start with the <a href="/blog/install-openclaw-vps/">VPS install guide</a>.</p>
+
+  <ul>
+    <li>An Ollama local LLM is a model tag served by Ollama on your hardware, not a separate product.</li>
+    <li>OpenClaw calls it as <code>ollama/&lt;tag&gt;</code>. The tag must match <code>ollama list</code>.</li>
+    <li>7B to 8B models fit an 8 GB machine. 14B wants about 16 GB. 70B is a workstation.</li>
+    <li>Do not expose port 11434 to the public internet.</li>
+    <li>Use a hosted primary when the agent runs tools and the local model is too small.</li>
+  </ul>
+
+  <div class="cta-box">
+    <div class="cta-label">// get started</div>
+    <h3>Point OpenClaw at an Ollama Local LLM</h3>
+    <p>Install OpenClaw, pull one model tag, and set it with <code>openclaw models set ollama/&lt;tag&gt;</code>. Switch back to a hosted model later with the same command.</p>
+    <a href="/#install" class="cta-button">Install OpenClaw Free</a>
+  </div>
+
+</div>
+
+<footer>
+  <a class="footer-logo" href="/">Get<span>Micro</span>Services</a>
+  <p>2026 GetMicroservices. All rights reserved.</p>
+  <div class="footer-links">
+    <a href="/blog/">Blog</a>
+    <a href="/privacy-policy.html">Privacy</a>
+    <a href="/terms-of-service.html">Terms</a>
+    <a href="https://getmicroservices.com" target="_blank" rel="noopener">GetMicroservices.com</a>
+  </div>
+</footer>
+
+<script src="/lead-magnets/inline-lead-magnet.js" defer></script>
+</body>
+</html>
