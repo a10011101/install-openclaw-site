@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OpenClaw Fallback Model: Router, Failover, and the Next Answer | install-openclaw.net</title>
+  <meta name="description" content="An OpenClaw fallback model answers this turn when the primary fails. Set the chain, then see when a model router or LLM proxy is the better path."/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RKCCVN536P"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-RKCCVN536P');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="canonical" href="https://install-openclaw.net/blog/llm-router-openclaw/"/>
+  <link rel="stylesheet" href="/assets/style.css"/>
+  <meta property="og:title" content="OpenClaw Fallback Model: Router, Failover, and the Next Answer"/>
+  <meta property="og:description" content="An OpenClaw fallback model answers this turn when the primary fails. Set the chain, then see when a model router or LLM proxy is the better path."/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:url" content="https://install-openclaw.net/blog/llm-router-openclaw/"/>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "OpenClaw Fallback Model: Router, Failover, and the Next Answer",
+    "description": "An OpenClaw fallback model answers this turn when the primary fails. Set the chain, then see when a model router or LLM proxy is the better path.",
+    "url": "https://install-openclaw.net/blog/llm-router-openclaw/",
+    "datePublished": "2026-11-24",
+    "dateModified": "2026-11-24",
+    "author": {
+      "@type": "Organization",
+      "name": "GetMicroservices"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "GetMicroservices",
+      "url": "https://getmicroservices.com"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://install-openclaw.net/blog/llm-router-openclaw/"
+    }
+  }
+  </script>
+  <style>
+    nav:not(.toc){position:fixed;top:0;left:0;right:0;height:64px;background:#fff;border-bottom:3px solid #d9d4c7;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;z-index:100;}
+    nav.toc{position:static;top:auto;left:auto;right:auto;height:auto;display:block;background:#fff;border:1px solid #e0ddd4;border-left:3px solid #b5006a;padding:16px 20px;margin:8px 0 28px;z-index:1;}
+    nav.toc ol{margin:8px 0 0 18px;}
+    nav.toc li{margin:4px 0;color:#6b6560;}
+    nav.toc a{color:#b5006a;text-decoration:none;}
+    .toc-label{font-family:'Fira Code',monospace;font-size:0.75rem;color:#b5006a;}
+    .cta-box{background:#fff;border:1px solid #e0ddd4;border-left:3px solid #b5006a;padding:24px;margin:36px 0 8px;}
+    .cta-label{font-family:'Fira Code',monospace;font-size:0.78rem;color:#b5006a;margin-bottom:8px;}
+    .cta-box h3{font-size:1.15rem;margin-bottom:8px;}
+    .cta-button{display:inline-block;margin-top:12px;background:#b5006a;color:#fff;text-decoration:none;font-weight:700;padding:10px 16px;}
+  </style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="/" style="text-decoration:none;display:flex;flex-direction:column;">
+    <span style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:400;letter-spacing:-0.01em;line-height:1;color:#1a1a1a;">Get<span style="color:#b5006a;">Micro</span><span style="color:#e9c46a;">Services</span></span>
+    <div style="font-family:'Fira Code',monospace;font-size:0.65rem;color:#6b6560;letter-spacing:0.06em;margin-top:3px;">// done-for-you automation agency</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/#install" class="nav-cta">Install OpenClaw</a></li>
+  </ul>
+</nav>
+
+<div class="article-header">
+  <a class="back-link" href="/blog/">Back to Blog</a>
+  <div class="post-tag">// fallback model</div>
+  <div class="post-meta">2026-11-24 · 6 min read</div>
+  <h1>OpenClaw Fallback Model: Router, Failover, and the Next Answer</h1>
+  <p class="lead">An OpenClaw fallback model is the next model in the chain. It answers this turn. It does not replace the primary.</p>
+</div>
+
+<div class="article-body">
+
+  <p>An <strong>OpenClaw fallback model</strong> is the next model OpenClaw tries after the current one fails. It is not a second assistant, and it is not a new install. Memory, skills, and channels stay where they are. Only the model attempt changes.</p>
+
+  <p><a href="/blog/what-is-openclaw/">OpenClaw</a> is the assistant. The model is the engine for one attempt. If that engine is rate limited, overloaded, or silent, the fallback list is the ordered plan for the rest of this turn. The next turn starts on the primary again.</p>
+
+  <p>A router and a fallback list are easy to mix up. A model router chooses which upstream a request may reach. An OpenClaw fallback model is what runs after that request already failed. You can use both. They are not the same setting.</p>
+
+  <nav class="toc">
+    <div class="toc-label">// contents</div>
+    <ol>
+      <li><a href="#what-it-does">What an OpenClaw Fallback Model Does</a></li>
+      <li><a href="#model-router">OpenClaw Model Router vs the Fallback List</a></li>
+      <li><a href="#clawrouter">LLM Router OpenClaw: ClawRouter</a></li>
+      <li><a href="#failover">OpenClaw Model Failover, in Order</a></li>
+      <li><a href="#llm-proxy">OpenClaw LLM Proxy</a></li>
+      <li><a href="#multi-model">OpenClaw Multi Model Routing That Stays Boring</a></li>
+    </ol>
+  </nav>
+
+  <h2 id="what-it-does">What an OpenClaw Fallback Model Does</h2>
+
+  <p>The configured default lives at <code>agents.defaults.model.primary</code>. The ordered list lives at <code>agents.defaults.model.fallbacks</code>. OpenClaw walks that list only when the failure is worth failing over. A wrong key, a user cancel, and a hard timeout are not the same event.</p>
+
+  <p>Set the chain from the CLI, or write the same list in config:</p>
+
+  <pre><code>openclaw models fallbacks list
+openclaw models fallbacks add openai/gpt-5.4-mini
+openclaw models fallbacks remove openai/gpt-5.4-mini</code></pre>
+
+  <pre><code>{
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "anthropic/claude-sonnet-4-6",
+        "fallbacks": ["openai/gpt-5.4-mini", "ollama/qwen3.5:27b"]
+      }
+    }
+  }
+}</code></pre>
+
+  <p>Order is the policy. Put the model you want next in the first slot, not the cheapest model you happen to have a key for. A fallback that cannot call tools will finish the turn with a weaker answer, and you will blame the primary. Compare candidates in <a href="/blog/openclaw-llm-model/">choosing an OpenClaw LLM</a> before you add a third name.</p>
+
+  <p>The winning fallback answers this turn only. OpenClaw does not save it as the session model. Status can show that a fallback answered. The next message still starts on the selected primary, unless you pinned a different model yourself.</p>
+
+  <h2 id="model-router">OpenClaw Model Router vs the Fallback List</h2>
+
+  <p>An <strong>OpenClaw model router</strong> is a provider that fronts many upstream models with one credential and one catalog. ClawRouter is the bundled router. You point OpenClaw at it, and the key's policy decides which models appear.</p>
+
+  <p>The fallback list does not care how you reached the primary. Your primary can be a ClawRouter ref, and the next OpenClaw fallback model can be a direct provider or a local model. The router controls access and budget. The fallback list controls recovery.</p>
+
+  <p>Do not list the same model twice under two names. If both refs hit the same key, the second attempt fails for the same reason. A real second hop uses a different provider, or a <a href="/blog/self-hosted-llm/">self-hosted LLM</a> that does not share that key.</p>
+
+  <h2 id="clawrouter">LLM Router OpenClaw: ClawRouter</h2>
+
+  <p>ClawRouter ships with OpenClaw. The provider id is <code>clawrouter</code>. The default origin is <code>https://clawrouter.openclaw.ai</code>. Auth is the <code>CLAWROUTER_API_KEY</code> environment variable. Do not paste that key into a chat or a commit.</p>
+
+  <pre><code>openclaw onboard --auth-choice clawrouter-api-key
+openclaw models list --all --provider clawrouter
+openclaw models set clawrouter/openai/gpt-5.5</code></pre>
+
+  <p>Use the refs the catalog returns, such as <code>clawrouter/openai/gpt-5.5</code>. If <code>plugins.allow</code> is set, add <code>clawrouter</code>. For a private deployment, set <code>models.providers.clawrouter.baseUrl</code> and store the key as an env reference on <code>apiKey</code>.</p>
+
+  <p>An empty catalog is usually the key's policy, not a broken install. ClawRouter checks grants and budget when the request is sent. The router does not replace <code>agents.defaults.model.fallbacks</code>. If the routed model times out, OpenClaw still walks your fallback list. A router outage with an empty list is a single point of failure.</p>
+
+  <h2 id="failover">OpenClaw Model Failover, in Order</h2>
+
+  <p><strong>OpenClaw model failover</strong> has two stages before it gives up.</p>
+
+  <p>First it stays on the same model. Temporary rate limits get a bounded retry on the current transcript. Auth profiles for that provider rotate when the failure calls for a different credential. Overloaded and rate-limit errors allow one same-provider profile rotation by default, then the chain moves on.</p>
+
+  <p>Second, if that provider is exhausted, OpenClaw moves to the next OpenClaw fallback model. Each candidate gets its own attempt budget. <code>agents.defaults.timeoutSeconds</code> applies per attempt, so a long chain can outlast one timeout setting. A user cancel stops the whole chain. A final run timeout, or the idle-timeout cost breaker, also stops it. Those stops are terminal. They are not a request to try the next model.</p>
+
+  <p>These sources are allowed to use the configured fallbacks:</p>
+
+  <ul>
+    <li>The configured default primary.</li>
+    <li>A cron job model, unless that job sets <code>payload.fallbacks</code>. An empty list makes the job strict. See <a href="/blog/openclaw-cron-jobs/">OpenClaw cron jobs</a> for the schedule.</li>
+    <li>An agent model object that includes its own <code>fallbacks</code>.</li>
+  </ul>
+
+  <p>These sources are strict:</p>
+
+  <ul>
+    <li>A model you picked with <code>/model</code>, the model picker, or <code>sessions.patch</code>. If it fails before a reply, OpenClaw reports the error. It does not quietly answer from another model.</li>
+    <li>An agent primary with no fallbacks of its own. Set <code>fallbacks</code> to an empty list when you want that strict behavior written down.</li>
+  </ul>
+
+  <p>A transcript write conflict does not change models. If the run looks like a hang, start with the <a href="/blog/openclaw-llm-timeout/">OpenClaw timeout</a> guide. A model that never sends a token needs a longer provider clock or a faster model. Adding fallbacks does not fix a primary that is still loading weights.</p>
+
+  <h2 id="llm-proxy">OpenClaw LLM Proxy</h2>
+
+  <p>An <strong>OpenClaw LLM proxy</strong> is a gateway in front of provider APIs. LiteLLM is the usual self-hosted one. Cloudflare AI Gateway is another. You onboard the proxy as a provider, and OpenClaw sends model calls to that base URL.</p>
+
+  <pre><code>openclaw onboard --auth-choice litellm-api-key</code></pre>
+
+  <p>The proxy can do its own backend routing, spend limits, and logs. That routing is not OpenClaw's fallback list. If LiteLLM fails over inside one request, OpenClaw still sees one provider. If the proxy host is down, only the next OpenClaw fallback model on a different provider will answer.</p>
+
+  <p>Use a proxy for one bill and one key policy. Use the fallback list for a second provider that does not share that outage. Keep the proxy key in the auth store or an env reference, and put a custom origin on the provider <code>baseUrl</code>.</p>
+
+  <h2 id="multi-model">OpenClaw Multi Model Routing That Stays Boring</h2>
+
+  <p><strong>OpenClaw multi model routing</strong> is three decisions, not a mesh of agents.</p>
+
+  <ol>
+    <li>Primary: the model that should answer a normal chat turn.</li>
+    <li>Fallbacks: one or two models that can finish a failed turn, on a different provider if you can.</li>
+    <li>Optional utility model: a cheaper model for short internal work such as titles. That is not the chat fallback. <code>imageModel</code> is also separate. It runs when the primary cannot accept images.</li>
+  </ol>
+
+  <p>Skip a long chain. Two fallbacks are enough for a personal gateway. A five-model list hides a bad primary and spends the attempt budget on models you would not trust. The <a href="/blog/openclaw-multi-model-ai/">multi-model setup</a> is about roles, not logos.</p>
+
+  <p>Run <code>openclaw models fallbacks list</code>, then send one prompt that must use a tool while the primary is stopped. A greeting does not prove failover. If you pinned the fallback with <code>/model</code> during the test, run <code>/model default</code> so the next turn returns to the configured primary.</p>
+
+  <p>Pair a strong primary with a cheaper fallback only for outages, not for every cron run. The <a href="/blog/cheapest-llm-for-openclaw/">cheapest LLM for OpenClaw</a> is a cost choice. An OpenClaw fallback model is an availability choice. They can be the same model. They usually should not be.</p>
+
+  <div class="cta-box">
+    <div class="cta-label">// get started</div>
+    <h3>Keep a Second Model Ready</h3>
+    <p>Install OpenClaw, set a primary, and add one fallback on a different provider before the first outage.</p>
+    <a href="/#install" class="cta-button">Install OpenClaw Free</a>
+  </div>
+
+</div>
+
+<footer>
+  <a class="footer-logo" href="/">Get<span>Micro</span>Services</a>
+  <p>2026 GetMicroservices. All rights reserved.</p>
+  <div class="footer-links">
+    <a href="/blog/">Blog</a>
+    <a href="/privacy-policy.html">Privacy</a>
+    <a href="/terms-of-service.html">Terms</a>
+    <a href="https://getmicroservices.com" target="_blank" rel="noopener">GetMicroservices.com</a>
+  </div>
+</footer>
+
+<script src="/lead-magnets/inline-lead-magnet.js" defer></script>
+</body>
+</html>
